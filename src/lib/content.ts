@@ -10,7 +10,7 @@ import type { T } from '@/lib/i18n';
 
 export const NODE_URL = 'https://mainnet-node.decentralchain.io';
 
-/** Source: ancla/README.md, ancla/ANCLA_PLAN.md §1.3, verified 2026-08-26/27. */
+/** Source: github.com/dylanpersonguy/ancla README, verified 2026-08-26/27. */
 export const ANCLA = {
   archiveGb: 3.04,
   /** First and last monthly archive in the mirror. */
@@ -36,7 +36,8 @@ export const ANCLA = {
  * The five republication events. Archives normally freeze on the last day of
  * their month; these all landed after their own month end, with no public record
  * of what changed. The 2022 cluster is the initial load and is deliberately
- * excluded. Source: ANCLA_PLAN.md §1.3, reproducible with `ingest survey`.
+ * excluded. Source: github.com/dylanpersonguy/ancla README; reproducible from
+ * that repository with `node packages/ingest/src/cli.ts survey`.
  */
 export const REPUBLICATIONS = [
   { date: '2024-09-20', months: 7, range: '2024-01 … 2024-08', sizeMb: 144.5 },
