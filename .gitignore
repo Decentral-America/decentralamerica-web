@@ -5,3 +5,9 @@ dist/
 .DS_Store
 .env
 .env.local
+
+# The build brief: voice rules, the facts discipline, the design contract. Kept
+# next to the code for whoever works on this next, never published. Its
+# vocabulary rule reads badly out of context, and a public repository is exactly
+# where things get read out of context.
+AGENT-BRIEF.md
