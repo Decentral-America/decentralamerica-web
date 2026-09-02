@@ -1,0 +1,34 @@
+{
+  "author": "DecentralAmerica",
+  "dependencies": {
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "description": "DecentralAmerica — la memoria pública de América Latina",
+  "devDependencies": {
+    "@biomejs/biome": "2.5.2",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.2",
+    "@types/node": "^26.1.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "tailwindcss": "^4.3.2",
+    "typescript": "5.9.3",
+    "vite": "^8.1.3"
+  },
+  "license": "MIT",
+  "name": "@decentralamerica/web",
+  "private": true,
+  "scripts": {
+    "blog": "node scripts/build-blog.mjs",
+    "build": "node scripts/build-blog.mjs && vite build && node scripts/prerender.mjs",
+    "dev": "vite",
+    "lint": "biome check --write .",
+    "lint:check": "biome check .",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "type": "module",
+  "version": "0.1.0"
+}

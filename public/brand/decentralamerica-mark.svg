@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" fill="none">
+  <title>DecentralAmerica</title>
+  <!--
+    DecentralAmerica mark. Solid #000000, no opacity and no transparency anywhere.
+
+    One path with six subpaths, all wound the same direction, filled nonzero: the
+    three arms overlap at the hub and union cleanly instead of showing a darker
+    patch. That matters if the mark is ever placed at reduced opacity, where
+    separate overlapping shapes compound their alpha and the seam appears.
+  -->
+  <path fill="#000000" fill-rule="nonzero" d="M140 65.5L160 65.5A2 2 0 0 1 162 67.5L162 164A2 2 0 0 1 160 166L140 166A2 2 0 0 1 138 164L138 67.5A2 2 0 0 1 140 65.5ZM228.179 183.59L218.179 200.91A2 2 0 0 1 215.447 201.642L131.876 153.392A2 2 0 0 1 131.144 150.66L141.144 133.34A2 2 0 0 1 143.876 132.608L227.447 180.858A2 2 0 0 1 228.179 183.59ZM81.821 200.91L71.821 183.59A2 2 0 0 1 72.553 180.858L156.124 132.608A2 2 0 0 1 158.856 133.34L168.856 150.66A2 2 0 0 1 168.124 153.392L84.553 201.642A2 2 0 0 1 81.821 200.91ZM192.044 119.007A16 16 0 1 1 224.044 119.007A16 16 0 1 1 192.044 119.007ZM134 225A16 16 0 1 1 166 225A16 16 0 1 1 134 225ZM75.956 119.007A16 16 0 1 1 107.956 119.007A16 16 0 1 1 75.956 119.007Z"/>
+</svg>

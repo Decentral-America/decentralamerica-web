@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <!-- The CentralAmerica glyph, knocked out of an ink disc. Geometry is
+       measured from the branding kit raster; see src/components/Logo.tsx. -->
+  <circle cx="150" cy="150" r="150" fill="#0a0a0b"/>
+  <g fill="#fcfcfa"><rect x="138" y="65.5" width="24" height="100.5" rx="2" transform="rotate(0 150 150)"/><rect x="138" y="65.5" width="24" height="100.5" rx="2" transform="rotate(120 150 150)"/><rect x="138" y="65.5" width="24" height="100.5" rx="2" transform="rotate(240 150 150)"/><circle cx="208.04" cy="119.01" r="16"/><circle cx="150.00" cy="225.00" r="16"/><circle cx="91.96" cy="119.01" r="16"/></g>
+</svg>

@@ -1,0 +1,182 @@
+@import 'tailwindcss';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+
+/* Satoshi — ITF Free Font License, see /fonts/Satoshi-LICENSE.txt */
+@font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+
+/* Metric-matched fallback, carried over from the DecentralChain site: Satoshi is
+   1.1% narrower than Arial, so a plain fallback rewraps the document on swap. */
+@font-face {
+  font-family: 'Satoshi Fallback';
+  src: local('Arial'), local('Helvetica Neue'), local('Liberation Sans'), local('Roboto');
+  size-adjust: 98.9%;
+  font-display: swap;
+}
+
+@theme {
+  /* Light ground. Warm white rather than #fff — pure white under a near-black
+     display face reads clinical, and every institutional reference we looked at
+     (OCP, Our World in Data) sits a few points warm. */
+  --color-ground: #fcfcfa;
+  --color-ground-2: #f5f5f1;
+  --color-panel: #ffffff;
+  --color-ink: #0a0a0b;
+  /* 0.62 measures 6.9:1 on the ground, 0.48 measures 4.6:1 — both clear AA, and
+     nothing lighter than --color-faint may carry text. */
+  --color-muted: rgba(10, 10, 11, 0.62);
+  --color-faint: rgba(10, 10, 11, 0.48);
+  --color-hairline: rgba(10, 10, 11, 0.09);
+  --color-hairline-2: rgba(10, 10, 11, 0.16);
+
+  /* The one colour on the site. Inherited from the DecentralChain brand kit,
+     where #1FD98A is reserved for confirmed state and is never decorative — the
+     same rule holds here. The -ink variant is the only one legible as text on a
+     light ground; the bright one is for fills, dots and the live ribbon. */
+  --color-confirmed: #1fd98a;
+  --color-confirmed-ink: #067a48;
+  --color-confirmed-wash: rgba(31, 217, 138, 0.12);
+
+  /* Used only where a record is known to have changed. */
+  --color-altered: #b2431a;
+  --color-altered-wash: rgba(178, 67, 26, 0.1);
+
+  --font-sans: 'Satoshi', 'Satoshi Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* Springs. Motion is physical or it is off; nothing here uses ease-in-out. */
+}
+
+@layer base {
+  :where(.grid) > *, :where(.flex) > * { min-width: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    color-scheme: light;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-ground);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    overflow-wrap: break-word;
+  }
+
+  ::selection { background-color: var(--color-ink); color: var(--color-ground); }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+}
+
+/* ---- Type scale -------------------------------------------------------------
+   Display sizes carry negative tracking because Satoshi's default fit is loose
+   above ~48px. The ratios below are the whole visual identity: enormous human
+   language against small monospace evidence. */
+
+@utility display-1 {
+  font-size: clamp(2.75rem, 9.5vw, 8.5rem);
+  line-height: 0.94;
+  letter-spacing: -0.038em;
+  font-weight: 700;
+  text-wrap: balance;
+}
+@utility display-2 {
+  font-size: clamp(2.25rem, 6vw, 5rem);
+  line-height: 1.0;
+  letter-spacing: -0.032em;
+  font-weight: 700;
+  text-wrap: balance;
+}
+@utility display-3 {
+  font-size: clamp(1.75rem, 3.6vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.026em;
+  font-weight: 700;
+  text-wrap: balance;
+}
+@utility lede {
+  font-size: clamp(1.125rem, 1.9vw, 1.5rem);
+  line-height: 1.5;
+  letter-spacing: -0.011em;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+/* Small letterspaced mono caps. Section markers, table headers, status chips. */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+@utility mono-data {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Motion ---------------------------------------------------------------- */
+
+/* Entry: 24px rise, spring-timed, interruptible. Applied by <Reveal>. */
+@keyframes rise {
+  from { opacity: 0; transform: translate3d(0, 24px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+@utility rise-in {
+  animation: rise 0.72s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* The confirmed pulse. Used once per page, on the live ribbon's newest bar. */
+@keyframes confirm-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+@utility confirm-pulse {
+  animation: confirm-pulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ---- Surfaces -------------------------------------------------------------- */
+
+/* Depth from layered shadow, never from a border on everything. */
+@utility card {
+  background-color: var(--color-panel);
+  border-radius: 1.25rem;
+  box-shadow:
+    0 1px 2px rgba(10, 10, 11, 0.04),
+    0 4px 16px rgba(10, 10, 11, 0.04),
+    0 0 0 1px rgba(10, 10, 11, 0.045);
+}
+/* Transitions `translate` as well as `transform`: Tailwind v4's -translate-y-*
+   sets the standalone `translate` property, so a transform-only transition left
+   the lift snapping instead of springing. Both are listed so either spelling
+   animates. */
+@utility card-lift {
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    translate 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@utility rule {
+  border-top: 1px solid var(--color-hairline);
+}
