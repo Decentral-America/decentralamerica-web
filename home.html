@@ -896,6 +896,7 @@
               <li style="--e: 0.76">2025-05-06 · 3 meses · 105,2 MB</li>
               <li style="--e: 0.8">2026-08-10 · 2 meses · 105,7 MB</li>
             </ul>
+            <p data-sc-cue="0 1 0 0"><a class="link" href="/evidencia">Ver qué cambió, fila por fila</a></p>
           </div>
           <div class="wall" aria-hidden="true">
             <div class="wall__scene">
@@ -1164,6 +1165,7 @@
         <p class="close__line d-md" data-sc-cue="0.4">Nada de esto pide que nos creas.</p>
         <div class="close__act" data-sc-cue="0.41">
           <a class="btn" href="/verificar" data-sc-magnet="0.22" data-sc-rise="0">Verificá un registro</a>
+          <a class="btn btn--ghost" href="/evidencia" data-sc-magnet="0.22" data-sc-rise="0">Ver qué cambió</a>
         </div>
         <div class="close__meta mono" data-sc-cue="0.42">
           <span>DecentralAmerica Asociación · Jacó, Garabito, Costa Rica</span>
@@ -1186,6 +1188,7 @@
       <a href="/organizaciones">Registro de Organizaciones</a>
       <a href="/nodo">Nodo Público</a>
       <a href="/financiar">Financiar un país</a>
+      <a href="/evidencia">Qué cambió</a>
       <a href="/publicaciones">Publicaciones</a>
     </nav>
   </div>
@@ -1227,6 +1230,9 @@
   try { var st = localStorage.getItem(LANG_KEY); lang = (st === 'en' || st === 'es') ? st : browserLang(); } catch (e) { lang = browserLang(); }
   function T(es, en) { return lang === 'en' ? en : es; }
   var EN = {
+    'Ver qué cambió, fila por fila': 'See what changed, row by row',
+    'Ver qué cambió': 'See what changed',
+    'Qué cambió': 'What changed',
     'Páginas del sitio': 'Site pages',
     'DecentralAmerica.com': 'DecentralAmerica.com',
     'Verificar un registro': 'Verify a record',
