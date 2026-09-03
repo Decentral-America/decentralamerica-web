@@ -16,6 +16,10 @@ const LINKS = [
   // A real page now, not an on-page anchor: someone clicking this wants the
   // whole explanation, not the summary the landing section carries.
   { href: '/nodo', label: { en: 'Nodo Público', es: 'Nodo Público' } },
+  // Served by the ancla service, proxied at this path. A plain <a> rather than a
+  // router link on purpose: it is a different application, and routing into it
+  // would leave this app's shell wrapped around something it does not own.
+  { href: '/evidencia/versions.html', label: { en: 'Evidence', es: 'Evidencia' } },
   { href: '/publicaciones', label: { en: 'Publications', es: 'Publicaciones' } },
 ] as const satisfies readonly { href: string; label: T }[];
 

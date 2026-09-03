@@ -50,7 +50,7 @@ export const GENERATED_POSTS: readonly Post[] = [
     date: '2026-08-20',
     description: {
       en: 'An institution cannot be both the subject of a record and its keeper. This is not a question of trust. It is a question of who is able to prove anything about the past.',
-      es: 'Una institución no puede ser a la vez el sujeto de un registro y su custodio. No es una cuestión de confianza. Es una cuestión de quién puede demostrar algo sobre el pasado.',
+      es: 'Una institución no puede ser a la vez el sujeto de un registro y su custodio. No es cuestión de confianza, sino de quién puede probar algo sobre el pasado.',
     },
     slug: 'quien-guarda-el-registro',
     tags: ['custodia', 'memoria publica'],

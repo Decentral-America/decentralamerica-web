@@ -7,15 +7,32 @@ import { useT } from '@/lib/i18n';
 const PLANNED = COUNTRIES.filter((c) => c.status === 'planned').length;
 const LIVE = COUNTRIES.filter((c) => c.status === 'live').length;
 
-const DOORS: { n: string; href: string; title: T; line: T }[] = [
+/**
+ * Written out rather than counted numerically, because the heading reads as a
+ * sentence. Both come from DOORS.length so adding a door cannot leave the
+ * heading saying four while five are listed underneath.
+ */
+const SPELLED_EN = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'];
+const SPELLED_ES = ['cero', 'una', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete'];
+
+const DOORS: { href: string; title: T; line: T }[] = [
   {
     href: '/verificar',
     line: {
       en: 'Paste an id or a file and check whether it matches the anchored copy.',
       es: 'Pegá un identificador o un archivo y comprobá si coincide con la copia anclada.',
     },
-    n: '01',
     title: { en: 'Verify a record', es: 'Verificá un registro' },
+  },
+  {
+    // The pair to /verificar, and stated as the pair: one checks a record you
+    // already have, the other shows what moved when you did not know to look.
+    href: '/evidencia/versions.html',
+    line: {
+      en: 'Every copy the source published, and what changed between one and the next.',
+      es: 'Cada copia que publicó la fuente, y qué cambió de una a la siguiente.',
+    },
+    title: { en: 'See what changed', es: 'Vé qué cambió' },
   },
   {
     href: '/organizaciones',
@@ -23,7 +40,6 @@ const DOORS: { n: string; href: string; title: T; line: T }[] = [
       en: 'Get listed in the organization registry, next to whoever vouched for you.',
       es: 'Quedá inscrita en el registro de organizaciones, junto a quién respondió por vos.',
     },
-    n: '02',
     title: { en: 'Add your organization', es: 'Sumá tu organización' },
   },
   {
@@ -32,7 +48,6 @@ const DOORS: { n: string; href: string; title: T; line: T }[] = [
       en: 'Hold a complete copy. No yield, and no stake in what you witness.',
       es: 'Sostené una copia completa. Sin rendimiento y sin interés en lo que atestigües.',
     },
-    n: '03',
     title: { en: 'Run a node', es: 'Operá un nodo' },
   },
   {
@@ -41,10 +56,12 @@ const DOORS: { n: string; href: string; title: T; line: T }[] = [
       en: `${LIVE} national portals are live. ${PLANNED} more are planned.`,
       es: `${LIVE} portales nacionales están en línea. Otros ${PLANNED} están planificados.`,
     },
-    n: '04',
     title: { en: 'Fund a country', es: 'Financiá un país' },
   },
 ];
+
+const WAYS = SPELLED_EN[DOORS.length] ?? String(DOORS.length);
+const WAYS_ES = SPELLED_ES[DOORS.length] ?? String(DOORS.length);
 
 export function Doors() {
   const t = useT();
@@ -55,25 +72,28 @@ export function Doors() {
         <Reveal>
           <Eyebrow>{t({ en: 'Ways in', es: 'Cómo entrar' })}</Eyebrow>
           <h2 className="display-2 mt-6 max-w-[14ch]">
-            {t({ en: 'Four ways in.', es: 'Cuatro maneras de entrar.' })}
+            {t({
+              en: `${WAYS} ways in.`,
+              es: `${WAYS_ES} maneras de entrar.`,
+            })}
           </h2>
           <p className="lede mt-6 max-w-[40ch]">
             {t({
-              en: 'All four lead to the same record.',
-              es: 'Las cuatro llevan al mismo registro.',
+              en: 'All of them lead to the same record.',
+              es: 'Todas llevan al mismo registro.',
             })}
           </p>
         </Reveal>
 
         <Reveal delay={80} className="mt-14 sm:mt-20">
-          {DOORS.map((d) => (
+          {DOORS.map((d, i) => (
             <a
-              key={d.n}
+              key={d.href}
               href={d.href}
               className="group -mx-6 block rule px-6 py-10 transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] last:border-b last:border-hairline hover:bg-ground-2 sm:py-12 lg:-mx-12 lg:px-12 lg:py-14"
             >
               <div className="grid gap-x-8 gap-y-3 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1.5 sm:grid-cols-[3rem_1fr_auto] sm:items-baseline">
-                <Mono className="text-faint">{d.n}</Mono>
+                <Mono className="text-faint">{String(i + 1).padStart(2, '0')}</Mono>
                 <div>
                   <h3 className="display-3">{t(d.title)}</h3>
                   <p className="mt-3 max-w-[48ch] text-base leading-relaxed text-muted sm:text-lg">

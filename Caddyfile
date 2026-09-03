@@ -64,6 +64,17 @@
 	# the reader's browser and read commitments straight off a public
 	# DecentralChain node, so a compromised proxy changes what a reader sees and
 	# not what they can prove.
+	# The bare path has to become a directory before anything else happens.
+	#
+	# The export links its own assets relatively — ./ancla.css, ./feed.js, ./api —
+	# because it must keep working when someone hosts a copy at their own root.
+	# Served at /evidencia with no trailing slash, a browser resolves those
+	# against / and asks this site for /ancla.css, which is a 404 here. The page
+	# arrived unstyled and stuck on "Cargando" because its stylesheet and its
+	# script both missed. One redirect fixes every relative reference at once.
+	@evidenciaBare path /evidencia
+	redir @evidenciaBare /evidencia/ 308
+
 	handle_path /evidencia* {
 		reverse_proxy http://ancla.railway.internal:8080
 	}
