@@ -1162,7 +1162,12 @@
 
 </main>
 
-<script src="/home/scrollcraft.js" defer></script>
+<!-- Not deferred. The inline block below applies the language and mounts the
+     engine, and it expects scrollcraft to have run: deferring this made the
+     external script execute after it, so nothing mounted and every scroll
+     animation was gone. Its position in the document is load order, not an
+     oversight. -->
+<script src="/home/scrollcraft.js"></script>
 <script>
 (function () {
   var root = document.documentElement;
