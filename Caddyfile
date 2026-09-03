@@ -45,13 +45,35 @@
 	@redrawn path /og/* /home/*.css /home/*.js /brand/*
 	header @redrawn Cache-Control "public, max-age=86400"
 
-	@html not path /assets/* /fonts/* /home/fonts/* /og/* /brand/*
+	# /evidencia is proxied and sets its own caching, which is shorter-lived than
+	# a prerendered page and longer-lived than must-revalidate.
+	@html not path /assets/* /fonts/* /home/fonts/* /og/* /brand/* /evidencia /evidencia/*
 	header @html Cache-Control "public, max-age=0, must-revalidate"
+
+	# The evidence layer, served from the `ancla` service in this project over
+	# Railway's private network.
+	#
+	# A path on this domain rather than a subdomain, because the two are one
+	# argument: the site claims a record is being kept, and /evidencia is where a
+	# reader checks that claim without leaving. handle_path strips the prefix, so
+	# the upstream is unaware it is mounted and the same export still works
+	# standalone — which matters, because the whole point of it being static
+	# files is that anyone can host their own copy.
+	#
+	# Nothing sensitive rides on this hop. The pages recompute their digests in
+	# the reader's browser and read commitments straight off a public
+	# DecentralChain node, so a compromised proxy changes what a reader sees and
+	# not what they can prove.
+	handle_path /evidencia* {
+		reverse_proxy http://ancla.railway.internal:8080
+	}
 
 	# Routes are directories holding an index.html. No fallback to the home page:
 	# that is the behaviour this file exists to remove.
-	try_files {path} {path}/index.html
-	file_server
+	handle {
+		try_files {path} {path}/index.html
+		file_server
+	}
 
 	# A miss served Caddy's empty body. The status was right and the page was
 	# blank, which is a worse answer than the status alone.
