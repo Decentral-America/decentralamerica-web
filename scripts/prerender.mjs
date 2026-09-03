@@ -113,8 +113,6 @@ for (const path of routes) {
 writeFileSync(join(DIST, 'index.html'), readFileSync(join(ROOT, 'home.html'), 'utf8'));
 console.log('  copied      / (home.html)');
 
-// serve reads its config from the directory it serves, not from the repo root.
-writeFileSync(join(DIST, 'serve.json'), readFileSync(join(ROOT, 'serve.json'), 'utf8'));
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

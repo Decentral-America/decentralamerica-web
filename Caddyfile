@@ -1,0 +1,55 @@
+# Serves the prerendered site in the Railway image.
+#
+# Railway terminates TLS at its edge and forwards plain HTTP to $PORT, so this
+# listens on a port rather than a hostname and leaves certificates alone.
+#
+# The point of running our own server is the last block. Railway's static
+# provider serves this site with a single-page-app fallback, which answers 200
+# with the home page for every path that does not exist. Every typo, every dead
+# inbound link and every stale URL then looks like a real page to a crawler.
+# Each route here is a real prerendered file, so a miss is a miss.
+
+{
+	admin off
+	auto_https off
+	persist_config off
+	log {
+		format console
+	}
+}
+
+:{$PORT:8080} {
+	root * /srv
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+		-Server
+	}
+
+	# Vite fingerprints these, so the name changes whenever the bytes do.
+	@fingerprinted path /assets/*
+	header @fingerprinted Cache-Control "public, max-age=31536000, immutable"
+
+	# Stable names that in practice never change.
+	@fonts path /fonts/* /home/fonts/*
+	header @fonts Cache-Control "public, max-age=31536000, immutable"
+
+	# Stable names that do change: the share cards are redrawn by `pnpm og` and
+	# the scroll page's css and js are hand-edited. A year would pin a stale card
+	# in every crawler that had seen it.
+	@redrawn path /og/* /home/*.css /home/*.js /brand/*
+	header @redrawn Cache-Control "public, max-age=86400"
+
+	@html not path /assets/* /fonts/* /home/fonts/* /og/* /brand/*
+	header @html Cache-Control "public, max-age=0, must-revalidate"
+
+	# Routes are directories holding an index.html. No fallback to the home page:
+	# that is the behaviour this file exists to remove.
+	try_files {path} {path}/index.html
+	file_server
+}
