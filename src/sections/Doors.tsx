@@ -5,6 +5,7 @@ import { useT } from '@/lib/i18n';
 
 /** Counted from the source of truth so the copy cannot drift from the map. */
 const PLANNED = COUNTRIES.filter((c) => c.status === 'planned').length;
+const LIVE = COUNTRIES.filter((c) => c.status === 'live').length;
 
 const DOORS: { n: string; href: string; title: T; line: T }[] = [
   {
@@ -37,8 +38,8 @@ const DOORS: { n: string; href: string; title: T; line: T }[] = [
   {
     href: '/financiar',
     line: {
-      en: `Costa Rica is live. ${PLANNED} more national portals are planned.`,
-      es: `Costa Rica está en línea. Otros ${PLANNED} portales nacionales están planificados.`,
+      en: `${LIVE} national portals are live. ${PLANNED} more are planned.`,
+      es: `${LIVE} portales nacionales están en línea. Otros ${PLANNED} están planificados.`,
     },
     n: '04',
     title: { en: 'Fund a country', es: 'Financiá un país' },

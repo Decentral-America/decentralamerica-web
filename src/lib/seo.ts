@@ -10,8 +10,8 @@ export const SITE_NAME = 'DecentralAmerica';
  * named the thing that is actually running.
  */
 export const TITLE: T = {
-  en: "DecentralAmerica — Latin America's permanent public record",
-  es: 'DecentralAmerica — El registro público permanente de América Latina',
+  en: 'DecentralAmerica — The public memory of Latin America',
+  es: 'DecentralAmerica — La memoria pública de América Latina',
 };
 
 export const DESCRIPTION: T = {
@@ -39,8 +39,8 @@ export const ROUTE_PATHS = [
 export const ROUTE_META: Record<string, { title: T; description: T }> = {
   '/financiar': {
     description: {
-      en: 'What funding a country actually buys: the work of bringing one more national record into the memory. Costa Rica is live; five more portals are named and not started.',
-      es: 'Qué compra en realidad financiar un país: el trabajo de incorporar un registro nacional más a la memoria. Costa Rica está activo; hay cinco portales más nombrados y sin empezar.',
+      en: 'What funding a country actually buys: the work of bringing one more national record into the memory. Costa Rica and Panamá are live; four more portals are named and not started.',
+      es: 'Qué compra financiar un país: incorporar un registro nacional más a la memoria. Costa Rica y Panamá activos, cuatro portales nombrados y sin empezar.',
     },
     title: { en: 'Fund a country — DecentralAmerica', es: 'Financiar un país — DecentralAmerica' },
   },
@@ -57,7 +57,7 @@ export const ROUTE_META: Record<string, { title: T; description: T }> = {
   '/organizaciones': {
     description: {
       en: 'The record of which organizations are real and, above all, who vouched for them. What it records, what verification means, and what being listed does not mean.',
-      es: 'El registro de qué organizaciones son reales y, sobre todo, quién respondió por ellas. Qué registra, qué significa la verificación y qué no significa estar en la lista.',
+      es: 'El registro de qué organizaciones son reales y quién respondió por ellas. Qué registra, qué significa la verificación y qué no significa estar en la lista.',
     },
     title: {
       en: 'Registro de Organizaciones — DecentralAmerica',
@@ -67,14 +67,14 @@ export const ROUTE_META: Record<string, { title: T; description: T }> = {
   '/publicaciones': {
     description: {
       en: 'Articles, findings from the instruments, and periodic reports.',
-      es: 'Artículos, hallazgos de los instrumentos e informes periódicos.',
+      es: 'Artículos, hallazgos de los instrumentos e informes trimestrales: todo lo que publicamos sobre el registro público permanente de América Latina.',
     },
     title: { en: 'Publications — DecentralAmerica', es: 'Publicaciones — DecentralAmerica' },
   },
   '/verificar': {
     description: {
       en: 'Check a public record against the anchored copy. What verification proves, what it does not, and the root anchored on chain, read live from the public node.',
-      es: 'Comprobar un registro público contra la copia anclada. Qué demuestra la verificación, qué no, y la raíz anclada en cadena, leída en vivo desde el nodo público.',
+      es: 'Comprobar un registro público contra la copia anclada. Qué demuestra la verificación, qué no, y la raíz anclada en cadena, leída desde el nodo público.',
     },
     title: {
       en: 'Verify a record — DecentralAmerica',

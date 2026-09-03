@@ -8,9 +8,11 @@ const LIVE_COUNT = COUNTRIES.filter((country) => country.status === 'live').leng
 /**
  * The regional ladder, stated as a ladder rather than as coverage.
  *
- * One country is running and five are not, and the section is built so that a
+ * Most of the isthmus is not running yet, and the section is built so that a
  * reader who takes in nothing but the map still comes away with that. The table
  * is the source of truth and the map decorates it, never the other way round.
+ * The counts come from COUNTRIES rather than the prose, so they cannot drift
+ * from it the way "only one is live" did when Panamá went live.
  */
 export function Reach() {
   const t = useT();
@@ -21,8 +23,8 @@ export function Reach() {
         <Reveal>
           <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3">
             <Eyebrow>{t({ en: 'Reach', es: 'Alcance' })}</Eyebrow>
-            {/* A ratio rather than a sentence: it cannot be read as five more
-                countries being close to ready. */}
+            {/* A ratio rather than a sentence: it cannot be read as the rest
+                being close to ready. */}
             <Mono className="text-faint">
               {LIVE_COUNT}/{COUNTRIES.length} {t(STATUS_TEXT.live)}
             </Mono>
@@ -37,8 +39,8 @@ export function Reach() {
 
           <p className="lede mt-7 max-w-[54ch]">
             {t({
-              en: 'Costa Rica is where the instrument already runs. The rest of the isthmus has the same problem and the same data shape.',
-              es: 'Costa Rica es donde el instrumento ya corre. El resto del istmo tiene el mismo problema y el mismo formato de datos.',
+              en: 'Costa Rica and Panamá are where the instrument already runs. The rest of the isthmus has the same problem and the same data shape.',
+              es: 'Costa Rica y Panamá son donde el instrumento ya corre. El resto del istmo tiene el mismo problema y el mismo formato de datos.',
             })}
           </p>
         </Reveal>

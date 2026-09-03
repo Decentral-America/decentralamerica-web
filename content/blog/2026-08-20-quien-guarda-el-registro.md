@@ -1,7 +1,7 @@
 ---
 title_es: Quién guarda el registro
 title_en: Who holds the record
-description_es: Una institución no puede ser a la vez el sujeto de un registro y su custodio. No es una cuestión de confianza. Es una cuestión de quién puede demostrar algo sobre el pasado.
+description_es: Una institución no puede ser a la vez el sujeto de un registro y su custodio. No es cuestión de confianza, sino de quién puede probar algo sobre el pasado.
 description_en: An institution cannot be both the subject of a record and its keeper. This is not a question of trust. It is a question of who is able to prove anything about the past.
 date: 2026-08-20
 type: articulo

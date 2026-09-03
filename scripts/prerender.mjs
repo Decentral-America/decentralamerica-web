@@ -64,13 +64,79 @@ if (!template.includes('<div id="root"></div>')) {
       'would read the scroll page back in as the template.',
   );
 }
+const ORG = { '@id': `${SITE}/#organization` };
+
+/**
+ * A crawler reading this site found one structured-data block, on the home page.
+ * Every other route described itself in meta tags alone, and the articles did not
+ * say they were articles: no date, no author, no headline.
+ *
+ * A post is a BlogPosting. Everything else is a WebPage carrying a breadcrumb, so
+ * a result can show where in the site it sits. Both reference the Organization
+ * the home page already declares rather than restating it.
+ */
+const jsonLd = (path, post, title, desc) => {
+  const crumbs = [{ '@type': 'ListItem', position: 1, name: 'Inicio', item: `${SITE}/` }];
+  if (path.startsWith('/publicaciones/')) {
+    crumbs.push({
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Publicaciones',
+      item: `${SITE}/publicaciones`,
+    });
+  }
+  if (path !== '/') {
+    crumbs.push({
+      '@type': 'ListItem',
+      position: crumbs.length + 1,
+      name: (post ? post.title.es : title).split(' — ')[0],
+      item: canonicalFor(path),
+    });
+  }
+
+  const main = post
+    ? {
+        '@type': 'BlogPosting',
+        author: ORG,
+        datePublished: post.date,
+        dateModified: post.date,
+        description: post.description.es,
+        headline: post.title.es,
+        image: `${SITE}${ogImage(path)}`,
+        inLanguage: 'es',
+        keywords: post.tags.join(', '),
+        mainEntityOfPage: canonicalFor(path),
+        publisher: ORG,
+        url: canonicalFor(path),
+      }
+    : {
+        '@type': 'WebPage',
+        description: desc,
+        inLanguage: 'es',
+        isPartOf: { '@id': `${SITE}/#website` },
+        name: title,
+        publisher: ORG,
+        url: canonicalFor(path),
+      };
+
+  return `<script type="application/ld+json">${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [main, { '@type': 'BreadcrumbList', itemListElement: crumbs }],
+  })}</script>`;
+};
+
 const routes = [...ROUTE_PATHS, ...POST_PATHS];
 
 for (const path of routes) {
   const body = await render(path, 'es');
   const post = POSTS.find((p) => `/publicaciones/${p.slug}` === path);
   const meta = ROUTE_META[path];
-  const title = post ? `${post.title.es} — DecentralAmerica` : (meta?.title.es ?? TITLE.es);
+  // A result shows about sixty characters. "Cinco republicaciones, catorce meses
+  // cerrados reescritos — DecentralAmerica" is seventy-five, and the brand is the
+  // half that gets cut, so it is only appended when the whole thing survives.
+  // og:site_name carries the brand either way.
+  const brand = (t) => (t.length + 19 <= 60 ? `${t} — DecentralAmerica` : t);
+  const title = post ? brand(post.title.es) : (meta?.title.es ?? TITLE.es);
   const desc = post ? post.description.es : (meta?.description.es ?? DESCRIPTION.es);
 
   const html = template
@@ -81,7 +147,13 @@ for (const path of routes) {
         `  <link rel="canonical" href="${canonicalFor(path)}" />\n` +
         `  <meta property="og:title" content="${escapeHtml(title)}" />\n` +
         `  <meta property="og:description" content="${escapeHtml(desc)}" />\n` +
-        `  <meta property="og:type" content="website" />\n` +
+        `  <meta property="og:type" content="${post ? 'article' : 'website'}" />\n` +
+        (post
+          ? `  <meta property="article:published_time" content="${post.date}T00:00:00+00:00" />\n` +
+            post.tags
+              .map((t) => `  <meta property="article:tag" content="${escapeHtml(t)}" />\n`)
+              .join('')
+          : '') +
         `  <meta property="og:url" content="${canonicalFor(path)}" />\n` +
         `  <meta property="og:site_name" content="DecentralAmerica" />\n` +
         `  <meta property="og:locale" content="es_CR" />\n` +
@@ -91,6 +163,7 @@ for (const path of routes) {
         `  <meta property="og:image:width" content="1200" />\n` +
         `  <meta property="og:image:height" content="630" />\n` +
         `  <meta property="og:image:alt" content="${escapeHtml(title)}" />\n` +
+        `  ${jsonLd(path, post, title, desc)}\n` +
         `  <meta name="twitter:card" content="summary_large_image" />\n` +
         `  <meta name="twitter:title" content="${escapeHtml(title)}" />\n` +
         `  <meta name="twitter:description" content="${escapeHtml(desc)}" />\n` +
@@ -116,7 +189,14 @@ console.log('  copied      / (home.html)');
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${['/', ...routes].map((p) => `  <url><loc>${SITE}${p === '/' ? '' : p}</loc></url>`).join('\n')}
+${['/', ...routes]
+  .map((p) => {
+    // Only posts carry a date anyone can defend. Stamping today on every static
+    // route each build tells a crawler nothing and teaches it to ignore the field.
+    const post = POSTS.find((x) => `/publicaciones/${x.slug}` === p);
+    return `  <url><loc>${SITE}${p === '/' ? '' : p}</loc>${post ? `<lastmod>${post.date}</lastmod>` : ''}</url>`;
+  })
+  .join('\n')}
 </urlset>
 `;
 writeFileSync(join(DIST, 'sitemap.xml'), sitemap);

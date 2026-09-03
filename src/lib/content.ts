@@ -175,12 +175,23 @@ export const PROGRAMS: Program[] = [
 
 /**
  * The regional ladder. Each is the country's real procurement portal — naming
- * them is what proves the work is done. Status is honest: only Costa Rica is
- * live, and nothing else may be shown as anything but planned.
+ * them is what proves the work is done.
+ *
+ * `live` means the whole evidence chain runs for that country every day:
+ * mirrored, canonicalised into records, reduced to a Merkle root, and that root
+ * committed to DecentralChain. Nothing may be shown as live on a weaker claim
+ * than that, and the account is public, so anyone can check the claim.
+ *
+ * Costa Rica since 2026-08-27. Panamá since 2026-09-03 — 37 archives, a
+ * canonicaliser of its own in `schema-pa.ts`, and `latest_pa` on the anchor
+ * account. Honduras is deliberately still `planned`: its archives are mirrored,
+ * but ONCAE's certificate expired on 2026-07-05 so the fetch is unauthenticated
+ * and opt-in, and there is no canonicalisation schema for it, so no records and
+ * no meaningful root. Mirroring a country is not the same as anchoring it.
  */
 export const COUNTRIES = [
   { code: 'CR', name: 'Costa Rica', portal: 'SICOP', status: 'live' },
-  { code: 'PA', name: 'Panamá', portal: 'PanamaCompra', status: 'planned' },
+  { code: 'PA', name: 'Panamá', portal: 'PanamaCompra', status: 'live' },
   { code: 'GT', name: 'Guatemala', portal: 'Guatecompras', status: 'planned' },
   { code: 'HN', name: 'Honduras', portal: 'HonduCompras', status: 'planned' },
   { code: 'SV', name: 'El Salvador', portal: 'COMPRASAL', status: 'planned' },

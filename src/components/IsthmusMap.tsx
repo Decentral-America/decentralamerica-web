@@ -84,7 +84,8 @@ const GEO: Record<CountryCode, Geo> = {
 const ORDER = ['GT', 'SV', 'HN', 'NI', 'CR', 'PA'] as const;
 
 /**
- * The Central American isthmus with one country filled and five outlined.
+ * The Central American isthmus, with the anchored countries filled and the rest
+ * outlined. Which are filled comes from COUNTRIES, not from this file.
  *
  * The map is decoration over the table that follows it: everything drawn here
  * is also written there as text, so nothing is lost when the map is hidden on a
@@ -116,14 +117,14 @@ export function IsthmusMap({ className = '' }: { className?: string }) {
       >
         <title id={titleId}>
           {t({
-            en: 'The Central American isthmus: Costa Rica live, five countries planned.',
-            es: 'El istmo centroamericano: Costa Rica activa, cinco países planeados.',
+            en: 'The Central American isthmus: Costa Rica and Panamá live, four countries planned.',
+            es: 'El istmo centroamericano: Costa Rica y Panamá activas, cuatro países planeados.',
           })}
         </title>
         <desc id={descId}>
           {t({
-            en: 'A stylised outline of Guatemala, El Salvador, Honduras, Nicaragua, Costa Rica and Panama. Costa Rica is drawn filled because the registry runs there. The other five are drawn as empty outlines because nothing runs in them yet. Each country is labelled with its national procurement portal and its status. The same information is in the table below.',
-            es: 'Contorno estilizado de Guatemala, El Salvador, Honduras, Nicaragua, Costa Rica y Panamá. Costa Rica está rellena porque el registro corre ahí. Los otros cinco son contornos vacíos porque todavía no corre nada en ellos. Cada país lleva el nombre de su portal nacional de compras públicas y su estado. La misma información está en la tabla siguiente.',
+            en: 'A stylised outline of Guatemala, El Salvador, Honduras, Nicaragua, Costa Rica and Panama. Costa Rica and Panamá are drawn filled because the registry runs in both. The other four are drawn as empty outlines because nothing runs in them yet. Each country is labelled with its national procurement portal and its status. The same information is in the table below.',
+            es: 'Contorno estilizado de Guatemala, El Salvador, Honduras, Nicaragua, Costa Rica y Panamá. Costa Rica y Panamá están rellenas porque el registro corre en ambas. Los otros cuatro son contornos vacíos porque todavía no corre nada en ellos. Cada país lleva el nombre de su portal nacional de compras públicas y su estado. La misma información está en la tabla siguiente.',
           })}
         </desc>
 
