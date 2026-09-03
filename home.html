@@ -599,6 +599,18 @@
     .wall__scene { transform: none; }
     .btn, .app { transition: none; }
   }
+
+/* FOOTER · the way off the landing page. Plain links rather than the underlined
+   .link: five underlined in a row read as a paragraph of corrections, and a nav
+   is already understood as a list of destinations. */
+.ftr { border-top: 1px solid var(--hairline); padding: clamp(2.5rem, 6vh, 4rem) 0 clamp(2rem, 5vh, 3rem); }
+.ftr__in { display: flex; flex-direction: column; gap: 1.75rem; }
+.ftr__brand { display: inline-flex; align-items: center; gap: 0.6rem; color: var(--sc-ink);
+  text-decoration: none; font-weight: 700; letter-spacing: -0.02em; font-size: 1.0625rem; }
+.ftr__brand svg { width: 26px; height: 26px; }
+.ftr__nav { display: flex; flex-wrap: wrap; gap: 0.75rem 1.75rem; }
+.ftr__nav a { color: var(--sc-ink-soft); text-decoration: none; font-size: 0.9375rem; transition: color 0.2s; }
+.ftr__nav a:hover, .ftr__nav a:focus-visible { color: var(--sc-ink); }
 </style>
 </head>
 <body>
@@ -1030,6 +1042,7 @@
             <p class="app__meta mono"><span class="state">abriendo</span></p>
           </article>
           <p class="rail__note">Dos están activos en Costa Rica. Los demás están construidos o listos, y lo decimos con esas palabras y no con otras.</p>
+          <p><a class="link" href="/organizaciones">Ver el Registro de Organizaciones</a></p>
         </div>
       </div>
     </div>
@@ -1121,7 +1134,7 @@
               <li><span>Medios de comunicación</span><span class="mono">custodio · sin nombrar</span></li>
             </ul>
             <p class="body">Hoy no hay ningún custodio institucional todavía. Nodo Público está abriendo, y esta página lo dice así porque cualquiera puede comprobarlo.</p>
-            <p><a class="link" href="/nodo">Conocé Nodo Público</a></p>
+            <p><a class="link" href="/nodo">Conocé Nodo Público</a> · <a class="link" href="/financiar">Financiar un país</a></p>
           </div>
         </div>
       </div>
@@ -1162,6 +1175,22 @@
 
 </main>
 
+<footer class="ftr">
+  <div class="wrap ftr__in">
+    <a class="ftr__brand" href="/">
+      <svg viewBox="0 0 300 300" aria-hidden="true"><use href="#markp"/></svg>
+      <span>DecentralAmerica.com</span>
+    </a>
+    <nav class="ftr__nav" aria-label="Páginas del sitio">
+      <a href="/verificar">Verificar un registro</a>
+      <a href="/organizaciones">Registro de Organizaciones</a>
+      <a href="/nodo">Nodo Público</a>
+      <a href="/financiar">Financiar un país</a>
+      <a href="/publicaciones">Publicaciones</a>
+    </nav>
+  </div>
+</footer>
+
 <!-- Not deferred. The inline block below applies the language and mounts the
      engine, and it expects scrollcraft to have run: deferring this made the
      external script execute after it, so nothing mounted and every scroll
@@ -1198,6 +1227,13 @@
   try { var st = localStorage.getItem(LANG_KEY); lang = (st === 'en' || st === 'es') ? st : browserLang(); } catch (e) { lang = browserLang(); }
   function T(es, en) { return lang === 'en' ? en : es; }
   var EN = {
+    'Páginas del sitio': 'Site pages',
+    'DecentralAmerica.com': 'DecentralAmerica.com',
+    'Verificar un registro': 'Verify a record',
+    'Registro de Organizaciones': 'Organization Registry',
+    'Nodo Público': 'Public Node',
+    'Financiar un país': 'Fund a country',
+    'Ver el Registro de Organizaciones': 'See the Organization Registry',
     'DecentralAmerica — La memoria pública de América Latina': "DecentralAmerica — The public memory of Latin America",
     'Un registro abierto de lo que el Estado publica, sostenido por instituciones que no ganan nada con cambiarlo y comprobable por cualquiera, sin pedir permiso.': 'An open record of what the State publishes, held by institutions that gain nothing by changing it and checkable by anyone, without asking permission.',
     'Saltar al contenido': 'Skip to content', 'El registro': 'The record', 'Cómo funciona': 'How it works', 'Alcance': 'Reach', 'Publicaciones': 'Publications', 'Idioma': 'Language', 'Capítulo actual': 'Current chapter',
