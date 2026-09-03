@@ -1,0 +1,1704 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DecentralAmerica — El registro público permanente de América Latina</title>
+<meta name="description" content="Un registro abierto de lo que el Estado publica, sostenido por instituciones que no ganan nada con cambiarlo y comprobable por cualquiera, sin pedir permiso.">
+<link rel="canonical" href="https://decentralamerica.com/">
+<meta name="theme-color" content="#f7f6f2">
+<link rel="icon" href="/favicon.svg">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DecentralAmerica">
+<meta property="og:locale" content="es_CR">
+<meta property="og:title" content="DecentralAmerica — El registro público permanente de América Latina">
+<meta property="og:description" content="Un registro abierto de lo que el Estado publica, sostenido por instituciones que no ganan nada con cambiarlo y comprobable por cualquiera, sin pedir permiso.">
+<meta property="og:url" content="https://decentralamerica.com/">
+<meta property="og:image" content="https://decentralamerica.com/og/home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DecentralAmerica — La memoria pública de América Latina">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://decentralamerica.com/og/home.png">
+<meta name="twitter:title" content="DecentralAmerica — El registro público permanente de América Latina">
+<meta name="twitter:description" content="Un registro abierto de lo que el Estado publica, sostenido por instituciones que no ganan nada con cambiarlo y comprobable por cualquiera, sin pedir permiso.">
+
+<!-- Every face used before the first scroll. Only Medium was preloaded while this
+     was a draft, so Bold and Regular were discovered from the stylesheet and the
+     headline reflowed once they arrived. -->
+<link rel="preload" href="/fonts/Satoshi-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Satoshi-Medium.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Satoshi-Regular.woff2" as="font" type="font/woff2" crossorigin>
+
+<!-- Kept to what is true today. The association is still in registration, so no
+     legal identifier is claimed here; DecentralExchange in content.ts is a
+     different entity and is not this one. -->
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[
+{"@type":"Organization","@id":"https://decentralamerica.com/#organization","name":"DecentralAmerica","url":"https://decentralamerica.com/","logo":"https://decentralamerica.com/brand/decentralamerica-mark.svg","description":"Una asociación que construye el registro público permanente de América Latina.","areaServed":["CR","PA","GT","HN","SV","NI"]},
+{"@type":"WebSite","@id":"https://decentralamerica.com/#website","url":"https://decentralamerica.com/","name":"DecentralAmerica","inLanguage":"es","publisher":{"@id":"https://decentralamerica.com/#organization"}}]}</script>
+<link rel="stylesheet" href="/home/scrollcraft.css">
+<!-- Runs before first paint, so a reader with JS off never gets the class and
+     the fail-safe rule below keeps the whole page readable. -->
+<script>document.documentElement.classList.add('js');</script>
+
+<style>
+  @font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+  @font-face { font-family: 'Satoshi'; src: url('/fonts/Satoshi-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+  @font-face {
+    font-family: 'Satoshi Fallback';
+    src: local('Arial'), local('Helvetica Neue'), local('Liberation Sans'), local('Roboto');
+    size-adjust: 98.9%; font-display: swap;
+  }
+  @font-face { font-family: 'IBM Plex Mono'; src: url('/home/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'IBM Plex Mono'; src: url('/home/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+
+  /* ---------------------------------------------------------------------
+     Colour roles. Warm paper, near-black ink, and one accent: confirmed
+     green, only ever for confirmed state (lattice witnesses that agree, the
+     live instruments). --altered marks a record that no longer matches.
+     Chapters paint their own ground and hard-cut between them; the close
+     is the single dark plate.
+     --------------------------------------------------------------------- */
+  :root {
+    --sc-canvas:     #f7f6f2;
+    --sc-surface:    #ffffff;
+    --sc-ink:        #14120f;
+    --sc-ink-soft:   rgba(20, 18, 15, 0.64);
+    --sc-accent:     #12a466;
+    --sc-accent-ink: #062b1c;
+    --sc-shadow-color: 40 14% 22%;
+    --sc-font-display: 'Satoshi', 'Satoshi Fallback', ui-sans-serif, system-ui, sans-serif;
+    --sc-font-text:    'Satoshi', 'Satoshi Fallback', ui-sans-serif, system-ui, sans-serif;
+    --sc-font-mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+
+    --faint:      rgba(20, 18, 15, 0.5);
+    --hairline:   rgba(20, 18, 15, 0.1);
+    --hairline-2: rgba(20, 18, 15, 0.2);
+    --confirmed:  #12a466;
+    --altered:    #d2542a;
+    --paper-2:    #ffffff;
+    --paper-3:    #f1f0eb;
+    --plate:      #0b0a09;
+    --gutter: clamp(1.25rem, 5vw, 5.5rem);
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /* Fail-safe: scrollcraft.css sets [data-sc-cue] { opacity: 0 } and hands the
+     element to the engine, so a 404 or a throw leaves every cued element
+     invisible. Copy stays visible unless the engine really mounted. */
+  html:not(.js) [data-sc-cue],
+  html.sc-nojs [data-sc-cue] { opacity: 1 !important; transform: none !important; }
+  html:not(.js) .silence,
+  html.sc-nojs .silence { display: none; }
+
+  html { color-scheme: light; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body {
+    background: var(--sc-canvas); color: var(--sc-ink);
+    font-family: var(--sc-font-text); font-size: 1.0625rem; line-height: 1.6; letter-spacing: 0.002em;
+    overflow-x: clip;
+  }
+  ::selection { background: var(--sc-ink); color: var(--sc-canvas); }
+  :focus-visible { outline: 2px solid var(--sc-ink); outline-offset: 3px; border-radius: 6px; }
+  .sc-grain { opacity: 0.028; }
+  .defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+  .wrap { width: 100%; max-width: 80rem; margin-inline: auto; padding-inline: var(--gutter); }
+  .mono { font-family: var(--sc-font-mono); font-variant-numeric: tabular-nums; font-size: 0.8125rem; letter-spacing: 0.01em; }
+  .label {
+    font-family: var(--sc-font-mono); font-size: 0.72rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--faint); margin: 0;
+  }
+  .d-xl {
+    font-family: var(--sc-font-display); font-weight: 500;
+    font-size: clamp(2.6rem, 5.6vw, 5.8rem);
+    line-height: 1; letter-spacing: -0.032em; text-wrap: balance; margin: 0;
+  }
+  .d-lg {
+    font-family: var(--sc-font-display); font-weight: 500;
+    font-size: clamp(2rem, 4vw, 3.9rem);
+    line-height: 1.04; letter-spacing: -0.026em; text-wrap: balance; margin: 0;
+  }
+  .d-md {
+    font-family: var(--sc-font-display); font-weight: 500;
+    font-size: clamp(1.45rem, 2.4vw, 2.3rem);
+    line-height: 1.12; letter-spacing: -0.02em; text-wrap: balance; margin: 0;
+  }
+  .lede {
+    font-size: clamp(1.05rem, 1.3vw, 1.25rem); line-height: 1.55;
+    color: var(--sc-ink-soft); max-width: 44ch; text-wrap: pretty; margin: 0;
+  }
+  .body { font-size: 1.0625rem; line-height: 1.65; color: var(--sc-ink-soft); max-width: 58ch; text-wrap: pretty; margin: 0; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    height: 3rem; padding: 0 1.45rem; border-radius: 999px; border: 0; cursor: pointer;
+    background: var(--sc-ink); color: var(--sc-canvas);
+    font: inherit; font-weight: 500; font-size: 0.95rem; letter-spacing: -0.005em; white-space: nowrap;
+    text-decoration: none; box-shadow: var(--sc-e2);
+    transition: transform 140ms var(--ease), background-color 140ms var(--ease), box-shadow 140ms var(--ease);
+  }
+  .btn:hover { background: #2a2622; box-shadow: var(--sc-e3); }
+  .btn:active { transform: scale(0.97); transition-duration: 100ms; }
+  .btn--sm { height: 2.25rem; padding: 0 0.95rem; font-size: 0.85rem; box-shadow: none; }
+  .btn--ghost { background: transparent; color: var(--sc-ink); box-shadow: inset 0 0 0 1px var(--hairline-2); }
+  .btn--ghost:hover { background: rgba(20, 18, 15, 0.05); box-shadow: inset 0 0 0 1px var(--sc-ink); }
+  .link {
+    color: var(--sc-ink); text-decoration: underline; text-underline-offset: 0.28em;
+    text-decoration-thickness: 1px; text-decoration-color: var(--hairline-2);
+    transition: text-decoration-color 140ms var(--ease);
+  }
+  .link:hover { text-decoration-color: var(--sc-ink); }
+  .state { display: inline-flex; align-items: center; gap: 0.4em; }
+  .state::before { content: ''; width: 0.5em; height: 0.5em; border-radius: 50%; background: var(--faint); }
+  .state--live::before { background: var(--confirmed); }
+
+  /* ============================== the folio ============================= */
+  /* The grammar's nav: a folio in the margin, not a bar. The mark glyph and
+     the current chapter, updated as chapters pass. No CTA lives in chrome. */
+  .folio {
+    position: fixed; left: clamp(0.85rem, 1.6vw, 1.5rem); top: 50%; z-index: 40;
+    transform: translateY(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.9rem;
+    color: var(--sc-ink); transition: color 400ms var(--ease), opacity 300ms var(--ease);
+  }
+  .folio__ch {
+    margin: 0; writing-mode: vertical-rl; transform: rotate(180deg);
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap;
+    display: flex; gap: 0.9em; opacity: 1; transition: opacity 220ms var(--ease), transform 220ms var(--ease);
+  }
+  .folio--swap .folio__ch { opacity: 0; transform: rotate(180deg) translateY(-6px); }
+  .folio--off .folio__ch { opacity: 0; }
+  .folio--dark { color: #f1ede6; }
+  .folio__num { opacity: 0.5; }
+
+  /* ============================== chapters ============================== */
+  .ch { position: relative; }
+  .ch--1 { background: var(--paper-2); }
+  .ch--2 { background: var(--paper-3); }
+  .ch--3 { background: var(--sc-canvas); }
+  .ch--4 { background: var(--paper-2); }
+  .ch--5 { background: var(--paper-3); }
+
+  .inter { min-height: 56svh; display: flex; align-items: center; padding-block: clamp(3rem, 8vh, 6rem); }
+  .inter .wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.1rem; }
+  .inter__num { color: var(--faint); font-size: 0.8rem; letter-spacing: 0.16em; }
+  .inter h2 { max-width: 18ch; }
+  .inter .lede { margin-top: 0.4rem; }
+  .rule { height: 1px; border: 0; margin: 1.4rem 0 0; background: var(--sc-ink); width: min(100%, 22rem); opacity: 0.5; }
+  html.sc-nojs .rule, html:not(.js) .rule { clip-path: none !important; }
+
+  /* ============================== title page ============================ */
+  .title { min-height: 100svh; display: flex; align-items: center; overflow: clip; position: relative; padding-block: clamp(4rem, 10vh, 7rem); }
+  .title__grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); align-items: center; gap: clamp(2rem, 5vw, 5rem); }
+  .title__copy { display: flex; flex-direction: column; gap: clamp(1.1rem, 2.4vh, 1.8rem); }
+  .title h1 { max-width: 12ch; }
+  .title__foot {
+    position: absolute; left: 0; right: 0; bottom: clamp(1.2rem, 3.5vh, 2.4rem);
+    display: flex; justify-content: space-between; gap: 1rem; color: var(--faint);
+  }
+  .title__foot span { white-space: nowrap; }
+  .relief { position: relative; aspect-ratio: 1; width: min(100%, 58vh); margin-left: auto; perspective: 1400px; }
+  .relief__lean { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+  .relief__l { position: absolute; inset: 0; transform-style: preserve-3d; }
+  .relief__l svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .relief__l--body { transform: translateZ(0); }
+  .relief__l--body svg { filter: drop-shadow(0 28px 34px rgba(30, 24, 16, 0.22)) drop-shadow(0 4px 8px rgba(30, 24, 16, 0.08)); }
+  .relief__l--body use { fill: var(--sc-ink); }
+  .relief__l--dots { transform: translateZ(60px); }
+  .relief__l--dots svg { filter: drop-shadow(0 12px 14px rgba(30, 24, 16, 0.22)); }
+  .relief__l--dots use { fill: var(--sc-ink); }
+
+  /* ============================== I · anatomy =========================== */
+  .spread__in { height: 100%; display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: center; gap: clamp(2rem, 5vw, 6rem); }
+  .spread__copy { display: flex; flex-direction: column; gap: clamp(1rem, 2.2vh, 1.6rem); }
+  .anat { margin: 0.6rem 0 0; display: flex; flex-direction: column; gap: 0.9rem; }
+  .anat__i { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1rem; padding-top: 0.9rem; border-top: 1px solid var(--hairline); opacity: 0.32; transition: opacity 480ms var(--ease); }
+  .anat__i.lit { opacity: 1; }
+  .anat dt { margin: 0; font-weight: 500; }
+  .anat dd { margin: 0; color: var(--sc-ink-soft); font-size: 0.98rem; line-height: 1.5; text-wrap: pretty; }
+  html.sc-nojs .anat__i, html:not(.js) .anat__i { opacity: 1; }
+  .anatomy { margin: 0; width: 100%; max-width: min(46rem, 84vh); justify-self: center; }
+  .anatomy svg { width: 100%; height: auto; overflow: visible; display: block; }
+  .an__stroke { fill: none; stroke: var(--sc-ink); stroke-width: 1.4; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .an__fill { fill: var(--sc-ink); opacity: 0; }
+  .co line, .co path { fill: none; stroke: var(--sc-ink); stroke-width: 1; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0.7; }
+  .co circle { fill: var(--sc-canvas); stroke: var(--sc-ink); stroke-width: 1.2; opacity: 0; }
+  .co text { font-family: var(--sc-font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; fill: var(--sc-ink); opacity: 0; }
+  html.sc-nojs .an__stroke, html:not(.js) .an__stroke { stroke-dashoffset: 0; }
+  html.sc-nojs .an__fill, html:not(.js) .an__fill,
+  html.sc-nojs .co *, html:not(.js) .co * { opacity: 1; stroke-dashoffset: 0; }
+
+  /* ============================== II · how ============================== */
+  .how { padding-block: clamp(4rem, 9vh, 7rem) clamp(2rem, 5vh, 4rem); }
+  .inter--inline { min-height: 0; padding: 0 0 clamp(3rem, 7vh, 5rem); }
+  .inter--inline .wrap { padding: 0; }
+  .steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: clamp(3rem, 9vh, 7rem); }
+  .step { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(2rem, 6vw, 7rem); }
+  .step:nth-child(even) .wipe { order: 2; }
+  /* The wipe lives on a padded wrapper: clip-path clips at the border box,
+     and the engine leaves inset(0) behind, which would cut the card's shadow
+     square at every corner. The padding keeps the shadow inside the clip. */
+  /* Sized to the shadow: --sc-e3's deepest layer (0 48px 90px -24px) reaches
+     114px below the card and 66px to each side, so the clip box is padded
+     past that and pulled back with the same margins. */
+  .wipe { padding: 2rem 5rem 8rem; margin: -2rem -5rem -8rem; min-width: 0; }
+  .step__copy { display: flex; flex-direction: column; gap: 0.9rem; max-width: 34rem; }
+  .step__copy .mono { color: var(--faint); margin-top: 0.4rem; }
+  .step__fig { margin: 0; }
+  .card {
+    position: relative; aspect-ratio: 4 / 3; border-radius: 22px; background: var(--paper-2);
+    box-shadow: var(--sc-e3), var(--sc-edge), 0 0 0 1px var(--hairline); overflow: hidden;
+  }
+  .card svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .card--dark { background: #1a1815; }
+  .doc__page { fill: var(--paper-2); stroke: var(--hairline-2); }
+  .doc__line { fill: rgba(20, 18, 15, 0.14); }
+  .doc__mark { fill: var(--sc-ink); }
+  .ht__dot { fill: var(--sc-ink); }
+  .seal__block { fill: #f3f1ec; stroke: var(--hairline-2); }
+  .seal__shadow { fill: rgba(20, 18, 15, 0.22); }
+  .seal__light { fill: #ffffff; }
+  .seal__ink { fill: #dad6cc; }
+  .ver__mark { fill: var(--sc-ink); }
+  .ver__w { fill: var(--confirmed); }
+  .ver__eq { stroke: var(--sc-ink); stroke-width: 6; stroke-linecap: round; }
+
+  .stats { padding-block: clamp(2rem, 5vh, 3.5rem) clamp(4rem, 9vh, 7rem); }
+  .stats__grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.5rem; padding-top: 1.4rem; border-top: 1px solid var(--hairline-2); }
+  .stat { display: flex; flex-direction: column; gap: 0.35rem; }
+  .stat__n { font-family: var(--sc-font-display); font-weight: 500; font-size: clamp(1.7rem, 2.6vw, 2.6rem); letter-spacing: -0.025em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat__n small { font-size: 0.55em; letter-spacing: -0.01em; color: var(--sc-ink-soft); margin-left: 0.15em; }
+  .stat__l { font-size: 0.9rem; color: var(--sc-ink-soft); line-height: 1.4; text-wrap: pretty; }
+  .stats__note { margin-top: 1.6rem; color: var(--faint); max-width: 60ch; }
+
+  .silence { height: 30svh; }
+
+  /* ============================== III · chain =========================== */
+  .chain__in { height: 100%; display: grid; grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr); align-items: center; position: relative; z-index: 2; pointer-events: none; }
+  .chain__copy { display: flex; flex-direction: column; gap: clamp(0.9rem, 2vh, 1.4rem); pointer-events: auto; max-width: 30rem; }
+  .lit { list-style: none; margin: 0.4rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.8rem; }
+  .lit li { position: relative; padding-left: 1.4rem; color: var(--sc-ink-soft); opacity: 0.3; transition: opacity 520ms var(--ease), color 520ms var(--ease); text-wrap: pretty; font-size: 1rem; line-height: 1.5; }
+  .lit li::before { content: ''; position: absolute; left: 0; top: 0.62em; width: 0.42rem; height: 0.42rem; border-radius: 50%; background: var(--sc-ink); opacity: 0.4; transition: opacity 520ms var(--ease); }
+  .lit li.lit-on { opacity: 1; color: var(--sc-ink); }
+  .lit li.lit-on::before { opacity: 1; }
+  html.sc-nojs .lit li, html:not(.js) .lit li { opacity: 1; color: var(--sc-ink); }
+
+  .lat-wrap { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: flex-end; padding-right: 2vw; perspective: 1600px; overflow: hidden; }
+  .lat-lean { width: min(118vh, 74vw); aspect-ratio: 14 / 13; transform: rotateX(20deg); transform-style: preserve-3d; will-change: transform;
+    -webkit-mask-image: radial-gradient(ellipse 56% 58% at 50% 50%, #000 48%, transparent 100%); mask-image: radial-gradient(ellipse 56% 58% at 50% 50%, #000 48%, transparent 100%); }
+  .lat { width: 100%; height: 100%; display: block; overflow: visible; }
+  .node { transform-box: fill-box; transform-origin: center; transform: scale(clamp(0, (var(--sc-p) - var(--t0)) / 0.14, 1)); }
+  .node__b { fill: var(--sc-ink); opacity: 0.11; }
+  .node--hub .node__b { opacity: 1; }
+  .node__w { fill: rgba(20, 18, 15, 0.36); transition: fill 460ms var(--ease); transition-delay: calc(var(--ring) * 130ms); }
+  .node--hub .node__w { fill: var(--sc-ink); }
+  .lat[data-state="confirmed"] .node__w { fill: var(--confirmed); }
+  .lat[data-state="altered"] .node__w { fill: var(--altered); }
+  html.sc-nojs .node, html:not(.js) .node { transform: none; }
+
+  /* The record at the hub. Real markup; the amount is the one editable span. */
+  /* Centred on the lattice hub, not on the viewport: the record sits on the
+     node that holds it, and the copy column keeps its own ground. */
+  .try { position: absolute; z-index: 3; right: calc(2vw + min(59vh, 37vw)); top: 50%; transform: translate(50%, -50%); width: min(24rem, 90vw); pointer-events: auto; }
+  .try--off { pointer-events: none; }
+  html.sc-nojs .try__plate, html:not(.js) .try__plate { opacity: 1; }
+  .try__plate {
+    position: absolute; inset: 0; border-radius: 18px; background: rgba(255, 255, 255, 0.9);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    box-shadow: var(--sc-e3), 0 24px 48px -20px rgba(30, 24, 16, 0.28), 0 0 0 1px var(--hairline);
+    /* Not a cue: driven from the act's own progress on the same window as
+       the record's cue, so it is never hidden with the text it protects. */
+    opacity: clamp(0, (var(--sc-p) - 0.56) / 0.06, 1);
+  }
+  .try__ask { font-size: 1.4rem; margin-bottom: 0.25rem; }
+  .record {
+    position: relative; padding: 1.1rem 1.2rem 1.05rem;
+    display: flex; flex-direction: column; gap: 0.55rem; font-family: var(--sc-font-mono); font-size: 0.78rem; letter-spacing: 0.005em;
+  }
+  .record__row { display: grid; grid-template-columns: 6.2rem minmax(0, 1fr); gap: 0.6rem; color: var(--sc-ink); }
+  .record__row span:first-child { color: var(--faint); }
+  .record__hd { color: var(--faint); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; padding-bottom: 0.45rem; border-bottom: 1px solid var(--hairline); }
+  .amt { display: inline-block; min-width: 6.5ch; padding: 0.05rem 0.3rem; margin: -0.05rem -0.3rem; border-radius: 6px; font-weight: 500;
+    box-shadow: inset 0 0 0 1px transparent; transition: box-shadow 160ms var(--ease), background-color 160ms var(--ease); }
+  .amt[contenteditable] { cursor: text; box-shadow: inset 0 0 0 1px var(--hairline-2); }
+  .amt[contenteditable]:hover { background: rgba(20, 18, 15, 0.04); }
+  .amt:focus-visible { outline: none; box-shadow: inset 0 0 0 1.5px var(--sc-ink); }
+  .record--alt .amt { color: var(--altered); }
+  .hash { display: grid; grid-template-columns: 6.2rem minmax(0, 1fr); gap: 0.6rem; padding-top: 0.5rem; border-top: 1px solid var(--hairline); }
+  .hash span:first-child { color: var(--faint); }
+  .hash code { font: inherit; word-break: break-all; color: var(--sc-ink); line-height: 1.45; font-size: 0.72rem; transition: color 300ms var(--ease); }
+  .record--alt #hashB { color: var(--altered); }
+  .status { display: flex; align-items: center; gap: 0.5rem; margin: 0.15rem 0 0; font-weight: 500; color: var(--sc-ink); }
+  .status__dot { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--confirmed); transition: background-color 300ms var(--ease); }
+  .record--alt .status__dot { background: var(--altered); }
+  .record--wait .status__dot { background: var(--faint); }
+  .try__acts { display: flex; gap: 0.5rem; margin-top: 0.35rem; }
+  .try__note { color: var(--faint); font-size: 0.68rem; text-wrap: pretty; line-height: 1.45; margin-top: 0.3rem; padding-top: 0.55rem; border-top: 1px solid var(--hairline); }
+
+  /* ============================== IV · apps ============================= */
+  .rail { display: flex; align-items: center; gap: clamp(1.2rem, 2.2vw, 2rem); height: 100%; padding-inline: var(--gutter) clamp(1.25rem, 5vw, 5.5rem); will-change: transform; }
+  .rail__head { flex: 0 0 auto; width: clamp(20rem, 30vw, 28rem); display: flex; flex-direction: column; gap: 1rem; padding-right: clamp(1rem, 3vw, 3rem); }
+  .rail__note { flex: 0 0 auto; width: clamp(18rem, 24vw, 22rem); color: var(--sc-ink-soft); text-wrap: pretty; padding-left: 1rem; }
+  .app {
+    flex: 0 0 auto; width: clamp(17rem, 24vw, 22.5rem); display: flex; flex-direction: column; gap: 0.55rem;
+    padding: 1.2rem 1.3rem 1.35rem; border-radius: 22px; background: var(--paper-3);
+    box-shadow: var(--sc-edge), 0 0 0 1px var(--hairline);
+    transition: transform 320ms var(--ease), box-shadow 320ms var(--ease);
+  }
+  @media (hover: hover) and (pointer: fine) { .app:hover { transform: translateY(-4px); box-shadow: var(--sc-e3), var(--sc-edge), 0 0 0 1px var(--hairline-2); } }
+  .app__fig { margin: 0 0 0.8rem; aspect-ratio: 1; width: 100%; border-radius: 16px; background: var(--paper-2); display: grid; place-items: center; overflow: hidden; }
+  .app__fig svg { width: 68%; height: 68%; overflow: visible; }
+  .app h4 { margin: 0; font-family: var(--sc-font-display); font-weight: 500; font-size: 1.45rem; letter-spacing: -0.02em; line-height: 1.1; }
+  .app__rec { margin: 0; font-weight: 500; font-size: 0.98rem; line-height: 1.4; }
+  .app__det { margin: 0; color: var(--sc-ink-soft); font-size: 0.92rem; line-height: 1.5; text-wrap: pretty; }
+  .app__meta { color: var(--faint); margin-top: 0.4rem; }
+  .fig--seal .seal-ring { fill: none; stroke: var(--sc-ink); stroke-width: 1.4; stroke-dasharray: 5 6; opacity: 0.55; }
+  .fig--seal use { fill: var(--sc-ink); }
+  .fig--route use { fill: none; stroke: var(--sc-ink); stroke-width: 2.2; stroke-dasharray: 7 6; stroke-linejoin: round; }
+  .fig--route .pin { fill: none; stroke: var(--confirmed); stroke-width: 2.5; }
+  .fig--route .pin-c { fill: var(--confirmed); }
+  .fig--line use { fill: none; stroke: var(--sc-ink); stroke-width: 1.1; }
+  .fig--line .base { stroke: var(--sc-ink); stroke-width: 1; opacity: 0.3; }
+  .fig--layers use { fill: var(--sc-ink); }
+  .fig--net use { fill: var(--sc-ink); }
+  .fig--net .nb { opacity: 0.16; }
+  @media (prefers-reduced-motion: no-preference) {
+    .app { opacity: calc(0.55 + 0.45 * clamp(0, (var(--sc-p) - var(--k)) / 0.1, 1)); transform: translateX(calc(28px * (1 - clamp(0, (var(--sc-p) - var(--k)) / 0.1, 1)))); }
+    .rail__note { opacity: calc(0.4 + 0.6 * clamp(0, (var(--sc-p) - 0.82) / 0.1, 1)); }
+  }
+  html.sc-nojs .app, html:not(.js) .app { opacity: 1; transform: none; }
+
+  /* ============================== V · region ============================ */
+  .region { padding-block: clamp(4rem, 9vh, 7rem); }
+  .region__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 7rem); align-items: center; }
+  .compass { position: relative; margin: 0; aspect-ratio: 1; width: min(100%, 34rem); justify-self: center; }
+  .compass > svg { position: absolute; inset: 18%; width: 64%; height: 64%; overflow: visible; }
+  .compass use { fill: var(--sc-ink); }
+  .compass__labels { list-style: none; margin: 0; padding: 0; }
+  .place { position: absolute; display: flex; flex-direction: column; gap: 0.1rem; line-height: 1.25; transform: translate(-50%, -50%); text-align: center; }
+  .place b { font-weight: 500; font-size: 1rem; letter-spacing: -0.01em; }
+  .place .mono { color: var(--faint); font-size: 0.72rem; }
+  .place .state { font-size: 0.72rem; font-family: var(--sc-font-mono); color: var(--faint); justify-content: center; }
+  .place--n { left: 50%; top: 9%; }
+  .place--s { left: 50%; top: 88%; }
+  .place--ne { left: 84%; top: 34%; }
+  .place--nw { left: 16%; top: 34%; }
+  .place--se { left: 82%; top: 70%; }
+  .place--sw { left: 18%; top: 70%; }
+  .custody { display: flex; flex-direction: column; gap: 1rem; }
+  .custody__list { list-style: none; margin: 0.4rem 0; padding: 0; display: flex; flex-direction: column; }
+  .custody__list li { padding: 0.8rem 0; border-top: 1px solid var(--hairline); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; align-items: baseline; }
+  .custody__list li:last-child { border-bottom: 1px solid var(--hairline); }
+  .custody__list .mono { color: var(--faint); }
+
+  /* ============================== III · la huella ======================= */
+  .ch--huella { background: var(--paper-2); }
+  .huella__c { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+  .huella__in { position: relative; z-index: 2; height: 100%; display: flex; align-items: flex-start; padding-top: clamp(5rem, 14vh, 9rem); pointer-events: none; }
+  .huella__copy { display: flex; flex-direction: column; gap: 0.9rem; max-width: 30rem; pointer-events: auto; }
+  .huella__copy .d-lg { max-width: 12ch; }
+  .huella__hash { position: absolute; z-index: 2; left: 50%; bottom: clamp(3rem, 14vh, 8rem); transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.6rem; text-align: center; }
+  .huella__chars { margin: 0; width: 64ch; font-size: clamp(0.8rem, 1.05vw, 1.05rem); letter-spacing: 0; line-height: 1.5; white-space: normal; word-break: break-all; }
+  .huella__chars span { display: inline-block; width: 1ch; opacity: 0.18; }
+  .huella__note { color: var(--faint); }
+  html.sc-nojs .huella__hash, html:not(.js) .huella__hash { display: none; }
+
+  /* ============================== IV · the wall ========================= */
+  .ch--wall { background: var(--paper-3); }
+  .wall__in { height: 100%; display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); align-items: center; gap: clamp(1.5rem, 4vw, 4rem); }
+  .wall__copy { display: flex; flex-direction: column; gap: clamp(0.9rem, 2vh, 1.4rem); max-width: 28rem; }
+  .events { list-style: none; margin: 0.2rem 0 0; padding: 0.7rem 0 0; border-top: 1px solid var(--hairline); display: flex; flex-direction: column; gap: 0.35rem; color: var(--sc-ink); font-size: 0.78rem; }
+  .events li { opacity: calc(0.22 + 0.78 * clamp(0, (var(--sc-p) - var(--e)) / 0.05, 1)); transform: translateX(calc(8px * (1 - clamp(0, (var(--sc-p) - var(--e)) / 0.05, 1)))); }
+  .wall { perspective: 1900px; width: 100%; }
+  .wall__scene { transform: rotateX(30deg) rotateY(-16deg) rotateZ(7deg); transform-style: preserve-3d; display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); gap: 0.35rem 0.45rem; width: 100%; }
+  .wall__years { grid-column: 2; grid-row: 1; display: grid; grid-template-columns: repeat(17, minmax(0, 1fr)); gap: 5px; font-size: 0.56rem; color: var(--faint); text-align: center; letter-spacing: 0; }
+  .wall__years span { overflow: hidden; }
+  .wall__months { grid-column: 1; grid-row: 2; display: grid; grid-template-rows: repeat(12, minmax(0, 1fr)); font-size: 0.6rem; color: var(--faint); align-items: center; text-align: right; }
+  .wall__grid { grid-column: 2; grid-row: 2; display: grid; grid-template-columns: repeat(17, minmax(0, 1fr)); gap: 5px; transform-style: preserve-3d; }
+  .tile { position: relative; aspect-ratio: 1; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(20, 18, 15, 0.14); transform-style: preserve-3d; }
+  .tile--none { visibility: hidden; }
+  .tile__f, .tile__a { position: absolute; inset: 0; border-radius: 3px; display: block; }
+  .tile__f { background: var(--sc-ink); opacity: clamp(0, (var(--sc-p) - var(--t0)) / 0.035, 1); }
+  .tile--alt { --lift: clamp(0, (var(--sc-p) - var(--t1)) / 0.08, 1); transform: translateZ(calc(34px * var(--lift))); box-shadow: inset 0 0 0 1px rgba(20, 18, 15, 0.14), 0 16px 24px -8px rgba(30, 24, 16, calc(0.5 * var(--lift))); }
+  .tile__a { background: var(--altered); opacity: var(--lift); }
+  html.sc-nojs .tile__f, html:not(.js) .tile__f { opacity: 1; }
+  html.sc-nojs .tile--alt, html:not(.js) .tile--alt { --lift: 1; }
+  html.sc-nojs .events li, html:not(.js) .events li { opacity: 1; transform: none; }
+
+  /* ============================== VII · live ============================ */
+  .ch--live { background: var(--paper-3); }
+  .live { padding-block: clamp(4rem, 9vh, 7rem); }
+  .ledger { border-radius: 22px; background: var(--paper-2); box-shadow: var(--sc-e2), var(--sc-edge), 0 0 0 1px var(--hairline); padding: clamp(1.2rem, 2.5vw, 2rem) clamp(1.2rem, 3vw, 2.4rem); max-width: 60rem; }
+  .ledger__row { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 1rem; align-items: baseline; padding: 0.9rem 0; border-top: 1px solid var(--hairline); }
+  .ledger__row:first-child { border-top: 0; padding-top: 0.2rem; }
+  .ledger__k { font-weight: 500; }
+  .ledger__v { color: var(--sc-ink); font-size: 0.9rem; word-break: break-all; }
+  .ledger__v--h { display: inline-flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+  .ledger__sub { color: var(--faint); font-size: 0.75rem; }
+  .ring { width: 1.15rem; height: 1.15rem; transform: rotate(-90deg); flex: 0 0 auto; }
+  .ring__t { fill: none; stroke: var(--hairline-2); stroke-width: 3; }
+  .ring__p { fill: none; stroke: var(--sc-ink); stroke-width: 3; stroke-dasharray: 1; stroke-dashoffset: 1; stroke-linecap: round; }
+  .ledger__root { line-height: 1.6; }
+  .ledger__root span { display: inline-block; opacity: clamp(0, (var(--sc-p) - 0.22 - var(--i) * 0.0035) / 0.06, 1); transform: translateY(calc(5px * (1 - clamp(0, (var(--sc-p) - 0.22 - var(--i) * 0.0035) / 0.06, 1)))); }
+  .ledger__foot { color: var(--faint); margin: 1.1rem 0 0; padding-top: 0.9rem; border-top: 1px solid var(--hairline); text-wrap: pretty; }
+  html.sc-nojs .ledger__root span, html:not(.js) .ledger__root span { opacity: 1; transform: none; }
+
+  /* ============================== VIII · the limits ===================== */
+  .ch--limits { background: var(--sc-canvas); }
+  .limits__in { height: 100%; display: flex; flex-direction: column; justify-content: center; gap: clamp(0.8rem, 2vh, 1.4rem); max-width: 46rem; }
+  .limits__no { list-style: none; margin: 0.3rem 0; padding: 0; display: flex; flex-direction: column; gap: clamp(0.5rem, 1.4vh, 0.9rem); }
+  .strike {
+    --sw: clamp(0, (var(--sc-p) - var(--at)) / 0.1, 1);
+    color: rgb(20 18 15 / calc(1 - 0.62 * var(--sw)));
+    background-image: linear-gradient(var(--sc-ink), var(--sc-ink)); background-repeat: no-repeat; background-position: 0 57%;
+    background-size: calc(var(--sw) * 100%) 0.085em; -webkit-box-decoration-break: clone; box-decoration-break: clone; padding: 0 0.05em; margin: 0 -0.05em;
+  }
+  .limits__yes { max-width: 20ch; margin-top: clamp(0.8rem, 3vh, 2rem); }
+  .limits__note { color: var(--faint); }
+  html.sc-nojs .strike, html:not(.js) .strike { --sw: 1; }
+
+  /* ============================== close · arrival ======================= */
+  /* Carried from /landing3 at the owner's request: the only literal
+     appearance of the mark at scale, on the page's one dark plate. */
+  .close { --sc-ink: #f1ede6; --sc-ink-soft: rgba(241, 237, 230, 0.66); --faint: rgba(241, 237, 230, 0.52); --sc-canvas: #0b0a09; background: var(--plate); color: var(--sc-ink); }
+  .close .sc-stage { background: var(--plate); }
+  .close__in {
+    height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; gap: clamp(1.25rem, 3vh, 2rem); padding-inline: var(--gutter);
+  }
+  .assembly { width: clamp(96px, 12vw, 150px); height: auto; overflow: visible; margin-bottom: clamp(0.5rem, 2vh, 1.5rem); }
+  .asm__axis { stroke: var(--sc-ink); stroke-linecap: butt; }
+  .asm__dot { fill: var(--sc-ink); }
+  .asm__mark { fill: var(--sc-ink); }
+  .close__line { max-width: 22ch; }
+  .close .btn { background: var(--sc-ink); color: var(--plate); }
+  .close .btn:hover { background: #ffffff; }
+  .close :focus-visible { outline-color: var(--sc-ink); }
+  .close__meta { color: var(--faint); display: flex; flex-direction: column; gap: 0.3rem; margin-top: clamp(1rem, 3vh, 2rem); }
+  html.sc-nojs .asm__mark { opacity: 1 !important; }
+  html.sc-nojs #asmAxes, html.sc-nojs #asmDots { display: none; }
+
+  /* ============================== the header ============================ */
+  /* The site's wordmark and language control, set on the title page. Absolute
+     rather than fixed: it belongs to the first screen and leaves with it. */
+  .hdr { --hdr-ink: var(--sc-ink); --hdr-muted: var(--sc-ink-soft); --hdr-ground: var(--sc-canvas); position: absolute; inset: 0 0 auto 0; z-index: 40; color: var(--hdr-ink); }
+  .hdr__skip {
+    position: absolute; top: 0.75rem; left: 1rem; z-index: 10; transform: translateY(calc(-100% - 1.5rem));
+    border-radius: 0.5rem; background: #ffffff; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500; color: var(--sc-ink); text-decoration: none;
+    box-shadow: 0 1px 2px rgba(10, 10, 11, 0.04), 0 8px 24px rgba(10, 10, 11, 0.1); transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hdr__skip:focus { transform: none; }
+  .hdr__wrap { margin-inline: auto; width: 100%; max-width: 1180px; padding-inline: 1.5rem; }
+  .hdr__row { display: flex; height: 4rem; align-items: center; justify-content: space-between; gap: 1rem; }
+  .hdr__brand { display: flex; align-items: center; gap: 0.625rem; font-size: 1.0625rem; font-weight: 500; letter-spacing: -0.03em; color: var(--hdr-ink); text-decoration: none; }
+  .hdr__brand svg { width: 1.62em; height: 1.62em; flex-shrink: 0; transform: translateY(0.04em); fill: currentColor; }
+  .hdr__right { display: flex; align-items: center; gap: 0.25rem; }
+  .lang { margin: 0; padding: 3px; border: 0; min-width: 0; display: inline-flex; align-items: center; gap: 1px; border-radius: 999px; background: rgba(20, 18, 15, 0.05); font-family: var(--sc-font-mono); font-size: 0.8125rem; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; }
+  .lang button { border: 0; background: transparent; cursor: pointer; border-radius: 999px; padding: 3px 0.5rem; line-height: 1; font: inherit; color: var(--hdr-muted); transition: color 300ms cubic-bezier(0.16, 1, 0.3, 1), background-color 300ms cubic-bezier(0.16, 1, 0.3, 1); }
+  .lang button:hover { color: var(--hdr-ink); }
+  .lang button[aria-pressed="true"] { background: var(--hdr-ink); color: var(--hdr-ground); font-weight: 500; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  @media (min-width: 40em) {
+    .hdr__wrap { padding-inline: 2rem; }
+    .hdr__row { height: 4.5rem; }
+    .hdr__brand { font-size: 1.125rem; }
+    .hdr__right { gap: 0.5rem; }
+    .lang button { padding-inline: 0.625rem; }
+  }
+  @media (min-width: 64em) { .hdr__wrap { padding-inline: 3rem; } }
+
+  /* =============================== phones =============================== */
+  @media (max-width: 53.75rem) {
+    .folio { display: none; }
+    .wrap { padding-inline: clamp(1.1rem, 5vw, 1.6rem); }
+    .title { padding-top: 4.5rem; }
+    .title__grid { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+    .relief { width: min(62vw, 46svh); margin: 0 auto 0 0; order: -1; }
+    .d-xl { font-size: clamp(2.2rem, 9vw, 3rem); letter-spacing: -0.026em; }
+    .title h1 { max-width: none; }
+    .title__foot { flex-direction: column; gap: 0.2rem; align-items: flex-start; padding-inline: clamp(1.1rem, 5vw, 1.6rem); }
+    .inter { min-height: 48svh; }
+    .spread__in { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); align-items: start; gap: 0.8rem; padding-top: 3.6rem; padding-bottom: 1rem; }
+    .anatomy { max-width: min(76vw, 40svh); }
+    .spread__copy { gap: 0.6rem; }
+    .spread__copy .d-md { font-size: 1.35rem; }
+    .spread__copy .body { font-size: 0.95rem; line-height: 1.5; }
+    .anat { gap: 0.5rem; }
+    .anat__i { grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0.6rem; padding-top: 0.5rem; }
+    .anat dd { font-size: 0.86rem; line-height: 1.4; }
+    .step { grid-template-columns: minmax(0, 1fr); gap: 1.4rem; }
+    .step:nth-child(even) .wipe { order: 0; }
+    .wipe { padding: 1.5rem 3rem 7rem; margin: -1.5rem -3rem -7rem; }
+    .stats__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .chain__in { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; align-items: end; padding-bottom: 1.2rem; }
+    .chain__copy { gap: 0.6rem; max-width: none; }
+    .chain__copy .d-md { font-size: 1.3rem; }
+    .lit li { font-size: 0.9rem; line-height: 1.4; }
+    .lit { gap: 0.45rem; }
+    .lat-wrap { align-items: flex-start; justify-content: center; padding: 3rem 0 0; }
+    .lat-lean { width: min(150vw, 58svh); aspect-ratio: 1; }
+    .try { right: auto; left: 50%; top: 3.6rem; transform: translate(-50%, 0); width: min(21rem, 86vw); }
+    .try__ask { font-size: 1.2rem; margin-bottom: 0.1rem; }
+    .try__note, .record__row--obj { display: none; }
+    .record { padding: 0.8rem 0.9rem 0.75rem; font-size: 0.7rem; gap: 0.38rem; }
+    .record__row, .hash { grid-template-columns: 5rem minmax(0, 1fr); }
+    .hash code { font-size: 0.64rem; }
+    .rail__head { width: min(78vw, 22rem); }
+    .app { width: min(76vw, 19rem); padding: 1rem 1.05rem 1.15rem; }
+    .rail__note { width: min(76vw, 19rem); }
+    .region__grid { grid-template-columns: minmax(0, 1fr); }
+    .compass { width: min(100%, 26rem); }
+    .place b { font-size: 0.86rem; }
+    .huella__in { padding-top: 4.2rem; }
+    .huella__copy { gap: 0.55rem; }
+    .huella__copy .d-lg { font-size: 1.7rem; max-width: none; }
+    .huella__copy .body { font-size: 0.92rem; line-height: 1.45; }
+    .huella__hash { bottom: 2.2rem; width: calc(100% - 2.2rem); }
+    .huella__chars { width: 32ch; font-size: 0.72rem; }
+    .wall__in { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; align-items: end; padding-top: 3.2rem; padding-bottom: 1rem; gap: 0.6rem; }
+    .wall { align-self: center; }
+    .wall__scene { transform: rotateX(26deg) rotateY(-10deg) rotateZ(4deg); }
+    .wall__years { font-size: 0.42rem; gap: 2px; }
+    .wall__months { font-size: 0.5rem; }
+    .wall__grid { gap: 2px; }
+    .wall__copy { max-width: none; gap: 0.45rem; }
+    .wall__copy .lit li { font-size: 0.84rem; line-height: 1.35; }
+    .events { font-size: 0.68rem; gap: 0.15rem; padding-top: 0.4rem; }
+    .ledger__row { grid-template-columns: minmax(0, 1fr); gap: 0.25rem; padding: 0.7rem 0; }
+    .ledger__v { font-size: 0.8rem; }
+    .limits__in { padding-top: 3.4rem; justify-content: flex-start; gap: 0.6rem; }
+    .limits__no .d-md { font-size: 1.32rem; }
+    .limits__yes { font-size: 1.7rem; max-width: none; }
+    .close__meta { font-size: 0.72rem; }
+  }
+  @media (max-height: 44rem) and (min-width: 53.76rem) {
+    .spread__copy .body { font-size: 0.98rem; }
+    .anat__i { padding-top: 0.6rem; }
+    .chain__copy { gap: 0.7rem; }
+    .lit li { font-size: 0.92rem; }
+  }
+
+  /* =========================== reduced motion =========================== */
+  @media (prefers-reduced-motion: reduce) {
+    .node, .app, .rail__note { transform: none !important; opacity: 1 !important; }
+    .node__w, .lit li, .anat__i { transition: none; }
+    .relief__lean, .lat-lean { transform: none !important; }
+    .lat-lean { -webkit-mask-image: none; mask-image: none; }
+    .anat__i { opacity: 1; }
+    .lit li { opacity: 1; color: var(--sc-ink); }
+    .try__plate { opacity: 1; }
+    /* The rail unpins into a grid: a horizontal scroll region inside a
+       pinned stage leaves items unreachable to anyone who cannot drag. */
+    .apps .sc-stage { position: static; height: auto; overflow: visible; }
+    .rail { transform: none !important; flex-wrap: wrap; height: auto; padding-block: 3rem; align-items: stretch; }
+    .rail__head, .rail__note { width: 100%; }
+    .tile__f, .huella__chars span, .ledger__root span, .events li { opacity: 1 !important; transform: none !important; }
+    .tile--alt { --lift: 1; }
+    .strike { --sw: 1; }
+    .wall__scene { transform: none; }
+    .btn, .app { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sc-grain" aria-hidden="true"></div>
+
+<!-- The site's own header, reduced to the wordmark and the ES/EN control,
+     and set on the title page rather than over it: it scrolls away with the
+     first screen. Same storage key (da:lang) as the React pages. -->
+<header class="hdr" id="hdr">
+  <a class="hdr__skip" href="#main">Saltar al contenido</a>
+  <div class="hdr__wrap">
+    <div class="hdr__row">
+      <a class="hdr__brand" href="/"><svg viewBox="0 0 300 300" aria-hidden="true"><use href="#markp"/></svg>DecentralAmerica</a>
+      <div class="hdr__right">
+        <fieldset class="lang" id="lang" aria-label="Idioma">
+          <button type="button" data-lang="es" aria-pressed="true">ES<span class="sr-only" lang="es"> Español</span></button>
+          <button type="button" data-lang="en" aria-pressed="false">EN<span class="sr-only" lang="en"> English</span></button>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- One path, six subpaths, the entire brand. Everything on the page is a
+     <use> of it or a construction drawn from its geometry. -->
+<svg class="defs" aria-hidden="true">
+  <defs>
+    <path id="markp" d="M140 65.5L160 65.5A2 2 0 0 1 162 67.5L162 164A2 2 0 0 1 160 166L140 166A2 2 0 0 1 138 164L138 67.5A2 2 0 0 1 140 65.5ZM228.179 183.59L218.179 200.91A2 2 0 0 1 215.447 201.642L131.876 153.392A2 2 0 0 1 131.144 150.66L141.144 133.34A2 2 0 0 1 143.876 132.608L227.447 180.858A2 2 0 0 1 228.179 183.59ZM81.821 200.91L71.821 183.59A2 2 0 0 1 72.553 180.858L156.124 132.608A2 2 0 0 1 158.856 133.34L168.856 150.66A2 2 0 0 1 168.124 153.392L84.553 201.642A2 2 0 0 1 81.821 200.91ZM192.044 119.007A16 16 0 1 1 224.044 119.007A16 16 0 1 1 192.044 119.007ZM134 225A16 16 0 1 1 166 225A16 16 0 1 1 134 225ZM75.956 119.007A16 16 0 1 1 107.956 119.007A16 16 0 1 1 75.956 119.007Z"/>
+    <path id="armsp" d="M140 65.5L160 65.5A2 2 0 0 1 162 67.5L162 164A2 2 0 0 1 160 166L140 166A2 2 0 0 1 138 164L138 67.5A2 2 0 0 1 140 65.5ZM228.179 183.59L218.179 200.91A2 2 0 0 1 215.447 201.642L131.876 153.392A2 2 0 0 1 131.144 150.66L141.144 133.34A2 2 0 0 1 143.876 132.608L227.447 180.858A2 2 0 0 1 228.179 183.59ZM81.821 200.91L71.821 183.59A2 2 0 0 1 72.553 180.858L156.124 132.608A2 2 0 0 1 158.856 133.34L168.856 150.66A2 2 0 0 1 168.124 153.392L84.553 201.642A2 2 0 0 1 81.821 200.91Z"/>
+    <g id="dotsp"><circle cx="208.044" cy="119.007" r="16"/><circle cx="150" cy="225" r="16"/><circle cx="91.956" cy="119.007" r="16"/></g>
+    <symbol id="mark" viewBox="0 0 300 300"><use href="#markp"/></symbol>
+    <clipPath id="markClip"><use href="#markp"/></clipPath>
+    <pattern id="ht" width="11" height="11" patternUnits="userSpaceOnUse"><circle class="ht__dot" cx="5.5" cy="5.5" r="2.4"/></pattern>
+  </defs>
+</svg>
+
+<aside class="folio folio--off" id="folio" aria-label="Capítulo actual">
+  <p class="folio__ch mono"><span class="folio__num" id="folioNum"></span><span id="folioTitle"></span></p>
+</aside>
+
+<main id="main">
+
+  <!-- ================================================================== T
+       TITLE PAGE · type on paper, the mark as a two-plane relief: solid arms, ink witnesses. Greet
+       cues, so the landing view is complete before anyone scrolls.
+       =================================================================== -->
+  <section class="title" data-sc-act="flow" data-ch="" data-title="">
+    <div class="wrap title__grid">
+      <div class="title__copy">
+        <p class="label" data-sc-cue="0 1 0 0">Desde Costa Rica, para Centroamérica</p>
+        <h1 class="d-xl" data-sc-cue="0 1 0 0" data-sc-kinetic="lines">La memoria pública de América Latina.</h1>
+        <p class="lede" data-sc-cue="0 1 0 0">Un registro abierto de lo que el Estado publica, sostenido por instituciones que no ganan nada con cambiarlo y comprobable por cualquiera, sin pedir permiso.</p>
+      </div>
+      <div class="relief" aria-hidden="true">
+        <div class="relief__lean" id="reliefLean">
+          <div class="relief__l relief__l--body"><svg viewBox="0 0 300 300" data-sc-parallax="-0.4"><use href="#armsp"/></svg></div>
+          <div class="relief__l relief__l--dots"><svg viewBox="0 0 300 300" data-sc-parallax="0.35"><use href="#dotsp"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <p class="title__foot mono wrap" data-sc-cue="0 1 0 0">
+      <span>Activo en Costa Rica desde 2026-08-27</span>
+      <span>Corre sobre DecentralChain</span>
+      <span>Asociación en trámite de inscripción</span>
+    </p>
+  </section>
+
+  <!-- ================================================================== I
+       QUÉ ES · intertitle, then a pinned spread: the mark draws itself and
+       gets labelled. The copy holds; only the figure and its callouts move.
+       =================================================================== -->
+  <section class="ch ch--1" data-ch="I" data-title="Qué es">
+    <header class="inter" data-sc-act="flow">
+      <div class="wrap">
+        <p class="inter__num mono">I</p>
+        <h2 class="d-lg" data-sc-cue="0.1 1 0.22 0" data-sc-kinetic="lines">Una memoria, no una base de datos.</h2>
+        <p class="lede" data-sc-cue="0.16 1 0.22 0">Una base de datos guarda lo último. Una memoria guarda lo que pasó, y quién lo vio.</p>
+        <hr class="rule" data-sc-reveal="right" data-sc-reveal-at="0.12 0.5">
+      </div>
+    </header>
+    <div class="spread" data-sc-act="pin" data-sc-span="2.2">
+      <div data-sc-stage>
+        <div class="wrap spread__in">
+          <div class="spread__copy">
+            <h3 class="d-md" data-sc-cue="0 1 0 0">La marca es el diagrama.</h3>
+            <p class="body" data-sc-cue="0 1 0 0">Un centro, tres brazos y tres testigos. Es exactamente lo que hace falta para que un hecho publicado no se pueda deshacer en silencio.</p>
+            <dl class="anat" data-sc-cue="0 1 0 0">
+              <div class="anat__i" data-part="hub"><dt>El centro</dt><dd>Un hecho publicado. Un archivo, una tarifa, una adjudicación, tal como salió.</dd></div>
+              <div class="anat__i" data-part="arms"><dt>Los brazos</dt><dd>Tres funciones que salen de él: quien lo publica, quien lo guarda, quien lo comprueba.</dd></div>
+              <div class="anat__i" data-part="dots"><dt>Los testigos</dt><dd>Entre cada dos funciones, un nodo independiente que sostiene la misma huella.</dd></div>
+            </dl>
+          </div>
+          <figure class="anatomy">
+            <svg viewBox="-10 18 400 268" aria-hidden="true">
+              <use class="an__fill" id="anFill" href="#markp"/>
+              <path class="an__stroke" id="anStroke" pathLength="1" d="M140 65.5L160 65.5A2 2 0 0 1 162 67.5L162 164A2 2 0 0 1 160 166L140 166A2 2 0 0 1 138 164L138 67.5A2 2 0 0 1 140 65.5ZM228.179 183.59L218.179 200.91A2 2 0 0 1 215.447 201.642L131.876 153.392A2 2 0 0 1 131.144 150.66L141.144 133.34A2 2 0 0 1 143.876 132.608L227.447 180.858A2 2 0 0 1 228.179 183.59ZM81.821 200.91L71.821 183.59A2 2 0 0 1 72.553 180.858L156.124 132.608A2 2 0 0 1 158.856 133.34L168.856 150.66A2 2 0 0 1 168.124 153.392L84.553 201.642A2 2 0 0 1 81.821 200.91ZM192.044 119.007A16 16 0 1 1 224.044 119.007A16 16 0 1 1 192.044 119.007ZM134 225A16 16 0 1 1 166 225A16 16 0 1 1 134 225ZM75.956 119.007A16 16 0 1 1 107.956 119.007A16 16 0 1 1 75.956 119.007Z"/>
+              <g class="co" data-at="0.6" data-part="hub">
+                <path pathLength="1" d="M150 150L150 262L108 262"/>
+                <circle cx="150" cy="150" r="4"/>
+                <text x="102" y="266" text-anchor="end">el centro</text>
+              </g>
+              <g class="co" data-at="0.7" data-part="arms">
+                <path pathLength="1" d="M150 65.5L150 38L196 38"/>
+                <circle cx="150" cy="65.5" r="4"/>
+                <circle cx="223.2" cy="192.2" r="4"/>
+                <circle cx="76.8" cy="192.2" r="4"/>
+                <text x="202" y="42">los brazos</text>
+              </g>
+              <g class="co" data-at="0.8" data-part="dots">
+                <path pathLength="1" d="M208 119L252 96L292 96"/>
+                <circle cx="208.044" cy="119.007" r="4"/>
+                <circle cx="150" cy="225" r="4"/>
+                <circle cx="91.956" cy="119.007" r="4"/>
+                <text x="298" y="100">los testigos</text>
+              </g>
+            </svg>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== II
+       CÓMO FUNCIONA · a flow chapter. Four spreads in a zigzag, each figure
+       a wipe timed to its own position (windows are tuned from the layout
+       before mount). The real counts land once, on entry, after the steps.
+       =================================================================== -->
+  <section class="ch ch--2" data-ch="II" data-title="Cómo funciona">
+    <div class="how" data-sc-act="flow">
+      <div class="wrap">
+        <header class="inter inter--inline">
+          <div class="wrap">
+            <p class="inter__num mono">II</p>
+            <h2 class="d-lg" data-sc-in>Cuatro pasos, ninguno secreto.</h2>
+            <p class="lede" data-sc-in>Así entra un registro en la memoria. Cada paso se puede repetir desde cualquier computadora, y ese es el punto.</p>
+          </div>
+        </header>
+        <ol class="steps">
+          <li class="step">
+            <div class="wipe" data-sc-reveal="up" data-sc-reveal-at="0.2 0.34" data-tune>
+            <figure class="step__fig card">
+              <svg viewBox="0 0 400 300" aria-hidden="true">
+                <rect class="doc__page" x="96" y="34" width="208" height="248" rx="10"/>
+                <rect class="doc__line" x="122" y="64" width="92" height="7" rx="3.5"/>
+                <rect class="doc__line" x="122" y="88" width="150" height="7" rx="3.5"/>
+                <rect class="doc__line" x="122" y="106" width="132" height="7" rx="3.5"/>
+                <rect class="doc__line" x="122" y="124" width="156" height="7" rx="3.5"/>
+                <rect class="doc__line" x="122" y="150" width="104" height="7" rx="3.5"/>
+                <rect class="doc__line" x="122" y="168" width="150" height="7" rx="3.5"/>
+                <rect class="doc__line" x="122" y="186" width="120" height="7" rx="3.5"/>
+                <rect class="doc__line" x="122" y="212" width="80" height="7" rx="3.5"/>
+                <use class="doc__mark" href="#markp" transform="translate(236 216) scale(0.16)"/>
+              </svg>
+            </figure>
+            </div>
+            <div class="step__copy" data-sc-in data-sc-stagger="70">
+              <h3 class="d-md">Se publica.</h3>
+              <p class="body">El Estado publica su registro como siempre. Ancla copia cada día el archivo de compras públicas tal como salió, sin corregirle nada.</p>
+              <p class="mono">SICOP · 189 archivos mensuales · 2010-12 a 2026-08</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="wipe" data-sc-reveal="left" data-sc-reveal-at="0.36 0.5" data-tune>
+            <figure class="step__fig card">
+              <svg viewBox="0 0 400 300" aria-hidden="true">
+                <g transform="translate(70 12) scale(0.92)"><rect width="300" height="300" fill="url(#ht)" clip-path="url(#markClip)"/></g>
+              </svg>
+            </figure>
+            </div>
+            <div class="step__copy" data-sc-in data-sc-stagger="70">
+              <h3 class="d-md">Se reduce a una huella.</h3>
+              <p class="body">Millones de filas se convierten en 64 caracteres: una raíz de Merkle. Cambiá una coma en cualquier parte y la huella cambia entera.</p>
+              <p class="mono">SHA-256 · raíz de Merkle · 64 caracteres</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="wipe" data-sc-reveal="iris" data-sc-reveal-at="0.52 0.66" data-tune>
+            <figure class="step__fig card">
+              <svg viewBox="0 0 400 300" aria-hidden="true">
+                <rect class="seal__block" x="104" y="54" width="192" height="192" rx="30"/>
+                <g transform="translate(200 150) scale(0.46) translate(-150 -150)">
+                  <use class="seal__shadow" href="#markp" transform="translate(0 2.5)"/>
+                  <use class="seal__light" href="#markp" transform="translate(0 -2.5)"/>
+                  <use class="seal__ink" href="#markp"/>
+                </g>
+              </svg>
+            </figure>
+            </div>
+            <div class="step__copy" data-sc-in data-sc-stagger="70">
+              <h3 class="d-md">Se ancla en cadena.</h3>
+              <p class="body">La huella se escribe en DecentralChain bajo la fecha del día. El contrato rechaza sobrescribir una raíz que ya existe: un día se agrega, nunca se corrige.</p>
+              <p class="mono">clave root_&lt;día&gt;_&lt;mes&gt; · cuenta pública, legible desde el navegador</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="wipe" data-sc-reveal="right" data-sc-reveal-at="0.68 0.82" data-tune>
+            <figure class="step__fig card">
+              <svg viewBox="0 0 400 300" aria-hidden="true">
+                <g transform="translate(46 78) scale(0.48)"><use class="ver__mark" href="#markp"/><use class="ver__w" href="#dotsp"/></g>
+                <line class="ver__eq" x1="186" y1="140" x2="214" y2="140"/>
+                <line class="ver__eq" x1="186" y1="160" x2="214" y2="160"/>
+                <g transform="translate(210 78) scale(0.48)"><use class="ver__mark" href="#markp"/><use class="ver__w" href="#dotsp"/></g>
+              </svg>
+            </figure>
+            </div>
+            <div class="step__copy" data-sc-in data-sc-stagger="70">
+              <h3 class="d-md">Cualquiera lo comprueba.</h3>
+              <p class="body">Años después, alguien vuelve a calcular la huella del archivo y la compara con la anclada, desde su navegador. Coincide, o no. Sin pedirnos nada.</p>
+              <p class="mono">mainnet-node.decentralchain.io · sin ningún servidor nuestro en medio</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="wrap">
+        <div class="stats__grid" data-sc-in data-sc-stagger="80">
+          <div class="stat"><p class="stat__n"><span data-sc-count="0 189">0</span></p><p class="stat__l">meses de archivos, de 2010-12 a 2026-08</p></div>
+          <div class="stat"><p class="stat__n">3,04<small>GB</small></p><p class="stat__l">de registro nacional de compras, en espejo</p></div>
+          <div class="stat"><p class="stat__n">72.105</p><p class="stat__l">actores resueltos, alrededor de seis millones de filas</p></div>
+          <div class="stat"><p class="stat__n"><span data-sc-count="0 14">0</span></p><p class="stat__l">meses ya cerrados que fueron reescritos después, sin aviso</p></div>
+          <div class="stat"><p class="stat__n"><span data-sc-count="0 1">0</span><small>US$/año</small></p><p class="stat__l">lo que cuesta operar el anclaje</p></div>
+        </div>
+        <p class="stats__note mono">El primer día anclado fue 2026-08-27. Cuántos días hay anclados hoy no lo decimos nosotros: lo dice el nodo, en el capítulo VII.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== III
+       LA HUELLA · pin. A field of rows on a canvas is pulled by the scroll
+       into 64 characters. The heading lives inside the stage; no intertitle.
+       =================================================================== -->
+  <section class="ch ch--huella" data-ch="III" data-title="La huella">
+    <div class="huella" id="huella" data-sc-act="pin" data-sc-span="2.6">
+      <div data-sc-stage>
+        <canvas class="huella__c" id="huellaC" aria-hidden="true"></canvas>
+        <div class="wrap huella__in">
+          <div class="huella__copy">
+            <p class="inter__num mono">III</p>
+            <p class="label" data-sc-cue="0 1 0 0">Unos seis millones de filas</p>
+            <h2 class="d-lg" data-sc-cue="0 1 0 0" data-sc-kinetic="lines">Todo eso cabe en una línea.</h2>
+            <p class="body" data-sc-cue="0 1 0 0">Cada archivo mensual se reduce a una raíz de Merkle: 64 caracteres que dependen de cada fila. Cambiá una coma en la fila tres millones y cambian los 64.</p>
+          </div>
+        </div>
+        <div class="huella__hash">
+          <p class="label">Huella del registro de muestra de esta página</p>
+          <p class="huella__chars mono" id="huellaChars" aria-label="SHA-256 del registro de muestra de esta página"></p>
+          <p class="mono huella__note">Cada punto representa miles de filas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== IV
+       LO QUE YA CAMBIÓ · intertitle, then a pinned wall of 189 months in
+       perspective: empty, then mirrored in order, then the fourteen that
+       were republished after closing lift out and turn.
+       =================================================================== -->
+  <section class="ch ch--wall" data-ch="IV" data-title="Lo que ya cambió">
+    <header class="inter" data-sc-act="flow">
+      <div class="wrap">
+        <p class="inter__num mono">IV</p>
+        <h2 class="d-lg" data-sc-cue="0.1 1 0.22 0" data-sc-kinetic="lines">Catorce meses cambiaron después de cerrar.</h2>
+        <p class="lede" data-sc-cue="0.16 1 0.22 0">Los archivos mensuales se congelan el último día de su mes. Estos se volvieron a publicar después, sin registro público de qué cambió.</p>
+        <hr class="rule" data-sc-reveal="right" data-sc-reveal-at="0.12 0.5">
+      </div>
+    </header>
+    <div class="wallact" id="wallAct" data-sc-act="pin" data-sc-span="3">
+      <div data-sc-stage>
+        <div class="wrap wall__in">
+          <div class="wall__copy">
+            <p class="label" data-sc-cue="0 1 0 0">Archivo mensual de compras públicas · SICOP</p>
+            <ol class="lit" id="wallLit" data-sc-cue="0 1 0 0">
+              <li data-at="0.02">Buscamos una copia ajena contra la cual comparar. El Internet Archive tenía cero capturas de estos archivos. No había contra qué.</li>
+              <li data-at="0.16">Así que construimos el espejo: 189 meses, de 2010-12 a 2026-08, 3,04 GB tal como salieron.</li>
+              <li data-at="0.6">Catorce de esos meses ya estaban cerrados cuando se volvieron a publicar. Sin aviso y sin registro de qué cambió.</li>
+            </ol>
+            <ul class="events mono" data-sc-cue="0 1 0 0">
+              <li style="--e: 0.64">2024-09-20 · 7 meses · 144,5 MB</li>
+              <li style="--e: 0.68">2024-10-03 · 1 mes · 13,8 MB</li>
+              <li style="--e: 0.72">2024-10-04 · 1 mes · 51,1 MB</li>
+              <li style="--e: 0.76">2025-05-06 · 3 meses · 105,2 MB</li>
+              <li style="--e: 0.8">2026-08-10 · 2 meses · 105,7 MB</li>
+            </ul>
+          </div>
+          <div class="wall" aria-hidden="true">
+            <div class="wall__scene">
+              <div class="wall__years mono" id="wallYears"></div>
+              <div class="wall__months mono" id="wallMonths"></div>
+              <div class="wall__grid" id="wallGrid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Authored silence before the peak. -->
+  <div class="silence" aria-hidden="true"></div>
+
+  <!-- ================================================================== III
+       SOBRE QUÉ CORRE · the peak. One mark becomes a lattice of nodes; the
+       fingerprint propagates; then the reader is handed the record.
+       =================================================================== -->
+  <section class="ch ch--3" data-ch="V" data-title="Sobre qué corre">
+    <header class="inter" data-sc-act="flow">
+      <div class="wrap">
+        <p class="inter__num mono">V</p>
+        <h2 class="d-lg" data-sc-cue="0.1 1 0.22 0" data-sc-kinetic="lines">Corre sobre DecentralChain.</h2>
+        <p class="lede" data-sc-cue="0.16 1 0.22 0">Una cadena pública con un bloque nuevo cada 60 segundos, que cualquiera puede leer desde un navegador. Sin permiso, sin cuenta, sin nosotros en medio.</p>
+        <hr class="rule" data-sc-reveal="right" data-sc-reveal-at="0.12 0.5">
+      </div>
+    </header>
+    <div class="chain" id="chain" data-sc-act="pin" data-sc-span="3.6">
+      <div data-sc-stage>
+        <div class="lat-wrap" aria-hidden="true">
+          <div class="lat-lean" id="latLean">
+            <svg class="lat" id="lat" viewBox="-660 -600 1320 1200" data-state="plain"></svg>
+          </div>
+        </div>
+        <div class="wrap chain__in">
+          <div class="chain__copy">
+            <p class="label" data-sc-cue="0 1 0 0">DecentralChain · red principal</p>
+            <h3 class="d-md" data-sc-cue="0 1 0 0">Una memoria vale lo que valen quienes la sostienen.</h3>
+            <ol class="lit" id="chainLit" data-sc-cue="0 1 0 0">
+              <li data-at="0.02">Cada nodo guarda la misma huella. Para cambiar el pasado habría que convencerlos a todos, al mismo tiempo.</li>
+              <li data-at="0.24">El contrato de anclaje no sabe sobrescribir. Un día se agrega; nunca se corrige.</li>
+              <li data-at="0.4">Cuando la huella coincide en todos, el registro queda confirmado. Cuando no coincide en alguno, queda a la vista.</li>
+            </ol>
+          </div>
+        </div>
+        <!-- The plate is a sibling of the text it protects, never its child, so
+             the contrast pass can photograph the frame under the copy. -->
+        <div class="try try--off" id="try">
+          <div class="try__plate" aria-hidden="true"></div>
+          <div class="record" id="record" data-sc-cue="0.56 1 0.06 0">
+            <p class="d-md try__ask">Intentá reescribirlo.</p>
+            <p class="record__hd">Registro de muestra · SICOP</p>
+            <p class="record__row"><span>Procedimiento</span><span>MUESTRA-0001</span></p>
+            <p class="record__row record__row--obj"><span>Objeto</span><span>Luminarias LED, 120 unidades</span></p>
+            <p class="record__row"><span>Monto</span><span>₡ <span class="amt" id="amt" spellcheck="false" inputmode="numeric" aria-label="Monto adjudicado, editable">4 250 000</span></span></p>
+            <p class="hash"><span>Huella actual</span><code id="hashB">calculando</code></p>
+            <p class="hash"><span>Huella anclada</span><code id="hashA">calculando</code></p>
+            <p class="status record__status"><span class="status__dot"></span><span id="statusTxt">Calculando la huella</span></p>
+            <div class="try__acts">
+              <button type="button" class="btn btn--sm btn--ghost" id="btnAlter">Cambiá un dígito</button>
+              <button type="button" class="btn btn--sm btn--ghost" id="btnRestore">Restaurá el original</button>
+            </div>
+            <p class="mono try__note">Registro de muestra, no un contrato real. La huella es un SHA-256 de verdad, calculado en tu navegador. Hoy la red la sostienen pocos nodos; el capítulo IX es sobre eso.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== IV
+       QUÉ LA ESCRIBE · pan. Six instruments, each carrying the mark in its
+       own treatment. The heading is the first item and a note is the last,
+       so the rail has the overflow the travel needs.
+       =================================================================== -->
+  <section class="ch ch--4" data-ch="VI" data-title="Qué la escribe">
+    <header class="inter" data-sc-act="flow">
+      <div class="wrap">
+        <p class="inter__num mono">VI</p>
+        <h2 class="d-lg" data-sc-cue="0.1 1 0.22 0" data-sc-kinetic="lines">Lo que escribe en la memoria.</h2>
+        <p class="lede" data-sc-cue="0.16 1 0.22 0">Ancla es un instrumento, no un sinónimo del registro. La memoria es el Registro Público de Integridad; esto es lo que escribe en él.</p>
+        <hr class="rule" data-sc-reveal="right" data-sc-reveal-at="0.12 0.5">
+      </div>
+    </header>
+    <div class="apps" data-sc-act="pan" data-sc-span="3.8">
+      <div data-sc-stage>
+        <div class="rail" id="rail" data-sc-pan="0.05">
+          <div class="rail__head">
+            <p class="label">Instrumentos</p>
+            <h3 class="d-md">Un registro, seis instrumentos.</h3>
+            <p class="body">Cada uno escribe un tipo de hecho distinto, con el mismo método: copia, huella, ancla, comprobación.</p>
+          </div>
+          <article class="app" style="--k: 0.06">
+            <figure class="app__fig fig--seal"><svg viewBox="0 0 300 300" aria-hidden="true"><circle class="seal-ring" cx="150" cy="152" r="128"/><use href="#markp"/></svg></figure>
+            <h4>Ancla</h4>
+            <p class="app__rec">Cada contrato público que firma el Estado.</p>
+            <p class="app__det">Copia diaria del registro nacional de compras públicas, reducido a una huella y anclado en cadena. Cualquier cambio posterior queda demostrable.</p>
+            <p class="app__meta mono"><span class="state state--live">activo</span> · 189 meses · 6M registros</p>
+          </article>
+          <article class="app" style="--k: 0.2">
+            <figure class="app__fig fig--route"><svg viewBox="0 0 300 300" aria-hidden="true"><use href="#markp"/><circle class="pin" cx="150" cy="225" r="26"/><circle class="pin-c" cx="150" cy="225" r="7"/></svg></figure>
+            <h4>Quests</h4>
+            <p class="app__rec">Cómo la ciudadanía aporta evidencia desde el campo.</p>
+            <p class="app__det">Misiones verificadas con foto, GPS y revisión de una organización acreditada. Cada una actualiza un indicador del Registro de Impacto.</p>
+            <p class="app__meta mono"><span class="state state--live">activo</span> · Costa Rica</p>
+          </article>
+          <article class="app" style="--k: 0.34">
+            <figure class="app__fig fig--ht"><svg viewBox="0 0 300 300" aria-hidden="true"><rect width="300" height="300" fill="url(#ht)" clip-path="url(#markClip)"/></svg></figure>
+            <h4>Registro de Impacto</h4>
+            <p class="app__rec">Resultados cívicos y ambientales verificados.</p>
+            <p class="app__det">Indicadores con unidades estandarizadas y metodología versionada, verificados por organizaciones acreditadas y alineados a ODS, ENEC y Bioeconomía 2030.</p>
+            <p class="app__meta mono"><span class="state">construido</span> · metodología versionada</p>
+          </article>
+          <article class="app" style="--k: 0.48">
+            <figure class="app__fig fig--line"><svg viewBox="0 0 300 300" aria-hidden="true"><use href="#markp"/><line class="base" x1="40" y1="262" x2="260" y2="262"/></svg></figure>
+            <h4>Servicios Públicos</h4>
+            <p class="app__rec">Tarifas de servicios públicos y tránsito en peajes, desde ARESEP.</p>
+            <p class="app__det">Lo que se cobró, cuándo se aprobó y cuánto tránsito pasó. Publicado por el regulador, preservado por nosotros.</p>
+            <p class="app__meta mono"><span class="state">construido</span> · clave crgov:aresep:*</p>
+          </article>
+          <article class="app" style="--k: 0.62">
+            <figure class="app__fig fig--layers"><svg viewBox="0 0 300 300" aria-hidden="true"><use href="#markp" transform="translate(-22 -22)" opacity="0.1"/><use href="#markp" transform="translate(-11 -11)" opacity="0.26"/><use href="#markp"/></svg></figure>
+            <h4>Registro de Organizaciones</h4>
+            <p class="app__rec">Qué organizaciones son reales, y quién las verificó.</p>
+            <p class="app__det">Cédula jurídica, tipo, año, y la organización que respondió por ella. La capa de acreditación de la que dependen los demás registros.</p>
+            <p class="app__meta mono"><span class="state">listo</span></p>
+          </article>
+          <article class="app" style="--k: 0.76">
+            <figure class="app__fig fig--net"><svg viewBox="0 0 300 300" aria-hidden="true">
+              <g transform="translate(150 152) scale(0.5) translate(-150 -150)">
+                <use class="nb" href="#markp" transform="translate(0 -178)"/>
+                <use class="nb" href="#markp" transform="translate(154.2 -89)"/>
+                <use class="nb" href="#markp" transform="translate(154.2 89)"/>
+                <use class="nb" href="#markp" transform="translate(0 178)"/>
+                <use class="nb" href="#markp" transform="translate(-154.2 89)"/>
+                <use class="nb" href="#markp" transform="translate(-154.2 -89)"/>
+                <use href="#markp"/>
+              </g>
+            </svg></figure>
+            <h4>Nodo Público</h4>
+            <p class="app__rec">Las instituciones que custodian la memoria.</p>
+            <p class="app__det">Universidades, colegios profesionales y medios operando nodos sin rendimiento financiero ni interés en lo que atestiguan. Quién sostiene el registro es la pregunta entera.</p>
+            <p class="app__meta mono"><span class="state">abriendo</span></p>
+          </article>
+          <p class="rail__note">Dos están activos en Costa Rica. Los demás están construidos o listos, y lo decimos con esas palabras y no con otras.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== VII
+       AHORA MISMO · flow. A ledger that reads the public node from the
+       reader's own browser: height, anchored days, the latest root. The
+       root's 64 characters assemble under the scroll.
+       =================================================================== -->
+  <section class="ch ch--live" data-ch="VII" data-title="Ahora mismo">
+    <div class="live" id="live" data-sc-act="flow">
+      <div class="wrap">
+        <header class="inter inter--inline">
+          <div class="wrap">
+            <p class="inter__num mono">VII</p>
+            <h2 class="d-lg" data-sc-in>Leelo vos, ahora mismo.</h2>
+            <p class="lede" data-sc-in>Todo lo que esta página afirma sobre la cadena se puede leer desde tu navegador, sin pasar por nosotros. Esto es lo que dice el nodo en este momento.</p>
+          </div>
+        </header>
+        <div class="ledger" data-sc-in data-sc-stagger="70">
+          <div class="ledger__row"><span class="ledger__k">Nodo</span><span class="ledger__v mono">mainnet-node.decentralchain.io</span></div>
+          <div class="ledger__row"><span class="ledger__k">Altura de bloque</span><span class="ledger__v mono ledger__v--h"><svg class="ring" viewBox="0 0 36 36" aria-hidden="true"><circle class="ring__t" cx="18" cy="18" r="15.5"/><circle class="ring__p" id="ringP" cx="18" cy="18" r="15.5" pathLength="1"/></svg><span id="lvHeight">leyendo</span><span class="ledger__sub">un bloque cada 60 segundos</span></span></div>
+          <div class="ledger__row"><span class="ledger__k">Cuenta de anclaje</span><span class="ledger__v mono ledger__addr">3DTwG5ZydbJDuLdEmwfgDEH3NuwDrgwQFtF</span></div>
+          <div class="ledger__row"><span class="ledger__k">Días anclados</span><span class="ledger__v mono" id="lvDays">leyendo</span></div>
+          <div class="ledger__row"><span class="ledger__k">Último anclaje</span><span class="ledger__v mono" id="lvLast">leyendo</span></div>
+          <div class="ledger__row"><span class="ledger__k">Su raíz</span><span class="ledger__v mono ledger__root" id="lvRoot">leyendo</span></div>
+          <p class="ledger__foot mono" id="lvFoot">Registro de compras públicas de Costa Rica. Leído desde tu navegador, sin ningún servidor nuestro en medio.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== VIII
+       LOS LÍMITES · pin. Four claims the page refuses, struck out one by
+       one under the scroll, then the single claim it makes.
+       =================================================================== -->
+  <section class="ch ch--limits" data-ch="VIII" data-title="Los límites">
+    <div class="limits" data-sc-act="pin" data-sc-span="2.4">
+      <div data-sc-stage>
+        <div class="wrap limits__in">
+          <p class="inter__num mono">VIII</p>
+          <p class="label" data-sc-cue="0 1 0 0">Lo que no hace</p>
+          <ul class="limits__no" data-sc-cue="0 1 0 0">
+            <li class="d-md"><span class="strike" style="--at: 0.1">No dice si un contrato fue justo.</span></li>
+            <li class="d-md"><span class="strike" style="--at: 0.24">No detecta corrupción.</span></li>
+            <li class="d-md"><span class="strike" style="--at: 0.38">No corrige el pasado.</span></li>
+            <li class="d-md"><span class="strike" style="--at: 0.52">No cubre lo que nunca se publicó.</span></li>
+          </ul>
+          <p class="d-lg limits__yes" data-sc-cue="0.68 1 0.2 0" data-sc-kinetic="lines">Demuestra una sola cosa: si un registro publicado cambió después, y cuándo.</p>
+          <p class="mono limits__note" data-sc-cue="0.8 1 0.2 0">Hacia adelante desde el momento del anclaje, y solo sobre lo que se publica.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== V
+       QUIÉN LA SOSTIENE · flow. Six portals on the mark's six directions,
+       one live; then who is allowed to hold the memory, honestly empty.
+       =================================================================== -->
+  <section class="ch ch--5" data-ch="IX" data-title="Quién la sostiene">
+    <div class="region" data-sc-act="flow">
+      <div class="wrap">
+        <header class="inter inter--inline">
+          <div class="wrap">
+            <p class="inter__num mono">IX</p>
+            <h2 class="d-lg" data-sc-in>Centroamérica, un portal a la vez.</h2>
+            <p class="lede" data-sc-in>Cada país tiene un portal de compras públicas. Nombrarlos es lo que demuestra que el trabajo está hecho. Hoy solo uno está activo, y lo decimos con esa palabra.</p>
+          </div>
+        </header>
+        <div class="region__grid">
+          <figure class="compass" data-sc-in data-sc-stagger="90">
+            <svg viewBox="0 0 300 300" aria-hidden="true"><use href="#markp"/></svg>
+            <ul class="compass__labels">
+              <li class="place place--n"><b>Costa Rica</b><span class="mono">SICOP</span><span class="state state--live">activo</span></li>
+              <li class="place place--se"><b>Panamá</b><span class="mono">PanamaCompra</span><span class="state">planificado</span></li>
+              <li class="place place--sw"><b>Guatemala</b><span class="mono">Guatecompras</span><span class="state">planificado</span></li>
+              <li class="place place--ne"><b>Honduras</b><span class="mono">HonduCompras</span><span class="state">planificado</span></li>
+              <li class="place place--s"><b>El Salvador</b><span class="mono">COMPRASAL</span><span class="state">planificado</span></li>
+              <li class="place place--nw"><b>Nicaragua</b><span class="mono">SISCAE</span><span class="state">planificado</span></li>
+            </ul>
+          </figure>
+          <div class="custody" data-sc-in data-sc-stagger="80">
+            <h3 class="d-md">Quién puede sostenerla.</h3>
+            <p class="body">Instituciones sin rendimiento financiero por operar un nodo y sin interés en lo que atestiguan. Quién sostiene el registro es la pregunta entera; el software es la parte fácil.</p>
+            <ul class="custody__list">
+              <li><span>Universidades</span><span class="mono">custodio · sin nombrar</span></li>
+              <li><span>Colegios profesionales</span><span class="mono">custodio · sin nombrar</span></li>
+              <li><span>Medios de comunicación</span><span class="mono">custodio · sin nombrar</span></li>
+            </ul>
+            <p class="body">Hoy no hay ningún custodio institucional todavía. Nodo Público está abriendo, y esta página lo dice así porque cualquiera puede comprobarlo.</p>
+            <p><a class="link" href="/nodo">Conocé Nodo Público</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== C
+       ARRIVAL · pin, 1.5vh, last element on the page. The axes shorten
+       into arms, the witnesses settle, and the mark appears at scale.
+       =================================================================== -->
+  <section class="close" data-sc-act="pin" data-sc-span="1.5" data-ch="" data-title="">
+    <div data-sc-stage>
+      <div class="close__in">
+        <svg class="assembly" id="assembly" viewBox="0 0 300 300" aria-hidden="true">
+          <g id="asmAxes">
+            <line class="asm__axis" x1="150" y1="150" x2="150" y2="-270"/>
+            <line class="asm__axis" x1="150" y1="150" x2="513.7" y2="360"/>
+            <line class="asm__axis" x1="150" y1="150" x2="-213.7" y2="360"/>
+          </g>
+          <g id="asmDots">
+            <circle class="asm__dot" cx="357.8" cy="30" r="6"/>
+            <circle class="asm__dot" cx="150" cy="390" r="6"/>
+            <circle class="asm__dot" cx="-57.8" cy="30" r="6"/>
+          </g>
+          <use id="asmMark" class="asm__mark" opacity="0" href="#markp"/>
+        </svg>
+        <p class="close__line d-md" data-sc-cue="0.4">Nada de esto pide que nos creas.</p>
+        <div class="close__act" data-sc-cue="0.41">
+          <a class="btn" href="/verificar" data-sc-magnet="0.22" data-sc-rise="0">Verificá un registro</a>
+        </div>
+        <div class="close__meta mono" data-sc-cue="0.42">
+          <span>DecentralAmerica Asociación · Jacó, Garabito, Costa Rica</span>
+          <span>Asociación en trámite de inscripción, sin cédula jurídica todavía</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="/home/scrollcraft.js" defer></script>
+<script>
+(function () {
+  var root = document.documentElement;
+  var NS = 'http://www.w3.org/2000/svg';
+  var C30 = Math.cos(Math.PI / 6);
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  /* ---------------------------------------------------------------------
+     LANGUAGE · Spanish is authored; English is applied to the DOM before the
+     engine mounts, so the kinetic splitter measures the lines it will keep.
+     Same storage key and same fallback as the React pages' LangProvider.
+     --------------------------------------------------------------------- */
+  var LANG_KEY = 'da:lang', SCROLL_KEY = 'da:landing4:scroll';
+  var lang = 'es';
+  // No stored choice: honour the browser's language list in its own order.
+  // English wins only if it is preferred over Spanish; anything else, or a
+  // list with neither, gets Spanish, the authored language.
+  function browserLang() {
+    var list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
+    for (var i = 0; i < list.length; i++) {
+      var code = String(list[i]).toLowerCase();
+      if (code.indexOf('es') === 0) return 'es';
+      if (code.indexOf('en') === 0) return 'en';
+    }
+    return 'es';
+  }
+  try { var st = localStorage.getItem(LANG_KEY); lang = (st === 'en' || st === 'es') ? st : browserLang(); } catch (e) { lang = browserLang(); }
+  function T(es, en) { return lang === 'en' ? en : es; }
+  var EN = {
+    'DecentralAmerica — El registro público permanente de América Latina': "DecentralAmerica — Latin America's permanent public record",
+    'Un registro abierto de lo que el Estado publica, sostenido por instituciones que no ganan nada con cambiarlo y comprobable por cualquiera, sin pedir permiso.': 'An open record of what the State publishes, held by institutions that gain nothing by changing it and checkable by anyone, without asking permission.',
+    'Saltar al contenido': 'Skip to content', 'El registro': 'The record', 'Cómo funciona': 'How it works', 'Alcance': 'Reach', 'Publicaciones': 'Publications', 'Idioma': 'Language', 'Capítulo actual': 'Current chapter',
+    'Qué es': 'What it is', 'Sobre qué corre': 'What it runs on', 'Qué la escribe': 'What writes to it', 'Quién la sostiene': 'Who holds it',
+    'Desde Costa Rica, para Centroamérica': 'From Costa Rica, for Central America',
+    'La memoria pública de América Latina.': 'The public memory of Latin America.',
+    'Activo en Costa Rica desde 2026-08-27': 'Live in Costa Rica since 2026-08-27', 'Corre sobre DecentralChain': 'Runs on DecentralChain', 'Asociación en trámite de inscripción': 'Association pending registration',
+    'Una memoria, no una base de datos.': 'A memory, not a database.',
+    'Una base de datos guarda lo último. Una memoria guarda lo que pasó, y quién lo vio.': 'A database keeps the latest version. A memory keeps what happened, and who saw it.',
+    'La marca es el diagrama.': 'The mark is the diagram.',
+    'Un centro, tres brazos y tres testigos. Es exactamente lo que hace falta para que un hecho publicado no se pueda deshacer en silencio.': 'A centre, three arms and three witnesses. Exactly what it takes for a published fact not to be undone in silence.',
+    'El centro': 'The centre', 'Un hecho publicado. Un archivo, una tarifa, una adjudicación, tal como salió.': 'A published fact. A file, a tariff, an award, exactly as it came out.',
+    'Los brazos': 'The arms', 'Tres funciones que salen de él: quien lo publica, quien lo guarda, quien lo comprueba.': 'Three roles that reach out from it: whoever publishes it, whoever keeps it, whoever checks it.',
+    'Los testigos': 'The witnesses', 'Entre cada dos funciones, un nodo independiente que sostiene la misma huella.': 'Between every two roles, an independent node holding the same fingerprint.',
+    'el centro': 'the centre', 'los brazos': 'the arms', 'los testigos': 'the witnesses',
+    'Cuatro pasos, ninguno secreto.': 'Four steps, none of them secret.',
+    'Así entra un registro en la memoria. Cada paso se puede repetir desde cualquier computadora, y ese es el punto.': 'This is how a record enters the memory. Every step can be repeated from any computer, and that is the point.',
+    'Se publica.': 'It is published.', 'El Estado publica su registro como siempre. Ancla copia cada día el archivo de compras públicas tal como salió, sin corregirle nada.': 'The State publishes its record as it always has. Every day Ancla copies the public procurement archive exactly as it came out, correcting nothing.', 'SICOP · 189 archivos mensuales · 2010-12 a 2026-08': 'SICOP · 189 monthly archives · 2010-12 to 2026-08',
+    'Se reduce a una huella.': 'It is reduced to a fingerprint.', 'Millones de filas se convierten en 64 caracteres: una raíz de Merkle. Cambiá una coma en cualquier parte y la huella cambia entera.': 'Millions of rows become 64 characters: a Merkle root. Change one comma anywhere and the whole fingerprint changes.', 'SHA-256 · raíz de Merkle · 64 caracteres': 'SHA-256 · Merkle root · 64 characters',
+    'Se ancla en cadena.': 'It is anchored on chain.', 'La huella se escribe en DecentralChain bajo la fecha del día. El contrato rechaza sobrescribir una raíz que ya existe: un día se agrega, nunca se corrige.': 'The fingerprint is written to DecentralChain under the day\'s date. The contract refuses to overwrite a root that already exists: a day can be added, never corrected.', 'clave root_<día>_<mes> · cuenta pública, legible desde el navegador': 'key root_<day>_<month> · public account, readable from a browser',
+    'Cualquiera lo comprueba.': 'Anyone can check it.', 'Años después, alguien vuelve a calcular la huella del archivo y la compara con la anclada, desde su navegador. Coincide, o no. Sin pedirnos nada.': 'Years later, someone recomputes the archive\'s fingerprint and compares it with the anchored one, from their browser. It matches, or it does not. Without asking us for anything.', 'mainnet-node.decentralchain.io · sin ningún servidor nuestro en medio': 'mainnet-node.decentralchain.io · no server of ours in between',
+    'meses de archivos, de 2010-12 a 2026-08': 'months of archives, 2010-12 to 2026-08', '3,04': '3.04', 'de registro nacional de compras, en espejo': 'of the national procurement record, mirrored', '72.105': '72,105', 'actores resueltos, alrededor de seis millones de filas': 'resolved actors, around six million rows', 'meses ya cerrados que fueron reescritos después, sin aviso': 'closed months rewritten afterwards, without notice', 'US$/año': 'US$/yr', 'lo que cuesta operar el anclaje': 'what it costs to run the anchoring',
+    'El primer día anclado fue 2026-08-27. Cuántos días hay anclados hoy no lo decimos nosotros: lo dice el nodo, en el capítulo VII.': 'The first anchored day was 2026-08-27. How many days are anchored today is not ours to say: the node says it, in chapter VII.',
+    'Corre sobre DecentralChain.': 'It runs on DecentralChain.',
+    'Una cadena pública con un bloque nuevo cada 60 segundos, que cualquiera puede leer desde un navegador. Sin permiso, sin cuenta, sin nosotros en medio.': 'A public chain with a new block every 60 seconds, readable by anyone from a browser. No permission, no account, no us in between.',
+    'DecentralChain · red principal': 'DecentralChain · mainnet', 'Una memoria vale lo que valen quienes la sostienen.': 'A memory is worth exactly what those who hold it are worth.',
+    'Cada nodo guarda la misma huella. Para cambiar el pasado habría que convencerlos a todos, al mismo tiempo.': 'Every node keeps the same fingerprint. Changing the past would mean convincing all of them, at the same time.',
+    'El contrato de anclaje no sabe sobrescribir. Un día se agrega; nunca se corrige.': 'The anchoring contract does not know how to overwrite. A day is added; it is never corrected.',
+    'Cuando la huella coincide en todos, el registro queda confirmado. Cuando no coincide en alguno, queda a la vista.': 'When the fingerprint matches on every node, the record is confirmed. When it fails to match on any, it is there for all to see.',
+    'Intentá reescribirlo.': 'Try to rewrite it.', 'Registro de muestra · SICOP': 'Sample record · SICOP', 'Procedimiento': 'Procedure', 'MUESTRA-0001': 'SAMPLE-0001', 'Objeto': 'Object', 'Luminarias LED, 120 unidades': 'LED luminaires, 120 units', 'Monto': 'Amount', 'Monto adjudicado, editable': 'Awarded amount, editable', 'Huella actual': 'Current fingerprint', 'Huella anclada': 'Anchored fingerprint', 'calculando': 'computing', 'Calculando la huella': 'Computing the fingerprint', 'Cambiá un dígito': 'Change one digit', 'Restaurá el original': 'Restore the original',
+    'Registro de muestra, no un contrato real. La huella es un SHA-256 de verdad, calculado en tu navegador. Hoy la red la sostienen pocos nodos; el capítulo IX es sobre eso.': 'A sample record, not a real contract. The fingerprint is a real SHA-256, computed in your browser. Today the network is held by few nodes; chapter IX is about that.',
+    'Lo que escribe en la memoria.': 'What writes into the memory.',
+    'Ancla es un instrumento, no un sinónimo del registro. La memoria es el Registro Público de Integridad; esto es lo que escribe en él.': 'Ancla is an instrument, not a synonym for the record. The memory is the Registro Público de Integridad; this is what writes into it.',
+    'Instrumentos': 'Instruments', 'Un registro, seis instrumentos.': 'One record, six instruments.', 'Cada uno escribe un tipo de hecho distinto, con el mismo método: copia, huella, ancla, comprobación.': 'Each writes a different kind of fact, with the same method: copy, fingerprint, anchor, check.',
+    'Cada contrato público que firma el Estado.': 'Every public contract the State signs.', 'Copia diaria del registro nacional de compras públicas, reducido a una huella y anclado en cadena. Cualquier cambio posterior queda demostrable.': 'A daily copy of the national procurement record, reduced to a fingerprint and anchored on chain. Any later change becomes provable.', 'activo': 'live', '· 189 meses · 6M registros': '· 189 months · 6M records',
+    'Cómo la ciudadanía aporta evidencia desde el campo.': 'How citizens contribute evidence from the field.', 'Misiones verificadas con foto, GPS y revisión de una organización acreditada. Cada una actualiza un indicador del Registro de Impacto.': 'Quests verified with photo, GPS and review by an accredited organization. Each one updates an indicator in the Registro de Impacto.',
+    'Resultados cívicos y ambientales verificados.': 'Verified civic and environmental outcomes.', 'Indicadores con unidades estandarizadas y metodología versionada, verificados por organizaciones acreditadas y alineados a ODS, ENEC y Bioeconomía 2030.': 'Indicators with standardized units and versioned methodology, verified by accredited organizations and aligned to the SDGs, ENEC and Bioeconomía 2030.', 'construido': 'built', '· metodología versionada': '· versioned methodology',
+    'Tarifas de servicios públicos y tránsito en peajes, desde ARESEP.': 'Utility tariffs and toll traffic, from ARESEP.', 'Lo que se cobró, cuándo se aprobó y cuánto tránsito pasó. Publicado por el regulador, preservado por nosotros.': 'What was charged, when it was approved, and how much traffic passed. Published by the regulator, preserved by us.', '· clave crgov:aresep:*': '· key crgov:aresep:*',
+    'Qué organizaciones son reales, y quién las verificó.': 'Which organizations are real, and who verified them.', 'Cédula jurídica, tipo, año, y la organización que respondió por ella. La capa de acreditación de la que dependen los demás registros.': 'Legal id, type, year, and the organization that vouched for it. The credentialing layer the other registries depend on.', 'listo': 'ready',
+    'Las instituciones que custodian la memoria.': 'The institutions that keep the memory.', 'Universidades, colegios profesionales y medios operando nodos sin rendimiento financiero ni interés en lo que atestiguan. Quién sostiene el registro es la pregunta entera.': 'Universities, professional colleges and newsrooms running nodes with no yield and no stake in what they witness. Who holds the record is the entire question.', 'abriendo': 'opening',
+    'Dos están activos en Costa Rica. Los demás están construidos o listos, y lo decimos con esas palabras y no con otras.': 'Two are live in Costa Rica. The rest are built or ready, and we say so in those words and no others.',
+    'Centroamérica, un portal a la vez.': 'Central America, one portal at a time.',
+    'Cada país tiene un portal de compras públicas. Nombrarlos es lo que demuestra que el trabajo está hecho. Hoy solo uno está activo, y lo decimos con esa palabra.': 'Every country has a procurement portal. Naming them is what proves the work is done. Today only one is live, and we say so in that word.',
+    'planificado': 'planned', 'Quién puede sostenerla.': 'Who can hold it.',
+    'Instituciones sin rendimiento financiero por operar un nodo y sin interés en lo que atestiguan. Quién sostiene el registro es la pregunta entera; el software es la parte fácil.': 'Institutions with no financial yield for running a node and no stake in what they witness. Who holds the record is the entire question; the software is the easy part.',
+    'Universidades': 'Universities', 'Colegios profesionales': 'Professional colleges', 'Medios de comunicación': 'Newsrooms', 'custodio · sin nombrar': 'custodian · none named',
+    'Hoy no hay ningún custodio institucional todavía. Nodo Público está abriendo, y esta página lo dice así porque cualquiera puede comprobarlo.': 'There is no institutional custodian yet. Nodo Público is opening, and this page says so because anyone can check.',
+    'Conocé Nodo Público': 'Learn about Nodo Público',
+    'La huella': 'The fingerprint', 'Lo que ya cambió': 'What already changed', 'Ahora mismo': 'Right now', 'Los límites': 'The limits',
+    'Unos seis millones de filas': 'Around six million rows', 'Todo eso cabe en una línea.': 'All of it fits on one line.',
+    'Cada archivo mensual se reduce a una raíz de Merkle: 64 caracteres que dependen de cada fila. Cambiá una coma en la fila tres millones y cambian los 64.': 'Every monthly archive is reduced to a Merkle root: 64 characters that depend on every row. Change one comma in row three million and all 64 change.',
+    'Huella del registro de muestra de esta página': 'Fingerprint of this page\'s sample record', 'SHA-256 del registro de muestra de esta página': 'SHA-256 of this page\'s sample record', 'Cada punto representa miles de filas.': 'Each dot stands for thousands of rows.',
+    'Catorce meses cambiaron después de cerrar.': 'Fourteen months changed after closing.',
+    'Los archivos mensuales se congelan el último día de su mes. Estos se volvieron a publicar después, sin registro público de qué cambió.': 'Monthly archives freeze on the last day of their month. These were published again afterwards, with no public record of what changed.',
+    'Archivo mensual de compras públicas · SICOP': 'Monthly public procurement archive · SICOP',
+    'Buscamos una copia ajena contra la cual comparar. El Internet Archive tenía cero capturas de estos archivos. No había contra qué.': 'We looked for someone else\'s copy to compare against. The Internet Archive held zero captures of these files. There was nothing to check against.',
+    'Así que construimos el espejo: 189 meses, de 2010-12 a 2026-08, 3,04 GB tal como salieron.': 'So we built the mirror: 189 months, 2010-12 to 2026-08, 3.04 GB exactly as they came out.',
+    'Catorce de esos meses ya estaban cerrados cuando se volvieron a publicar. Sin aviso y sin registro de qué cambió.': 'Fourteen of those months were already closed when they were published again. No notice, no record of what changed.',
+    '2024-09-20 · 7 meses · 144,5 MB': '2024-09-20 · 7 months · 144.5 MB', '2024-10-03 · 1 mes · 13,8 MB': '2024-10-03 · 1 month · 13.8 MB', '2024-10-04 · 1 mes · 51,1 MB': '2024-10-04 · 1 month · 51.1 MB', '2025-05-06 · 3 meses · 105,2 MB': '2025-05-06 · 3 months · 105.2 MB', '2026-08-10 · 2 meses · 105,7 MB': '2026-08-10 · 2 months · 105.7 MB',
+    'Leelo vos, ahora mismo.': 'Read it yourself, right now.',
+    'Todo lo que esta página afirma sobre la cadena se puede leer desde tu navegador, sin pasar por nosotros. Esto es lo que dice el nodo en este momento.': 'Everything this page claims about the chain can be read from your browser, without going through us. This is what the node says right now.',
+    'Nodo': 'Node', 'Altura de bloque': 'Block height', 'un bloque cada 60 segundos': 'one block every 60 seconds', 'Cuenta de anclaje': 'Anchor account', 'Días anclados': 'Anchored days', 'Último anclaje': 'Latest anchor', 'Su raíz': 'Its root', 'leyendo': 'reading',
+    'Registro de compras públicas de Costa Rica. Leído desde tu navegador, sin ningún servidor nuestro en medio.': 'Costa Rica\'s public procurement record. Read from your browser, with no server of ours in between.',
+    'Lo que no hace': 'What it does not do', 'No dice si un contrato fue justo.': 'It does not say whether a contract was fair.', 'No detecta corrupción.': 'It does not detect corruption.', 'No corrige el pasado.': 'It does not correct the past.', 'No cubre lo que nunca se publicó.': 'It does not cover what was never published.',
+    'Demuestra una sola cosa: si un registro publicado cambió después, y cuándo.': 'It proves one thing only: whether a published record changed afterwards, and when.',
+    'Hacia adelante desde el momento del anclaje, y solo sobre lo que se publica.': 'Forward from the moment of anchoring, and only for what gets published.',
+    'Nada de esto pide que nos creas.': 'None of this asks you to trust us.', 'Verificá un registro': 'Verify a record', 'Asociación en trámite de inscripción, sin cédula jurídica todavía': 'Association pending registration, no legal id yet'
+  };
+  var i18nMiss = [];
+  if (lang === 'en') {
+    root.lang = 'en';
+    var walker = document.createTreeWalker(document.documentElement, NodeFilter.SHOW_TEXT, null);
+    var textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+    textNodes.forEach(function (n) {
+      var pn = n.parentNode; if (!pn || pn.nodeName === 'SCRIPT' || pn.nodeName === 'STYLE') return;
+      var raw = n.nodeValue, key = raw.replace(/\s+/g, ' ').trim();
+      if (!key) return;
+      if (EN.hasOwnProperty(key)) n.nodeValue = raw.replace(key, EN[key]).replace(raw.trim(), EN[key]);
+      else if (/[a-záéíóúñ]{3,}/i.test(key) && !/^[IVX]+$/.test(key)) i18nMiss.push(key);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[aria-label], [data-title], meta[name="description"]'), function (el) {
+      ['aria-label', 'data-title', 'content'].forEach(function (a) { var v = el.getAttribute(a); if (v && EN.hasOwnProperty(v)) el.setAttribute(a, EN[v]); });
+    });
+    var pressed = document.querySelectorAll('#lang button');
+    for (var b = 0; b < pressed.length; b++) pressed[b].setAttribute('aria-pressed', pressed[b].getAttribute('data-lang') === 'en' ? 'true' : 'false');
+  }
+  window.__i18nMiss = i18nMiss;
+
+  function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+  function smooth(v) { v = clamp01(v); return v * v * (3 - 2 * v); }
+  function progress(act) { return parseFloat(getComputedStyle(act).getPropertyValue('--sc-p')) || 0; }
+  function svgEl(tag, attrs, parent) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+
+  /* ---------------------------------------------------------------------
+     THE LATTICE · built before mount, so a failed engine still leaves a
+     complete network on the page. The mark's arms end 84.5 units from its
+     hub and its witnesses sit 75 units out with a radius of 16, so at a
+     spacing of 178 every arm plugs into a neighbour's witness with a hair
+     of air. 37 nodes, three rings, ring index on each for the state wave.
+     --------------------------------------------------------------------- */
+  var S = 178, lat = document.getElementById('lat');
+  if (lat) {
+    var list = [], R = 3;
+    for (var q = -R; q <= R; q++) for (var r = -R; r <= R; r++) {
+      var ring = (Math.abs(q) + Math.abs(r) + Math.abs(q + r)) / 2;
+      if (ring <= R) list.push({ q: q, r: r, ring: ring });
+    }
+    list.sort(function (a, b) { return a.ring - b.ring; });
+    list.forEach(function (n, i) {
+      var x = n.q * S * C30, y = -n.r * S - n.q * S * 0.5;
+      var pos = svgEl('g', { transform: 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ')' }, lat);
+      var g = svgEl('g', { 'class': 'node' + (n.ring === 0 ? ' node--hub' : '') }, pos);
+      g.style.setProperty('--ring', n.ring);
+      g.style.setProperty('--t0', (0.02 + n.ring * 0.075 + ((i * 7) % 5) * 0.009).toFixed(3));
+      svgEl('use', { 'class': 'node__b', href: '#markp', transform: 'translate(-150 -150)' }, g);
+      svgEl('use', { 'class': 'node__w', href: '#dotsp', transform: 'translate(-150 -150)' }, g);
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     THE RECORD · a labelled sample, hashed for real. The anchored hash is
+     computed once from the original text; the current one follows every
+     edit. The lattice shows whichever state the comparison lands on.
+     --------------------------------------------------------------------- */
+  var amt = document.getElementById('amt'), record = document.getElementById('record');
+  var hashA = document.getElementById('hashA'), hashB = document.getElementById('hashB'), statusTxt = document.getElementById('statusTxt');
+  var ORIGINAL = '4 250 000', edited = false, seq = 0, anchored = null;
+  var recRows = document.querySelectorAll('#record .record__row > span:last-child');
+  function canonical(v) { return [recRows[0].textContent.trim(), recRows[1].textContent.trim(), 'CRC ' + v.replace(/\s+/g, ' ').trim()].join('\n'); }
+  function sha(text) {
+    if (!(window.crypto && crypto.subtle && window.TextEncoder)) return Promise.reject(new Error('no subtle'));
+    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)).then(function (buf) {
+      return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+    });
+  }
+  function setState(alt, waiting) {
+    edited = alt;
+    if (record) {
+      record.classList.toggle('record--alt', alt && !waiting);
+      record.classList.toggle('record--wait', !!waiting);
+    }
+    if (statusTxt) statusTxt.textContent = waiting ? T('Calculando la huella', 'Computing the fingerprint') : (alt ? T('No coincide con el ancla. Ningún nodo la acepta.', 'Does not match the anchor. No node accepts it.') : T('Coincide con el ancla. Todos los nodos la confirman.', 'Matches the anchor. Every node confirms it.'));
+  }
+  function recompute() {
+    if (!amt) return;
+    var mine = ++seq, text = canonical(amt.textContent || '');
+    setState(edited, true);
+    sha(text).then(function (h) {
+      if (mine !== seq) return;
+      hashB.textContent = h;
+      setState(anchored !== null && h !== anchored, false);
+    }, function () {
+      if (mine !== seq) return;
+      hashB.textContent = T('no disponible en este navegador', 'not available in this browser');
+      setState(canonical(amt.textContent || '') !== canonical(ORIGINAL), false);
+    });
+  }
+  if (amt) {
+    sha(canonical(ORIGINAL)).then(function (h) { anchored = h; hashA.textContent = h; huellaBuild(h); recompute(); }, function () {
+      hashA.textContent = T('no disponible en este navegador', 'not available in this browser'); recompute();
+    });
+    if (fine) {
+      amt.setAttribute('contenteditable', 'true');
+      amt.addEventListener('input', recompute);
+      amt.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); amt.blur(); } });
+      amt.addEventListener('paste', function (e) {
+        e.preventDefault();
+        var t = (e.clipboardData || window.clipboardData).getData('text').replace(/[\r\n]+/g, ' ');
+        document.execCommand('insertText', false, t);
+      });
+    }
+    document.getElementById('btnAlter').addEventListener('click', function () {
+      var cur = (amt.textContent || '').trim();
+      amt.textContent = cur === ORIGINAL ? '4 350 000' : cur.replace(/\d(?=\D*$)/, function (d) { return String((+d + 1) % 10); });
+      recompute();
+    });
+    document.getElementById('btnRestore').addEventListener('click', function () { amt.textContent = ORIGINAL; recompute(); });
+  }
+
+  /* ---------------------------------------------------------------------
+     REVEAL WINDOWS · chapter II's wipes are timed from the layout rather
+     than guessed: each figure starts revealing when its top crosses 88% of
+     the viewport and finishes at 50%, expressed in the flow act's own p.
+     --------------------------------------------------------------------- */
+  function tuneReveals() {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-tune]'), function (el) {
+      var act = el.closest('[data-sc-act]'); if (!act) return;
+      var vh = innerHeight, aTop = act.getBoundingClientRect().top + scrollY, H = act.offsetHeight;
+      var rel = el.getBoundingClientRect().top + scrollY - aTop;
+      var from = (rel + 0.12 * vh) / (H + vh), to = (rel + 0.52 * vh) / (H + vh);
+      el.setAttribute('data-sc-reveal-at', from.toFixed(3) + ' ' + to.toFixed(3));
+    });
+  }
+
+  /* ---- mount. Synchronous engine: by now it has defined ScrollCraft or
+          failed, and marking the failure is what fires the CSS fail-safe. ---- */
+  if (typeof ScrollCraft === 'undefined') {
+    root.classList.add('sc-nojs');
+    if (window.console) console.error('scrollcraft: engine did not load, falling back to static page.');
+    return;
+  }
+  var api = null;
+  function mountNow() {
+    if (api) return;
+    try {
+      tuneReveals();
+      api = ScrollCraft.mount(document.body);
+      try { var sy = sessionStorage.getItem(SCROLL_KEY); if (sy !== null) { sessionStorage.removeItem(SCROLL_KEY); scrollTo({ top: +sy, left: 0, behavior: 'instant' }); } } catch (e2) {}
+    } catch (e) {
+      root.classList.add('sc-nojs');
+      if (window.console) console.error('scrollcraft: falling back to static page.', e);
+      return;
+    }
+    requestAnimationFrame(frame);
+  }
+  var mounted = false;
+  function once() { if (mounted) return; mounted = true; mountNow(); }
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(once, once); setTimeout(once, 900); } else once();
+
+  /* ---------------------------------------------------------------------
+     THE FOLIO · which chapter is under the reader. Measured on resize,
+     compared per frame, swapped with a short crossfade.
+     --------------------------------------------------------------------- */
+  var folio = document.getElementById('folio'), folioNum = document.getElementById('folioNum'), folioTitle = document.getElementById('folioTitle');
+  var chapters = Array.prototype.slice.call(document.querySelectorAll('[data-ch]'));
+  var tops = [], curCh = null, swapTimer = 0;
+  function measure() { tops = chapters.map(function (c) { return c.getBoundingClientRect().top + scrollY; }); }
+  addEventListener('resize', measure); measure(); setTimeout(measure, 1000);
+  function paintFolio() {
+    var y = scrollY + innerHeight * 0.45, hit = null;
+    for (var i = 0; i < chapters.length; i++) if (tops[i] <= y) hit = chapters[i];
+    if (hit === curCh) return;
+    curCh = hit;
+    var num = hit ? hit.getAttribute('data-ch') : '', title = hit ? hit.getAttribute('data-title') : '';
+    var dark = hit && hit.classList.contains('close');
+    folio.classList.toggle('folio--dark', !!dark);
+    if (!num) { folio.classList.add('folio--off'); return; }
+    folio.classList.remove('folio--off');
+    folio.classList.add('folio--swap');
+    clearTimeout(swapTimer);
+    swapTimer = setTimeout(function () {
+      folioNum.textContent = num; folioTitle.textContent = title;
+      folio.classList.remove('folio--swap');
+    }, reduce ? 0 : 200);
+  }
+
+  /* ---------------------------------------------------------------------
+     POINTER LEAN · the relief on the title page and the lattice plane both
+     tilt toward the pointer, interpolated so they carry momentum. Fine
+     pointers only; touch never fires a false hover.
+     --------------------------------------------------------------------- */
+  var reliefLean = document.getElementById('reliefLean'), latLean = document.getElementById('latLean');
+  var tx = 0, ty = 0, cx = 0, cy = 0;
+  if (fine && !reduce) addEventListener('pointermove', function (e) {
+    tx = (e.clientX / innerWidth) * 2 - 1; ty = (e.clientY / innerHeight) * 2 - 1;
+  }, { passive: true });
+  function tickLean() {
+    if (!fine || reduce) return;
+    cx += (tx - cx) * 0.06; cy += (ty - cy) * 0.06;
+    if (reliefLean) reliefLean.style.transform = 'rotateY(' + (cx * 7).toFixed(2) + 'deg) rotateX(' + (-cy * 5).toFixed(2) + 'deg)';
+    if (latLean) latLean.style.transform = 'rotateX(' + (20 - cy * 4).toFixed(2) + 'deg) rotateY(' + (cx * 5).toFixed(2) + 'deg)';
+  }
+
+  /* ---------------------------------------------------------------------
+     I · ANATOMY · the outline draws along the mark's own path order (three
+     arms, then three witnesses), the fill takes over so the hub reads as
+     one piece, then the three callouts arrive and light their definitions.
+     --------------------------------------------------------------------- */
+  var anatAct = document.querySelector('.spread'), anStroke = document.getElementById('anStroke'), anFill = document.getElementById('anFill');
+  var callouts = Array.prototype.slice.call(document.querySelectorAll('.co'));
+  var anatItems = {};
+  Array.prototype.forEach.call(document.querySelectorAll('.anat__i'), function (el) { anatItems[el.getAttribute('data-part')] = el; });
+  function paintAnatomy(p) {
+    if (reduce) p = 1;
+    anStroke.style.strokeDashoffset = (1 - smooth((p - 0.04) / 0.46)).toFixed(4);
+    anFill.style.opacity = smooth((p - 0.48) / 0.12).toFixed(3);
+    callouts.forEach(function (g) {
+      var at = parseFloat(g.getAttribute('data-at')), t = smooth((p - at) / 0.09);
+      var path = g.querySelector('path'); path.style.strokeDashoffset = (1 - t).toFixed(4);
+      Array.prototype.forEach.call(g.querySelectorAll('circle, text'), function (n) { n.style.opacity = smooth((t - 0.4) / 0.6).toFixed(3); });
+      var item = anatItems[g.getAttribute('data-part')]; if (item) item.classList.toggle('lit', t > 0.5);
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     III · THE CHAIN · lit copy, the confirmation wave, the record's window.
+     --------------------------------------------------------------------- */
+  var chainAct = document.getElementById('chain'), litItems = Array.prototype.slice.call(document.querySelectorAll('#chainLit li')), tryBox = document.getElementById('try');
+  var latState = '';
+  function paintChain(p) {
+    if (reduce) p = Math.max(p, 0.7);
+    litItems.forEach(function (li) { li.classList.toggle('lit-on', p >= parseFloat(li.getAttribute('data-at'))); });
+    var st = p >= 0.36 ? (edited ? 'altered' : 'confirmed') : 'plain';
+    if (st !== latState) { latState = st; lat.setAttribute('data-state', st); }
+    tryBox.classList.toggle('try--off', p < 0.5);
+  }
+  if (chainAct) chainAct.addEventListener('focusin', function () {
+    var p = progress(chainAct);
+    if (p < 0.6) {
+      var top = chainAct.getBoundingClientRect().top + scrollY;
+      scrollTo({ top: top + (chainAct.offsetHeight - innerHeight) * 0.75, left: 0, behavior: 'instant' });
+    }
+  });
+
+  /* ---------------------------------------------------------------------
+     CLOSE · arrival, carried from /landing3. The three axes shorten into
+     arms and thicken, the witnesses slide in to their seats, and at the
+     last moment the literal mark takes over so the hub is clean.
+     --------------------------------------------------------------------- */
+  var closeAct = document.querySelector('.close');
+  var asmAxes = document.querySelectorAll('#asmAxes line');
+  var asmDots = document.querySelectorAll('#asmDots circle');
+  var asmMark = document.getElementById('asmMark');
+  var ARM = [[0, -1], [C30, 0.5], [-C30, 0.5]];
+  var SEAT = [[208.044, 119.007], [150, 225], [91.956, 119.007]];
+  function paintClose(p) {
+    var a = reduce ? 1 : smooth((p - 0.04) / 0.54);
+    var m = smooth((a - 0.86) / 0.14);
+    var len = 420 + (84.5 - 420) * a, back = 16 * a, sw = 1 + 23 * a;
+    for (var i = 0; i < 3; i++) {
+      var d = ARM[i], ln = asmAxes[i];
+      ln.setAttribute('x1', (150 - d[0] * back).toFixed(2)); ln.setAttribute('y1', (150 - d[1] * back).toFixed(2));
+      ln.setAttribute('x2', (150 + d[0] * len).toFixed(2));  ln.setAttribute('y2', (150 + d[1] * len).toFixed(2));
+      ln.setAttribute('stroke-width', sw.toFixed(2));
+      ln.style.opacity = (1 - m).toFixed(3);
+      var sx = SEAT[i][0], sy = SEAT[i][1];
+      var vx = sx - 150, vy = sy - 150, vl = Math.sqrt(vx * vx + vy * vy);
+      var fx = 150 + vx / vl * 240, fy = 150 + vy / vl * 240;
+      var c = asmDots[i];
+      c.setAttribute('cx', (fx + (sx - fx) * a).toFixed(2)); c.setAttribute('cy', (fy + (sy - fy) * a).toFixed(2));
+      c.setAttribute('r', (6 + 10 * a).toFixed(2));
+      c.style.opacity = (1 - m).toFixed(3);
+    }
+    asmMark.setAttribute('opacity', m.toFixed(3));
+  }
+  if (closeAct) closeAct.addEventListener('focusin', function () {
+    if (progress(closeAct) < 0.7) scrollTo({ top: document.documentElement.scrollHeight, left: 0, behavior: 'instant' });
+  });
+
+  /* ---- the language control: stores the choice under the React pages' key
+          and reloads at the same scroll position ---- */
+  Array.prototype.forEach.call(document.querySelectorAll('#lang button'), function (b) {
+    b.addEventListener('click', function () {
+      var l = b.getAttribute('data-lang'); if (l === lang) return;
+      try { localStorage.setItem(LANG_KEY, l); } catch (e) {}
+      try { sessionStorage.setItem(SCROLL_KEY, String(Math.round(scrollY))); history.scrollRestoration = 'manual'; } catch (e) {}
+      location.reload();
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     III · LA HUELLA · a canvas of rows pulled into 64 characters. Particles
+     are laid out once per resize; the frame only redraws when p changes.
+     --------------------------------------------------------------------- */
+  var huellaAct = document.getElementById('huella'), hc = document.getElementById('huellaC'), hChars = document.getElementById('huellaChars');
+  var HP = null, hctx = null, hW = 0, hH = 0, hSlots = [], hLastP = -1;
+  function huellaBuild(hash) {
+    if (!hChars) return;
+    hChars.textContent = '';
+    for (var i = 0; i < 64; i++) { var sp = document.createElement('span'); sp.textContent = hash.charAt(i); hChars.appendChild(sp); }
+    huellaLayout();
+  }
+  function huellaLayout() {
+    if (!hc || !hChars.children.length) return;
+    var r = hc.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
+    hW = r.width; hH = r.height; hc.width = Math.round(hW * dpr); hc.height = Math.round(hH * dpr);
+    hctx = hc.getContext('2d'); hctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    hSlots = Array.prototype.map.call(hChars.children, function (sp) { var b = sp.getBoundingClientRect(); return [b.left - r.left + b.width / 2, b.top - r.top + b.height / 2]; });
+    var N = hW < 700 ? 1500 : 4200, left = hW < 700 ? 0 : hW * 0.4, top = hW < 700 ? hH * 0.34 : 0, bottom = hSlots[0][1] - 40;
+    HP = new Float32Array(N * 5);
+    for (var i = 0; i < N; i++) {
+      var o = i * 5;
+      HP[o] = left + Math.random() * (hW - left); HP[o + 1] = top + Math.random() * (bottom - top);
+      HP[o + 2] = Math.random() * 0.5; HP[o + 3] = i % 64; HP[o + 4] = (Math.random() - 0.5) * 7;
+    }
+    hLastP = -1;
+  }
+  function paintHuella(p) {
+    if (!hctx || !HP) return;
+    if (reduce) p = 1;
+    if (Math.abs(p - hLastP) < 0.0005) return;
+    hLastP = p;
+    hctx.clearRect(0, 0, hW, hH);
+    hctx.fillStyle = '#14120f';
+    var N = HP.length / 5, counts = new Uint16Array(64), per = N / 64;
+    for (var i = 0; i < N; i++) {
+      var o = i * 5, t = clamp01((p - 0.06 - HP[o + 2]) / 0.3), e = t * t * (3 - 2 * t), sl = hSlots[HP[o + 3]];
+      if (t >= 0.97) { counts[HP[o + 3]]++; continue; }
+      var x = HP[o] + (sl[0] + HP[o + 4] - HP[o]) * e + Math.sin(e * Math.PI) * HP[o + 4] * 5;
+      var y = HP[o + 1] + (sl[1] - HP[o + 1]) * e;
+      hctx.globalAlpha = 0.16 + 0.5 * (1 - e * e);
+      hctx.fillRect(x, y, 1.7, 1.7);
+    }
+    hctx.globalAlpha = 1;
+    for (var c = 0; c < 64; c++) hChars.children[c].style.opacity = (0.18 + 0.82 * Math.min(1, counts[c] / per * 1.15)).toFixed(2);
+  }
+  var hResize = 0;
+  addEventListener('resize', function () { clearTimeout(hResize); hResize = setTimeout(huellaLayout, 150); });
+
+  /* ---------------------------------------------------------------------
+     IV · THE WALL · 189 months, years across and months down, in the mark's
+     own ink; fill order and lift order are custom properties, the motion
+     is CSS against --sc-p. Built before mount so a failed engine still
+     leaves a complete wall.
+     --------------------------------------------------------------------- */
+  var wallAct = document.getElementById('wallAct'), wallGrid = document.getElementById('wallGrid');
+  if (wallGrid) {
+    var yEl = document.getElementById('wallYears'), mEl = document.getElementById('wallMonths');
+    for (var yy = 2010; yy <= 2026; yy++) { var yl = document.createElement('span'); yl.textContent = String(yy).slice(2); yEl.appendChild(yl); }
+    T('EFMAMJJASOND', 'JFMAMJJASOND').split('').forEach(function (ch) { var ml = document.createElement('span'); ml.textContent = ch; mEl.appendChild(ml); });
+    var altList = ['2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06', '2024-07', '2024-08', '2024-09', '2025-02', '2025-03', '2025-04', '2026-06', '2026-07'];
+    for (var mm = 0; mm < 12; mm++) for (var y2 = 2010; y2 <= 2026; y2++) {
+      var k = (y2 - 2010) * 12 + mm - 11, tile = document.createElement('div');
+      if (k < 0 || k > 188) { tile.className = 'tile tile--none'; wallGrid.appendChild(tile); continue; }
+      tile.className = 'tile';
+      tile.style.setProperty('--t0', (0.1 + k * 0.42 / 188).toFixed(3));
+      var f = document.createElement('i'); f.className = 'tile__f'; tile.appendChild(f);
+      var ai = altList.indexOf(y2 + '-' + ('0' + (mm + 1)).slice(-2));
+      if (ai > -1) {
+        tile.classList.add('tile--alt'); tile.style.setProperty('--t1', (0.6 + ai * 0.016).toFixed(3));
+        var a = document.createElement('i'); a.className = 'tile__a'; tile.appendChild(a);
+      }
+      wallGrid.appendChild(tile);
+    }
+  }
+  var wallLit = Array.prototype.slice.call(document.querySelectorAll('#wallLit li'));
+  function paintWall(p) {
+    if (reduce) p = 1;
+    wallLit.forEach(function (li) { li.classList.toggle('lit-on', p >= parseFloat(li.getAttribute('data-at'))); });
+  }
+
+  /* ---------------------------------------------------------------------
+     VII · THE LEDGER · reads the public node from the reader's browser once
+     the section is near, and again every 30 seconds while it stays. Only
+     the Costa Rica series (keys with no prefix) is shown, which is what the
+     page is about; a node that does not answer is said so, not zeroed.
+     --------------------------------------------------------------------- */
+  var NODE = 'https://mainnet-node.decentralchain.io', ADDR = '3DTwG5ZydbJDuLdEmwfgDEH3NuwDrgwQFtF';
+  var liveEl = document.getElementById('live'), lvHeight = document.getElementById('lvHeight'), lvDays = document.getElementById('lvDays'), lvLast = document.getElementById('lvLast'), lvRoot = document.getElementById('lvRoot'), lvFoot = document.getElementById('lvFoot'), ringP = document.getElementById('ringP');
+  var lv = { height: null, seenAt: 0, timer: 0, busy: false, rootShown: '' };
+  function fmtN(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, T('.', ',')); }
+  function liveFail() {
+    [lvHeight, lvDays, lvLast, lvRoot].forEach(function (el) { if (el.textContent === T('leyendo', 'reading')) el.textContent = T('sin respuesta', 'no answer'); });
+    lvFoot.textContent = T('El nodo no respondió en este momento. Nada de lo que afirma esta página depende de nosotros; podés intentar de nuevo más tarde.', 'The node did not answer just now. Nothing this page claims depends on us; you can try again later.');
+  }
+  function liveRead() {
+    if (!liveEl || lv.busy || !window.fetch) return;
+    lv.busy = true;
+    var a = fetch(NODE + '/blocks/height').then(function (r) { return r.json(); }).then(function (j) {
+      if (typeof j.height !== 'number') throw new Error('shape');
+      if (j.height !== lv.height) { lv.height = j.height; lv.seenAt = performance.now(); }
+      lvHeight.textContent = fmtN(j.height);
+    });
+    var b = fetch(NODE + '/addresses/data/' + ADDR).then(function (r) { return r.json(); }).then(function (list) {
+      if (!Array.isArray(list)) throw new Error('shape');
+      var roots = {}, metas = {}, days = {};
+      list.forEach(function (e) {
+        var m = /^(root|meta)_(\d{4}-\d{2}-\d{2})_(\d{6})$/.exec(e.key); if (!m) return;
+        (m[1] === 'root' ? roots : metas)[m[2] + '_' + m[3]] = e.value; days[m[2]] = 1;
+      });
+      var dayList = Object.keys(days).sort(); if (!dayList.length) throw new Error('empty');
+      var last = dayList[dayList.length - 1], months = Object.keys(roots).filter(function (k) { return k.indexOf(last) === 0; }).map(function (k) { return k.split('_')[1]; }).sort();
+      var month = months[months.length - 1], root = roots[last + '_' + month] || '', meta = (metas[last + '_' + month] || '').split('|');
+      lvDays.textContent = dayList.length === 1 ? '1 · ' + last : dayList.length + ' · ' + dayList[0] + ' → ' + last;
+      lvLast.textContent = last + ' · ' + T('archivo', 'archive') + ' ' + month.slice(0, 4) + '-' + month.slice(4) + (meta[1] ? ' · ' + fmtN(meta[1]) + ' ' + T('filas', 'rows') : '');
+      if (root && root !== lv.rootShown) {
+        lv.rootShown = root; lvRoot.textContent = '';
+        for (var i = 0; i < root.length; i++) { var sp = document.createElement('span'); sp.textContent = root.charAt(i); sp.style.setProperty('--i', i); lvRoot.appendChild(sp); }
+      }
+      var d = new Date(), hh = function (n) { return ('0' + n).slice(-2); };
+      lvFoot.textContent = T('Registro de compras públicas de Costa Rica. Leído desde tu navegador a las ', 'Costa Rica\'s public procurement record. Read from your browser at ') + hh(d.getUTCHours()) + ':' + hh(d.getUTCMinutes()) + ':' + hh(d.getUTCSeconds()) + ' UTC' + T(', sin ningún servidor nuestro en medio.', ', with no server of ours in between.');
+    });
+    Promise.all([a, b]).then(function () { lv.busy = false; }, function () { lv.busy = false; liveFail(); });
+  }
+  if (liveEl && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      var on = entries.some(function (e) { return e.isIntersecting; });
+      if (on) { liveRead(); if (!lv.timer) lv.timer = setInterval(liveRead, 30000); }
+      else if (lv.timer) { clearInterval(lv.timer); lv.timer = 0; }
+    }, { rootMargin: '240px 0px' }).observe(liveEl);
+  }
+  function paintRing(now) {
+    if (!ringP || lv.height === null) return;
+    var f = reduce ? 1 : ((now - lv.seenAt) / 60000) % 1;
+    ringP.style.strokeDashoffset = (1 - f).toFixed(3);
+  }
+
+  /* ---- one loop ---- */
+  function frame(now) {
+    if (huellaAct) paintHuella(progress(huellaAct));
+    if (wallAct) paintWall(progress(wallAct));
+    paintRing(now);
+    paintFolio();
+    if (anatAct) paintAnatomy(progress(anatAct));
+    if (chainAct) paintChain(progress(chainAct));
+    if (closeAct) paintClose(progress(closeAct));
+    tickLean();
+    requestAnimationFrame(frame);
+  }
+})();
+</script>
+</body>
+</html>

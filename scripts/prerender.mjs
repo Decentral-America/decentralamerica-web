@@ -7,7 +7,7 @@
  * that never runs the bundle.
  */
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -37,6 +37,16 @@ const {
   TITLE,
 } = mod;
 
+/**
+ * The card for a route. Blog posts share the publications card rather than each
+ * getting one: a post's card would have to restate its title, and og.mjs draws
+ * from ROUTE_META, which posts are not in.
+ */
+const ogImage = (path) =>
+  existsSync(join(ROOT, 'public/og', `${path === '/' ? 'home' : path.slice(1)}.png`))
+    ? `/og/${path === '/' ? 'home' : path.slice(1)}.png`
+    : '/og/publicaciones.png';
+
 const template = readFileSync(join(DIST, 'index.html'), 'utf8');
 
 /**
@@ -49,7 +59,9 @@ const template = readFileSync(join(DIST, 'index.html'), 'utf8');
  */
 if (!template.includes('<div id="root"></div>')) {
   throw new Error(
-    'dist/index.html is already prerendered. Run `vite build` before this script.',
+    "dist/index.html is not Vite's shell. Run `vite build` before this script: " +
+      'the home page overwrites it at the end, so a second run without a rebuild ' +
+      'would read the scroll page back in as the template.',
   );
 }
 const routes = [...ROUTE_PATHS, ...POST_PATHS];
@@ -71,7 +83,18 @@ for (const path of routes) {
         `  <meta property="og:description" content="${escapeHtml(desc)}" />\n` +
         `  <meta property="og:type" content="website" />\n` +
         `  <meta property="og:url" content="${canonicalFor(path)}" />\n` +
+        `  <meta property="og:site_name" content="DecentralAmerica" />\n` +
+        `  <meta property="og:locale" content="es_CR" />\n` +
+        // A card per route, drawn by scripts/og.mjs from this page's own title.
+        // Absolute: a relative og:image is ignored by every crawler that reads it.
+        `  <meta property="og:image" content="${SITE}${ogImage(path)}" />\n` +
+        `  <meta property="og:image:width" content="1200" />\n` +
+        `  <meta property="og:image:height" content="630" />\n` +
+        `  <meta property="og:image:alt" content="${escapeHtml(title)}" />\n` +
         `  <meta name="twitter:card" content="summary_large_image" />\n` +
+        `  <meta name="twitter:title" content="${escapeHtml(title)}" />\n` +
+        `  <meta name="twitter:description" content="${escapeHtml(desc)}" />\n` +
+        `  <meta name="twitter:image" content="${SITE}${ogImage(path)}" />\n` +
         '</head>',
     )
     .replace('<div id="root"></div>', `<div id="root">${body}</div>`);
@@ -82,13 +105,24 @@ for (const path of routes) {
   console.log(`  prerendered ${path}`);
 }
 
+/**
+ * The home page is hand-built, not rendered from React, so it is copied over
+ * Vite's shell after every route has been written. It goes last for the reason
+ * the guard above exists: this file is the template until this moment.
+ */
+writeFileSync(join(DIST, 'index.html'), readFileSync(join(ROOT, 'home.html'), 'utf8'));
+console.log('  copied      / (home.html)');
+
+// serve reads its config from the directory it serves, not from the repo root.
+writeFileSync(join(DIST, 'serve.json'), readFileSync(join(ROOT, 'serve.json'), 'utf8'));
+
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${routes.map((p) => `  <url><loc>${SITE}${p === '/' ? '' : p}</loc></url>`).join('\n')}
+${['/', ...routes].map((p) => `  <url><loc>${SITE}${p === '/' ? '' : p}</loc></url>`).join('\n')}
 </urlset>
 `;
 writeFileSync(join(DIST, 'sitemap.xml'), sitemap);
 writeFileSync(join(DIST, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
 
 rmSync(SSR, { force: true, recursive: true });
-console.log(`\n${routes.length} routes prerendered.`);
+console.log(`\n${routes.length} routes prerendered, plus the home page.`);

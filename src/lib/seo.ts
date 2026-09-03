@@ -21,7 +21,9 @@ export const DESCRIPTION: T = {
 
 /** Static routes. Post routes are appended by the prerender from the blog index. */
 export const ROUTE_PATHS = [
-  '/',
+  // '/' is not here. The home page is home.html, a hand-built scroll page served
+  // as a real file; React owns everything below it. prerender.mjs writes it last
+  // and adds it to the sitemap itself.
   '/verificar',
   '/organizaciones',
   '/nodo',
