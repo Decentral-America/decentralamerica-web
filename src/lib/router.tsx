@@ -1,6 +1,44 @@
 import { startTransition, useEffect, useState } from 'react';
+import { ROUTE_PATHS } from '@/lib/seo';
 
 const NAV_EVENT = 'dc:navigate';
+
+/**
+ * Trailing slashes are stripped before matching. A static host that serves
+ * `/nodo/` rather than `/nodo` was sending the prerendered node page and then,
+ * on hydration, falling through to the landing page — the document visibly
+ * replaced itself with the wrong page, and every in-page anchor stopped
+ * resolving. Matching on an exact string made the route depend on how the host
+ * happened to spell the URL.
+ */
+export function normalize(path: string) {
+  return path.length > 1 ? path.replace(/\/+$/, '') : path;
+}
+
+/**
+ * Every path this app renders itself. `/` is the hand-built home page, which
+ * React does own once hydrated; ROUTE_PATHS is the rest.
+ */
+const OWNED = new Set<string>(['/', ...ROUTE_PATHS]);
+const POST_PREFIX = '/publicaciones/';
+
+/**
+ * Does this app render the path, or does the server?
+ *
+ * The click handler below used to intercept every same-origin link, on the
+ * assumption that the app is the only thing behind this domain. It is not:
+ * `/evidencia` is a separate service reverse-proxied at the same origin. So a
+ * click on it was cancelled, the URL was pushed into history, no route matched,
+ * and the reader was left looking at the previous page under the new address —
+ * fixed only by a manual reload, which is a real request the proxy can answer.
+ *
+ * Anything not listed here therefore belongs to the browser. That is the safe
+ * default: a path the app cannot render is a path it must not swallow.
+ */
+export function isAppRoute(pathname: string) {
+  const path = normalize(pathname);
+  return OWNED.has(path) || path.startsWith(POST_PREFIX);
+}
 
 /**
  * Waits for the anchor to exist, then scrolls to it.
@@ -142,6 +180,8 @@ export function useRoute(initial?: string) {
       const url = new URL(href, window.location.origin);
       // An anchor on the page we are already on: the browser does this better.
       if (url.hash && url.pathname === window.location.pathname) return;
+      // A path served by something other than this app. Let the browser go.
+      if (!isAppRoute(url.pathname)) return;
 
       e.preventDefault();
       navigate(href);

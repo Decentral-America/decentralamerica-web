@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Nav } from '@/components/Nav';
 import { type Lang, LangProvider } from '@/lib/i18n';
-import { useRoute } from '@/lib/router';
+import { normalize, useRoute } from '@/lib/router';
 import { Disappearance } from '@/sections/Disappearance';
 import { Doors } from '@/sections/Doors';
 import { Footer } from '@/sections/Footer';
@@ -40,18 +40,6 @@ function Landing() {
       <Doors />
     </>
   );
-}
-
-/**
- * Trailing slashes are stripped before matching. A static host that serves
- * `/nodo/` rather than `/nodo` was sending the prerendered node page and then,
- * on hydration, falling through to the landing page — the document visibly
- * replaced itself with the wrong page, and every in-page anchor stopped
- * resolving. Matching on an exact string made the route depend on how the host
- * happened to spell the URL.
- */
-function normalize(path: string) {
-  return path.length > 1 ? path.replace(/\/+$/, '') : path;
 }
 
 function Body({ path: raw }: { path: string }) {
