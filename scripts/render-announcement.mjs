@@ -63,10 +63,20 @@ const meta = Object.fromEntries(
   }),
 );
 const body = fm[2];
-const halves = {
-  es: body.split('--- es ---')[1].split('--- en ---')[0].trim(),
-  en: body.split('--- en ---')[1].trim(),
-};
+
+/**
+ * A bilingual source splits on the language markers; a single-language one has
+ * none and renders as whichever language its frontmatter carries a title for.
+ */
+const LANGS = body.includes('--- es ---')
+  ? ['es', 'en']
+  : [meta.title_es ? 'es' : 'en'];
+const halves = body.includes('--- es ---')
+  ? {
+      es: body.split('--- es ---')[1].split('--- en ---')[0].trim(),
+      en: body.split('--- en ---')[1].trim(),
+    }
+  : { [LANGS[0]]: body.trim() };
 
 // ---------------------------------------------------------------- markdown
 
@@ -84,7 +94,14 @@ function inline(s) {
     .replace(/`([^`]+)`/g, '<code>$1</code>');
 }
 
+/** A pipe row, minus the leading and trailing pipes. */
+const cells = (line) =>
+  line.replace(/^\||\|$/g, '').split('|').map((c) => c.trim());
+
+const isDivider = (line) => /^\|[\s|:-]+\|$/.test(line.trim());
+
 function render(md) {
+  const lines = md.split('\n');
   const out = [];
   let list = null;
   const closeList = () => {
@@ -93,8 +110,30 @@ function render(md) {
       list = null;
     }
   };
-  for (const line of md.split('\n')) {
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
     const t = line.trim();
+
+    // A table is a header row, a divider, then rows until the blank line.
+    if (t.startsWith('|') && isDivider(lines[i + 1] ?? '')) {
+      closeList();
+      const head = cells(t);
+      const rows = [];
+      i += 2;
+      while (i < lines.length && lines[i].trim().startsWith('|')) {
+        rows.push(cells(lines[i].trim()));
+        i++;
+      }
+      i--;
+      out.push(
+        `<table><thead><tr>${head.map((h) => `<th>${inline(h)}</th>`).join('')}</tr></thead>` +
+          `<tbody>${rows
+            .map((r) => `<tr>${r.map((c) => `<td>${inline(c)}</td>`).join('')}</tr>`)
+            .join('')}</tbody></table>`,
+      );
+      continue;
+    }
+
     if (!t) {
       closeList();
       continue;
@@ -306,10 +345,44 @@ ul li::before{
   font-family:var(--mono);font-size:8pt;letter-spacing:.02em;
 }
 .sign svg{opacity:.55;flex:none;}
+
+table{
+  width:100%;border-collapse:collapse;margin:0 0 5mm;font-size:9pt;
+  break-inside:avoid;
+}
+th{
+  text-align:left;font-weight:500;font-family:var(--mono);font-size:7.8pt;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--faint);
+  padding:0 4mm 2mm 0;border-bottom:.6pt solid var(--hairline-2);vertical-align:bottom;
+}
+td{
+  padding:2.4mm 4mm 2.4mm 0;border-bottom:.5pt solid var(--hairline);
+  vertical-align:top;line-height:1.45;
+}
+tr td:last-child,tr th:last-child{padding-right:0;}
+/* The date column stays on one line; everything else may wrap. */
+td:nth-child(2),td:nth-child(3){white-space:nowrap;}
 `;
 
+/**
+ * Cover furniture, from the frontmatter when the document carries its own.
+ *
+ * `stats: 4|dates|16 Sep – 8 Oct; 7|launches|four repositories`
+ * `ribbon: some text`   omit to hide it
+ * `verify: no`          omit the check-it-yourself panel
+ */
+function furniture(lang) {
+  const base = { ...COPY[lang], ...(meta.kicker ? { kicker: meta.kicker } : {}) };
+  if (meta.stats) {
+    base.stats = meta.stats.split(';').map((g) => g.split('|').map((x) => x.trim()));
+  }
+  base.ribbon = meta.ribbon ?? (meta.ribbon === '' ? null : 'decentralamerica.com/evidencia');
+  base.showVerify = meta.verify !== 'no';
+  return base;
+}
+
 function page(lang) {
-  const c = COPY[lang];
+  const c = furniture(lang);
   const md = halves[lang];
   const title = lang === 'es' ? meta.title_es : meta.title_en;
   const lede = lang === 'es' ? meta.description_es : meta.description_en;
@@ -335,7 +408,7 @@ function page(lang) {
 
     <h1>${title}</h1>
     <p class="lede">${lede}</p>
-    <span class="ribbon"><i></i>decentralamerica.com/evidencia</span>
+    ${c.ribbon ? `<span class="ribbon"><i></i>${c.ribbon}</span>` : ''}
 
     <div class="stats">
       ${c.stats
@@ -349,18 +422,21 @@ function page(lang) {
   <main class="sheet">
     ${html}
 
-    <section class="verify">
-      <h3>${c.verify}</h3>
-      <dl>${c.verifyLines.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
-    </section>
+    ${
+      c.showVerify
+        ? `<section class="verify"><h3>${c.verify}</h3>
+      <dl>${c.verifyLines.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></section>`
+        : ''
+    }
 
     <div class="sign">${mark(15)}<span>DecentralAmerica · decentralamerica.com</span></div>
   </main>
 </body></html>`;
 }
 
-for (const lang of ['es', 'en']) {
-  const out = resolve(dirname(resolve(mdArg)), `${basename(mdArg, '.md')}-${lang}.pdf`);
+for (const lang of LANGS) {
+  const suffix = LANGS.length > 1 ? `-${lang}` : '';
+  const out = resolve(dirname(resolve(mdArg)), `${basename(mdArg, '.md')}${suffix}.pdf`);
   const tmp = `${out}.html`;
   writeFileSync(tmp, page(lang), 'utf8');
   execFileSync(
