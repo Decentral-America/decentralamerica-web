@@ -611,6 +611,31 @@
 .ftr__nav { display: flex; flex-wrap: wrap; gap: 0.75rem 1.75rem; }
 .ftr__nav a { color: var(--sc-ink-soft); text-decoration: none; font-size: 0.9375rem; transition: color 0.2s; }
 .ftr__nav a:hover, .ftr__nav a:focus-visible { color: var(--sc-ink); }
+
+  /* ---- touch. Nothing here changes what the reader sees at rest; it changes
+     what the compositor has to hold. A 390x844 screen at 3x is 3 MB per
+     full-screen layer, and a 150vw 3D-rotated SVG, three drop-shadow filters
+     and a backdrop blur are each a layer that re-rasterises on every scroll
+     frame. The lean that justified the 3D never runs on touch to begin with. */
+  @media (hover: none) and (pointer: coarse) {
+    .relief { perspective: none; }
+    .relief__lean, .relief__l { transform-style: flat; will-change: auto; }
+    .relief__l--body, .relief__l--dots { transform: none; }
+    .relief__l--body svg, .relief__l--dots svg { filter: none; }
+    .lat-wrap { perspective: none; }
+    .lat-lean { transform: none; transform-style: flat; will-change: auto; -webkit-mask-image: none; mask-image: none; width: min(100vw, 58svh); }
+    /* the confirmation wave still plays; it no longer waits on a ring stagger
+       that stacked 37 transitions on a layer that was already repainting */
+    .node__w { transition-duration: 220ms; transition-delay: 0ms; }
+    .try__plate { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--paper-2); }
+    .wall__grid, .tile { transform-style: flat; }
+    .wall__grid { contain: paint; }
+    .tile { box-shadow: none; outline: 1px solid rgba(20, 18, 15, 0.14); outline-offset: -1px; }
+    .tile--alt { transform: none; box-shadow: none; }
+    /* the rail is one layer 6-7 viewports wide by design; six shadowed cards
+       painted into it at once was the hitch, and an outline is a cheap edge */
+    .app { box-shadow: none; outline: 1px solid var(--hairline); outline-offset: -1px; }
+  }
 </style>
 </head>
 <body>
@@ -1134,7 +1159,7 @@
               <li><span>Colegios profesionales</span><span class="mono">custodio · sin nombrar</span></li>
               <li><span>Medios de comunicación</span><span class="mono">custodio · sin nombrar</span></li>
             </ul>
-            <p class="body">Hoy no hay ningún custodio institucional todavía. Nodo Público está abriendo, y esta página lo dice así porque cualquiera puede comprobarlo.</p>
+            <p class="body">Nodo Público está abriendo y los criterios ya están publicados. Hoy ningún custodio institucional sostiene una copia, y esta página lo dice así porque cualquiera puede comprobarlo.</p>
             <p><a class="link" href="/nodo">Conocé Nodo Público</a> · <a class="link" href="/financiar">Financiar un país</a></p>
           </div>
         </div>
@@ -1286,7 +1311,7 @@
     'planificado': 'planned', 'Quién puede sostenerla.': 'Who can hold it.',
     'Instituciones sin rendimiento financiero por operar un nodo y sin interés en lo que atestiguan. Quién sostiene el registro es la pregunta entera; el software es la parte fácil.': 'Institutions with no financial yield for running a node and no stake in what they witness. Who holds the record is the entire question; the software is the easy part.',
     'Universidades': 'Universities', 'Colegios profesionales': 'Professional colleges', 'Medios de comunicación': 'Newsrooms', 'custodio · sin nombrar': 'custodian · none named',
-    'Hoy no hay ningún custodio institucional todavía. Nodo Público está abriendo, y esta página lo dice así porque cualquiera puede comprobarlo.': 'There is no institutional custodian yet. Nodo Público is opening, and this page says so because anyone can check.',
+    'Nodo Público está abriendo y los criterios ya están publicados. Hoy ningún custodio institucional sostiene una copia, y esta página lo dice así porque cualquiera puede comprobarlo.': 'Nodo Público is opening and the criteria are already published. Today no custodian institution holds a copy, and this page says so because anyone can check.',
     'Conocé Nodo Público': 'Learn about Nodo Público',
     'La huella': 'The fingerprint', 'Lo que ya cambió': 'What already changed', 'Ahora mismo': 'Right now', 'Los límites': 'The limits',
     'Unos seis millones de filas': 'Around six million rows', 'Todo eso cabe en una línea.': 'All of it fits on one line.',
@@ -1331,7 +1356,14 @@
 
   function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function smooth(v) { v = clamp01(v); return v * v * (3 - 2 * v); }
-  function progress(act) { return parseFloat(getComputedStyle(act).getPropertyValue('--sc-p')) || 0; }
+  var actByEl = null;
+  function progress(act) {
+    if (actByEl) { var a = actByEl.get(act); return a ? a.p : 0; }
+    return parseFloat(getComputedStyle(act).getPropertyValue('--sc-p')) || 0;
+  }
+  var idle = window.requestIdleCallback
+    ? function (f) { requestIdleCallback(f, { timeout: 250 }); }
+    : function (f) { setTimeout(f, 60); };
   function svgEl(tag, attrs, parent) {
     var n = document.createElementNS(NS, tag);
     for (var k in attrs) n.setAttribute(k, attrs[k]);
@@ -1354,15 +1386,17 @@
       if (ring <= R) list.push({ q: q, r: r, ring: ring });
     }
     list.sort(function (a, b) { return a.ring - b.ring; });
+    var latFrag = document.createDocumentFragment();
     list.forEach(function (n, i) {
       var x = n.q * S * C30, y = -n.r * S - n.q * S * 0.5;
-      var pos = svgEl('g', { transform: 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ')' }, lat);
+      var pos = svgEl('g', { transform: 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ')' }, latFrag);
       var g = svgEl('g', { 'class': 'node' + (n.ring === 0 ? ' node--hub' : '') }, pos);
       g.style.setProperty('--ring', n.ring);
       g.style.setProperty('--t0', (0.02 + n.ring * 0.075 + ((i * 7) % 5) * 0.009).toFixed(3));
       svgEl('use', { 'class': 'node__b', href: '#markp', transform: 'translate(-150 -150)' }, g);
       svgEl('use', { 'class': 'node__w', href: '#dotsp', transform: 'translate(-150 -150)' }, g);
     });
+    lat.appendChild(latFrag);
   }
 
   /* ---------------------------------------------------------------------
@@ -1459,7 +1493,18 @@
       if (window.console) console.error('scrollcraft: falling back to static page.', e);
       return;
     }
-    requestAnimationFrame(frame);
+    // The engine already spends one rAF per scroll event on read(). The page's
+    // sections paint from that same frame, against the progress the engine
+    // just computed, rather than from a second permanent loop that polled the
+    // style system for it.
+    actByEl = new Map();
+    for (var ai = 0; ai < api.acts.length; ai++) actByEl.set(api.acts[ai].el, api.acts[ai]);
+    api.onRead(paintScroll);
+    paintScroll();
+    // Line-splitting measures offsetTop per word. Done here, once, while the
+    // reader is still on the title, instead of the first time each headline
+    // scrolls into range.
+    idle(function () { api.prepare(); });
   }
   var mounted = false;
   function once() { if (mounted) return; mounted = true; mountNow(); }
@@ -1498,16 +1543,18 @@
      pointers only; touch never fires a false hover.
      --------------------------------------------------------------------- */
   var reliefLean = document.getElementById('reliefLean'), latLean = document.getElementById('latLean');
-  var tx = 0, ty = 0, cx = 0, cy = 0;
-  if (fine && !reduce) addEventListener('pointermove', function (e) {
-    tx = (e.clientX / innerWidth) * 2 - 1; ty = (e.clientY / innerHeight) * 2 - 1;
-  }, { passive: true });
+  var tx = 0, ty = 0, cx = 0, cy = 0, leanRaf = 0;
   function tickLean() {
-    if (!fine || reduce) return;
     cx += (tx - cx) * 0.06; cy += (ty - cy) * 0.06;
     if (reliefLean) reliefLean.style.transform = 'rotateY(' + (cx * 7).toFixed(2) + 'deg) rotateX(' + (-cy * 5).toFixed(2) + 'deg)';
     if (latLean) latLean.style.transform = 'rotateX(' + (20 - cy * 4).toFixed(2) + 'deg) rotateY(' + (cx * 5).toFixed(2) + 'deg)';
+    // Carry momentum only while there is somewhere left to go.
+    leanRaf = (Math.abs(tx - cx) + Math.abs(ty - cy) > 0.0015) ? requestAnimationFrame(tickLean) : 0;
   }
+  if (fine && !reduce) addEventListener('pointermove', function (e) {
+    tx = (e.clientX / innerWidth) * 2 - 1; ty = (e.clientY / innerHeight) * 2 - 1;
+    if (!leanRaf) leanRaf = requestAnimationFrame(tickLean);
+  }, { passive: true });
 
   /* ---------------------------------------------------------------------
      I · ANATOMY · the outline draws along the mark's own path order (three
@@ -1518,8 +1565,10 @@
   var callouts = Array.prototype.slice.call(document.querySelectorAll('.co'));
   var anatItems = {};
   Array.prototype.forEach.call(document.querySelectorAll('.anat__i'), function (el) { anatItems[el.getAttribute('data-part')] = el; });
+  var anLast = -1;
   function paintAnatomy(p) {
     if (reduce) p = 1;
+    if (p === anLast) return; anLast = p;
     anStroke.style.strokeDashoffset = (1 - smooth((p - 0.04) / 0.46)).toFixed(4);
     anFill.style.opacity = smooth((p - 0.48) / 0.12).toFixed(3);
     callouts.forEach(function (g) {
@@ -1535,8 +1584,10 @@
      --------------------------------------------------------------------- */
   var chainAct = document.getElementById('chain'), litItems = Array.prototype.slice.call(document.querySelectorAll('#chainLit li')), tryBox = document.getElementById('try');
   var latState = '';
+  var chLast = -1;
   function paintChain(p) {
     if (reduce) p = Math.max(p, 0.7);
+    if (p === chLast) return; chLast = p;
     litItems.forEach(function (li) { li.classList.toggle('lit-on', p >= parseFloat(li.getAttribute('data-at'))); });
     var st = p >= 0.36 ? (edited ? 'altered' : 'confirmed') : 'plain';
     if (st !== latState) { latState = st; lat.setAttribute('data-state', st); }
@@ -1561,8 +1612,10 @@
   var asmMark = document.getElementById('asmMark');
   var ARM = [[0, -1], [C30, 0.5], [-C30, 0.5]];
   var SEAT = [[208.044, 119.007], [150, 225], [91.956, 119.007]];
+  var clLast = -1;
   function paintClose(p) {
     var a = reduce ? 1 : smooth((p - 0.04) / 0.54);
+    if (a === clLast) return; clLast = a;
     var m = smooth((a - 0.86) / 0.14);
     var len = 420 + (84.5 - 420) * a, back = 16 * a, sw = 1 + 23 * a;
     for (var i = 0; i < 3; i++) {
@@ -1601,7 +1654,7 @@
      are laid out once per resize; the frame only redraws when p changes.
      --------------------------------------------------------------------- */
   var huellaAct = document.getElementById('huella'), hc = document.getElementById('huellaC'), hChars = document.getElementById('huellaChars');
-  var HP = null, hctx = null, hW = 0, hH = 0, hSlots = [], hLastP = -1;
+  var HP = null, hctx = null, hW = 0, hH = 0, hSlots = [], hLastP = -1, hOp = [];
   function huellaBuild(hash) {
     if (!hChars) return;
     hChars.textContent = '';
@@ -1614,14 +1667,14 @@
     hW = r.width; hH = r.height; hc.width = Math.round(hW * dpr); hc.height = Math.round(hH * dpr);
     hctx = hc.getContext('2d'); hctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     hSlots = Array.prototype.map.call(hChars.children, function (sp) { var b = sp.getBoundingClientRect(); return [b.left - r.left + b.width / 2, b.top - r.top + b.height / 2]; });
-    var N = hW < 700 ? 1500 : 4200, left = hW < 700 ? 0 : hW * 0.4, top = hW < 700 ? hH * 0.34 : 0, bottom = hSlots[0][1] - 40;
+    var N = hW < 700 ? 900 : 4200, left = hW < 700 ? 0 : hW * 0.4, top = hW < 700 ? hH * 0.34 : 0, bottom = hSlots[0][1] - 40;
     HP = new Float32Array(N * 5);
     for (var i = 0; i < N; i++) {
       var o = i * 5;
       HP[o] = left + Math.random() * (hW - left); HP[o + 1] = top + Math.random() * (bottom - top);
       HP[o + 2] = Math.random() * 0.5; HP[o + 3] = i % 64; HP[o + 4] = (Math.random() - 0.5) * 7;
     }
-    hLastP = -1;
+    hLastP = -1; hOp = [];
   }
   function paintHuella(p) {
     if (!hctx || !HP) return;
@@ -1640,10 +1693,13 @@
       hctx.fillRect(x, y, 1.7, 1.7);
     }
     hctx.globalAlpha = 1;
-    for (var c = 0; c < 64; c++) hChars.children[c].style.opacity = (0.18 + 0.82 * Math.min(1, counts[c] / per * 1.15)).toFixed(2);
+    for (var c = 0; c < 64; c++) {
+      var op = (0.18 + 0.82 * Math.min(1, counts[c] / per * 1.15)).toFixed(2);
+      if (hOp[c] !== op) { hOp[c] = op; hChars.children[c].style.opacity = op; }
+    }
   }
   var hResize = 0;
-  addEventListener('resize', function () { clearTimeout(hResize); hResize = setTimeout(huellaLayout, 150); });
+  addEventListener('resize', function () { clearTimeout(hResize); hResize = setTimeout(function () { huellaLayout(); paintScroll(); }, 150); });
 
   /* ---------------------------------------------------------------------
      IV · THE WALL · 189 months, years across and months down, in the mark's
@@ -1657,9 +1713,10 @@
     for (var yy = 2010; yy <= 2026; yy++) { var yl = document.createElement('span'); yl.textContent = String(yy).slice(2); yEl.appendChild(yl); }
     T('EFMAMJJASOND', 'JFMAMJJASOND').split('').forEach(function (ch) { var ml = document.createElement('span'); ml.textContent = ch; mEl.appendChild(ml); });
     var altList = ['2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06', '2024-07', '2024-08', '2024-09', '2025-02', '2025-03', '2025-04', '2026-06', '2026-07'];
+    var wallFrag = document.createDocumentFragment();
     for (var mm = 0; mm < 12; mm++) for (var y2 = 2010; y2 <= 2026; y2++) {
       var k = (y2 - 2010) * 12 + mm - 11, tile = document.createElement('div');
-      if (k < 0 || k > 188) { tile.className = 'tile tile--none'; wallGrid.appendChild(tile); continue; }
+      if (k < 0 || k > 188) { tile.className = 'tile tile--none'; wallFrag.appendChild(tile); continue; }
       tile.className = 'tile';
       tile.style.setProperty('--t0', (0.1 + k * 0.42 / 188).toFixed(3));
       var f = document.createElement('i'); f.className = 'tile__f'; tile.appendChild(f);
@@ -1668,12 +1725,15 @@
         tile.classList.add('tile--alt'); tile.style.setProperty('--t1', (0.6 + ai * 0.016).toFixed(3));
         var a = document.createElement('i'); a.className = 'tile__a'; tile.appendChild(a);
       }
-      wallGrid.appendChild(tile);
+      wallFrag.appendChild(tile);
     }
+    wallGrid.appendChild(wallFrag);
   }
   var wallLit = Array.prototype.slice.call(document.querySelectorAll('#wallLit li'));
+  var wlLast = -1;
   function paintWall(p) {
     if (reduce) p = 1;
+    if (p === wlLast) return; wlLast = p;
     wallLit.forEach(function (li) { li.classList.toggle('lit-on', p >= parseFloat(li.getAttribute('data-at'))); });
   }
 
@@ -1723,8 +1783,14 @@
   if (liveEl && 'IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) {
       var on = entries.some(function (e) { return e.isIntersecting; });
-      if (on) { liveRead(); if (!lv.timer) lv.timer = setInterval(liveRead, 30000); }
-      else if (lv.timer) { clearInterval(lv.timer); lv.timer = 0; }
+      if (on) {
+        liveRead();
+        if (!lv.timer) lv.timer = setInterval(liveRead, 30000);
+        if (!lv.ring) lv.ring = setInterval(function () { paintRing(performance.now()); }, 250);
+      } else {
+        if (lv.timer) { clearInterval(lv.timer); lv.timer = 0; }
+        if (lv.ring) { clearInterval(lv.ring); lv.ring = 0; }
+      }
     }, { rootMargin: '240px 0px' }).observe(liveEl);
   }
   function paintRing(now) {
@@ -1733,17 +1799,15 @@
     ringP.style.strokeDashoffset = (1 - f).toFixed(3);
   }
 
-  /* ---- one loop ---- */
-  function frame(now) {
+  /* ---- one paint per engine read. Nothing here runs while the page is
+          still; every writer above skips when its input has not moved. ---- */
+  function paintScroll() {
     if (huellaAct) paintHuella(progress(huellaAct));
     if (wallAct) paintWall(progress(wallAct));
-    paintRing(now);
     paintFolio();
     if (anatAct) paintAnatomy(progress(anatAct));
     if (chainAct) paintChain(progress(chainAct));
     if (closeAct) paintClose(progress(closeAct));
-    tickLean();
-    requestAnimationFrame(frame);
   }
 })();
 </script>

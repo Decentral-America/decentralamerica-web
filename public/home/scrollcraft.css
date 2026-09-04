@@ -430,3 +430,26 @@ video[data-sc-scrub].sc-has-clip { opacity: 1; }
       transparent 58%);
   }
 }
+
+/* ------------------------------------------------------------- touch ------
+   What a phone GPU can carry. A 390x844 screen at 3x is 3 MB per full-screen
+   layer; every `will-change` here pins one, and a few dozen of them is the
+   texture budget of a mid-range phone, at which point the compositor evicts
+   layers mid-scroll and the page flickers. Nothing below changes what the
+   reader sees at rest; it changes what the compositor has to hold. */
+@media (hover: none) and (pointer: coarse) {
+  /* A fixed, viewport-sized feTurbulence layer blended over every scroll
+     frame. On a warm paper ground at 4.5% it is invisible on a phone screen
+     and it is the single most expensive thing on the page. */
+  .sc-grain { display: none; }
+
+  /* Units and reveals get a compositor layer while they actually move,
+     because translate3d/clip-path promote them on their own. Pinning one
+     per word for the life of the page buys nothing and costs texture. */
+  .sc-split__i { will-change: auto; }
+  [data-sc-reveal] { will-change: auto; }
+
+  /* A pinned stage already clips; telling the engine it also contains its
+     paint lets it skip the rest of the page when a stage repaints. */
+  .sc-stage { contain: paint; }
+}

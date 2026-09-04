@@ -569,6 +569,9 @@
         var r = a.el.getBoundingClientRect();
         a.top = r.top + scrollY;
         a.height = r.height;
+        // The rail's overflow is a layout read. It only moves on resize, so it
+        // is taken here rather than on every scroll frame in read().
+        if (a.rail) a.railOver = a.rail.scrollWidth - vw;
       });
       if (acts.length) {
         acts.forEach(function (a) {
@@ -866,7 +869,7 @@
 
         // horizontal rail
         if (a.rail) {
-          var over = a.rail.scrollWidth - vw;
+          var over = a.railOver != null ? a.railOver : (a.rail.scrollWidth - vw);
           if (over > 0) {
             var extra = over * (a.railExtra || 0);
             a.rail.style.transform = 'translate3d(' + (-(over + extra) * a.p).toFixed(2) + 'px,0,0)';
@@ -885,7 +888,11 @@
               pq.el.style.opacity = '0';
               pq.el.style.pointerEvents = 'none';
               pq.state = 0;
-              if (pq.units) for (var zu = 0; zu < pq.units.length; zu++) pq.units[zu].style.opacity = '0';
+              // Reset the memo too: the parked write bypasses it, and a cue that
+              // comes back at the same plateau it left on would otherwise be
+              // skipped and stay invisible.
+              pq.lastV = null;
+              if (pq.units) for (var zu = 0; zu < pq.units.length; zu++) { pq.units[zu].style.opacity = '0'; pq.units[zu].__v = null; }
             }
             a.parked = true;
           }
@@ -919,15 +926,23 @@
               var uStart = (u / Math.max(n, 1)) * 0.62;
               var uv = clamp01((vis - uStart) / (1 - 0.62 + 0.001));
               uv = smooth(uv);
-              q.units[u].style.opacity = uv.toFixed(3);
-              q.units[u].style.transform = reduce ? 'none'
+              var uvS = uv.toFixed(3);
+              var unit = q.units[u];
+              if (unit.__v === uvS) continue;
+              unit.__v = uvS;
+              unit.style.opacity = uvS;
+              unit.style.transform = reduce ? 'none'
                 : 'translate3d(0,' + ((1 - uv) * 100).toFixed(2) + '%,0)';
             }
-            q.el.style.opacity = '1';
+            if (q.lastV !== 1) { q.lastV = 1; q.el.style.opacity = '1'; }
           } else {
-            q.el.style.opacity = vis.toFixed(3);
-            q.el.style.transform = reduce ? 'none'
-              : 'translate3d(0,' + ((1 - vis) * 2.4 * q.rise).toFixed(2) + 'vh,0)';
+            var visS = vis.toFixed(3);
+            if (q.lastV !== visS) {
+              q.lastV = visS;
+              q.el.style.opacity = visS;
+              q.el.style.transform = reduce ? 'none'
+                : 'translate3d(0,' + ((1 - vis) * 2.4 * q.rise).toFixed(2) + 'vh,0)';
+            }
           }
           var on = vis > 0.5;
           if (on !== (q.state === 1)) { q.state = on ? 1 : 0; q.el.style.pointerEvents = on ? 'auto' : 'none'; }
@@ -937,7 +952,8 @@
         if (!reduce) {
           for (var pz = 0; pz < a.parallax.length; pz++) {
             var pp = a.parallax[pz];
-            pp.el.style.transform = 'translate3d(0,' + (pp.rate * (a.p - 0.5) * 100).toFixed(2) + 'px,0)';
+            var ppS = 'translate3d(0,' + (pp.rate * (a.p - 0.5) * 100).toFixed(2) + 'px,0)';
+            if (pp.__v !== ppS) { pp.__v = ppS; pp.el.style.transform = ppS; }
           }
         }
 
@@ -946,12 +962,13 @@
           var R = a.reveals[rv];
           var t = smooth((a.p - R.from) / Math.max(R.to - R.from, 0.001));
           var pct = ((1 - t) * 100).toFixed(2);
-          R.el.style.clipPath =
+          var clipS =
             R.dir === 'down' ? 'inset(' + pct + '% 0 0 0)' :
             R.dir === 'left' ? 'inset(0 ' + pct + '% 0 0)' :
             R.dir === 'right' ? 'inset(0 0 0 ' + pct + '%)' :
             R.dir === 'iris' ? 'circle(' + (t * 78).toFixed(2) + '% at 50% 50%)' :
                                'inset(0 0 ' + pct + '% 0)';
+          if (R.__v !== clipS) { R.__v = clipS; R.el.style.clipPath = clipS; }
         }
 
         // counters
@@ -984,13 +1001,19 @@
         var max = Math.max(document.body.scrollHeight - vh, 1);
         progressBar.style.transform = 'scaleX(' + clamp01(y / max).toFixed(4) + ')';
       }
+
+      for (var h = 0; h < readHooks.length; h++) {
+        try { readHooks[h](y, vh); } catch (e) { if (window.console) console.error('[scrollcraft] read hook', e); }
+      }
     }
+    var readHooks = [];
 
     // ---- video seek loop --------------------------------------------------
     // Split from read() on purpose: seeking is asynchronous and rate-limited by
     // the decoder, while read() must stay cheap enough to run on every scroll
     // event. The lerp here is also what turns a jittery wheel into a glide.
     function tick() {
+      if (!playheads.length) return;
       // Deadband. A phone decoder cannot service a seek every frame, so asking
       // for one costs more than it shows; 20ms of clip is under a frame of
       // footage anyway.
@@ -1198,7 +1221,22 @@
     requestAnimationFrame(tick);
     document.documentElement.classList.add('sc-ready');
 
-    var api = { layout: layout, read: read, acts: acts, worlds: worlds, clips: playheads, lerp: LERP };
+    // All of it in one go, as early as the browser allows. Slicing this across
+    // idle callbacks was tried and measured worse: on a throttled phone there
+    // is no idle time, every slice fires at its timeout instead, and the
+    // splitting lands mid-scroll as a run of long tasks. One ~50ms task while
+    // the reader is still on the title is the cheaper place for it.
+    function prepare() {
+      for (var i = 0; i < acts.length; i++) {
+        var cs = acts[i].cues;
+        for (var c = 0; c < cs.length; c++) if (cs[c].kinetic && !cs[c].units) cs[c].units = splitText(cs[c].el, cs[c].kinetic);
+      }
+    }
+    var api = {
+      layout: layout, read: read, acts: acts, worlds: worlds, clips: playheads, lerp: LERP,
+      prepare: prepare,
+      onRead: function (fn) { if (typeof fn === 'function') readHooks.push(fn); }
+    };
     global.ScrollCraft.instances.push(api);
     return api;
   }
