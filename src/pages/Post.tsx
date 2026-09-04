@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ShareButton } from '@/components/PageExtras';
 import { Container, Reveal } from '@/components/primitives';
 import {
   BLOG_PATH,
@@ -119,7 +120,10 @@ export default function Post({ slug }: { slug?: string }) {
                 ))}
               </ul>
             )}
-            <BackLink label={t({ en: 'All publications', es: 'Todas las publicaciones' })} />
+            <div className="flex flex-wrap items-center gap-x-8">
+              <BackLink label={t({ en: 'All publications', es: 'Todas las publicaciones' })} />
+              <ShareButton title={t(post.title)} />
+            </div>
           </footer>
         </article>
       </Container>

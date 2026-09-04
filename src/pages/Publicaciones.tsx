@@ -125,8 +125,8 @@ export default function Publicaciones() {
           {posts.length === 0 && (
             <li className="rule py-12 text-muted">
               {t({
-                en: 'Nothing published under this type yet.',
-                es: 'Todavía no hay nada publicado bajo este tipo.',
+                en: 'This type has nothing in it yet. Try another.',
+                es: 'Este tipo todavía no tiene nada. Probá con otro.',
               })}
             </li>
           )}

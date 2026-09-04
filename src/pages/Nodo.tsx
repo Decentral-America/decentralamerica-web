@@ -1,6 +1,13 @@
 import type { ReactNode } from 'react';
 import { Mark } from '@/components/Logo';
 import { NodeProof } from '@/components/NodeProof';
+import {
+  FaqSection,
+  RelatedPages,
+  StickyCta,
+  Takeaways,
+} from '@/components/PageExtras';
+import { LatticeReveal } from '@/components/LatticeReveal';
 import { Container, Eyebrow, Mono, Reveal } from '@/components/primitives';
 import { ANCLA, NODE, NODE_URL } from '@/lib/content';
 import { useNum, useT } from '@/lib/i18n';
@@ -56,6 +63,16 @@ export default function Nodo() {
           })}
         </p>
       </Reveal>
+
+      {/*
+       * The network, before the argument for joining it. The same scroll-driven
+       * lattice as the home page's chapter V: one mark becomes thirty-seven,
+       * ring by ring, and the witnesses confirm. On this page that is not
+       * decoration; it is the thing a node operator is being asked to be one of.
+       */}
+      <LatticeReveal />
+
+      <Takeaways cta={{ href: '#empezar', label: { en: 'Start a node', es: 'Empezar un nodo' } }} path="/nodo" />
 
       {/*
        * The page became a decision document rather than an explainer, and a
@@ -359,8 +376,8 @@ export default function Nodo() {
       >
         <p className={`${P} mb-8`}>
           {t({
-            en: 'No institution has done this yet, so what follows is what we propose rather than a procedure anyone has been through. It is deliberately short.',
-            es: 'Ninguna institución lo ha hecho todavía, así que lo que sigue es lo que proponemos y no un procedimiento por el que alguien ya pasó. Es corto a propósito.',
+            en: 'What follows is what we propose, not a procedure anyone has completed. It is deliberately short.',
+            es: 'Lo que sigue es lo que proponemos, no un procedimiento que alguien ya haya recorrido. Es corto a propósito.',
           })}
         </p>
         <ol className="grid gap-px overflow-hidden rounded-2xl bg-hairline">
@@ -445,20 +462,20 @@ export default function Nodo() {
         </div>
       </Section>
 
-      {/* Honest empty state. There are no custodians, and saying so is method. */}
+      {/* Leads with the open seat. The roster is still empty and the body says so. */}
       <Reveal className="mt-20 sm:mt-28">
         <div className="card grid items-center gap-10 p-8 sm:p-12 lg:grid-cols-[1fr_auto]">
           <div>
             <h2 className="display-3 max-w-[18ch]">
               {t({
-                en: 'No institution keeps a copy yet.',
-                es: 'Todavía ninguna institución guarda una copia.',
+                en: 'The first custodian seat is open.',
+                es: 'El primer puesto de custodia está abierto.',
               })}
             </h2>
             <p className={`${P} mt-5 max-w-[44ch]`}>
               {t({
-                en: 'When one does, it will appear here with its name and the date it began. Saying so plainly while the list is empty is part of the method: a custody roster nobody can check is worth nothing.',
-                es: 'Cuando alguna lo haga, aparecerá aquí con su nombre y la fecha en que empezó. Decirlo mientras la lista está vacía es parte del método: una lista de custodias que nadie puede comprobar no vale nada.',
+                en: 'Each institution that takes one appears here by name, with the date it began. The roster is public from its first day, before it holds anything flattering, because a custody list nobody can check is worth nothing.',
+                es: 'Cada institución que tome uno aparece acá con su nombre y la fecha en que empezó. La lista es pública desde el primer día, antes de que tenga nada halagador, porque una lista de custodias que nadie puede comprobar no vale nada.',
               })}
             </p>
             <a
@@ -498,6 +515,10 @@ export default function Nodo() {
           </p>
         </details>
       </Reveal>
+
+        <FaqSection path="/nodo" />
+        <RelatedPages path="/nodo" />
+        <StickyCta href="#empezar" label={{ en: 'Start a node', es: 'Empezar un nodo' }} />
     </Container>
   );
 }

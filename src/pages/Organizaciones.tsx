@@ -1,5 +1,11 @@
 import type { ReactNode } from 'react';
 import { Mark } from '@/components/Logo';
+import {
+  FaqSection,
+  RelatedPages,
+  StickyCta,
+  Takeaways,
+} from '@/components/PageExtras';
 import { Container, Eyebrow, Mono, Reveal } from '@/components/primitives';
 import type { T } from '@/lib/i18n';
 import { useT } from '@/lib/i18n';
@@ -103,17 +109,43 @@ const VERIFICATION: { field: T; note: T }[] = [
   },
 ];
 
-function Fields({ rows }: { rows: { field: T; note: T }[] }) {
+/**
+ * A field and what goes in it. Two columns of the same two things on every row,
+ * which is a table, so it is one: a definition list said the same thing without
+ * ever naming the columns, and a reader scanning for "what does this field hold"
+ * had to infer the header.
+ */
+function Fields({ caption, rows }: { caption: string; rows: { field: T; note: T }[] }) {
   const t = useT();
   return (
-    <dl className="mt-6 grid gap-x-10 gap-y-5 sm:grid-cols-2">
-      {rows.map((row) => (
-        <div key={row.field.en}>
-          <dt className="text-[0.9375rem] font-medium text-ink">{t(row.field)}</dt>
-          <dd className="mt-1 text-[0.9375rem] leading-relaxed text-muted">{t(row.note)}</dd>
-        </div>
-      ))}
-    </dl>
+    <div className="mt-6 overflow-x-auto">
+      <table className="w-full border-collapse text-left text-[0.9375rem]">
+        <caption className="sr-only">{caption}</caption>
+        <thead>
+          <tr className="border-b border-hairline">
+            <th className="eyebrow py-2 pr-6 font-normal text-faint" scope="col">
+              {t({ en: 'Field', es: 'Campo' })}
+            </th>
+            <th className="eyebrow py-2 font-normal text-faint" scope="col">
+              {t({ en: 'What it holds', es: 'Qué contiene' })}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr className="border-b border-hairline align-baseline" key={row.field.en}>
+              <th
+                className="py-3.5 pr-6 font-medium whitespace-nowrap text-ink"
+                scope="row"
+              >
+                {t(row.field)}
+              </th>
+              <td className="py-3.5 leading-relaxed text-muted">{t(row.note)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -147,6 +179,8 @@ export default function Organizaciones() {
           })}
         </p>
       </Reveal>
+
+        <Takeaways cta={{ href: '#inscribirse', label: { en: 'Get listed', es: 'Inscribirse' } }} path="/organizaciones" />
 
       {/*
        * Same reason as the node page: a reader arrives wanting one answer —
@@ -247,7 +281,13 @@ export default function Organizaciones() {
           <h3 className="text-xl font-bold tracking-[-0.02em]">
             {t({ en: 'What the organization declares', es: 'Lo que declara la organización' })}
           </h3>
-          <Fields rows={DECLARED} />
+          <Fields
+            caption={t({
+              en: 'Fields an organization declares about itself',
+              es: 'Campos que la organización declara sobre sí misma',
+            })}
+            rows={DECLARED}
+          />
         </div>
         <p className={`${P} mt-6`}>
           {t({
@@ -260,7 +300,13 @@ export default function Organizaciones() {
           <h3 className="text-xl font-bold tracking-[-0.02em]">
             {t({ en: 'What the verification leaves', es: 'Lo que deja la verificación' })}
           </h3>
-          <Fields rows={VERIFICATION} />
+          <Fields
+            caption={t({
+              en: 'Fields the verifier records',
+              es: 'Campos que anota quien verifica',
+            })}
+            rows={VERIFICATION}
+          />
         </div>
         <p className={`${P} mt-6`}>
           {t({
@@ -301,8 +347,8 @@ export default function Organizaciones() {
         </p>
         <p className={`${P} mt-5`}>
           {t({
-            en: 'No verifying organization is listed yet. When one is, its entry will be public like any other, and a reader will be able to see who vouched for the verifier before deciding what its decisions are worth.',
-            es: 'Todavía no hay ninguna organización verificadora inscrita. Cuando la haya, su entrada será pública como cualquier otra, y quien lea podrá ver quién respondió por ella antes de decidir cuánto valen sus decisiones.',
+            en: 'The first verifier entry will be public like any other, so a reader can see who vouched for it before deciding what its signature is worth. None is listed today.',
+            es: 'La primera entrada de una organización verificadora será pública como cualquier otra, para que quien lea vea quién respondió por ella antes de decidir cuánto vale su firma. Hoy no hay ninguna inscrita.',
           })}
         </p>
       </Section>
@@ -417,8 +463,8 @@ export default function Organizaciones() {
         </ol>
         <p className={`${P} mt-6`}>
           {t({
-            en: 'There is nothing to check yet, because no entry exists. The procedure is written down first so that the first entry can be held to it.',
-            es: 'Todavía no hay nada que revisar, porque no existe ninguna entrada. El procedimiento se escribe antes para que la primera entrada se pueda medir con él.',
+            en: 'The procedure is written down first so the first entry can be held to it. Nothing has come through yet to check.',
+            es: 'El procedimiento se escribe antes para que la primera entrada se pueda medir con él. Todavía no ha entrado nada que revisar.',
           })}
         </p>
       </Section>
@@ -433,8 +479,8 @@ export default function Organizaciones() {
       >
         <p className={`${P} mb-8`}>
           {t({
-            en: 'No organization has been through this yet. The schema is defined; what follows is the procedure we propose, not one anyone has completed.',
-            es: 'Ninguna organización ha pasado por esto todavía. El esquema está definido; lo que sigue es el procedimiento que proponemos, no uno que alguien ya haya recorrido.',
+            en: 'The schema is defined and what follows is the procedure we propose. No organization has completed it yet.',
+            es: 'El esquema está definido y lo que sigue es el procedimiento que proponemos. Ninguna organización lo ha recorrido todavía.',
           })}
         </p>
         <ol className="grid gap-px overflow-hidden rounded-2xl bg-hairline">
@@ -472,21 +518,21 @@ export default function Organizaciones() {
         </p>
       </Section>
 
-      {/* Honest empty state. Nothing is registered, and a sample entry here would
-          invert the purpose of a registry that exists to say what is real. */}
+      {/* Leads with the registry being open, then says it is empty. No sample entry:
+          a fake row in a record that exists to say what is real inverts the point. */}
       <Reveal className="mt-20 sm:mt-28">
         <div className="card grid items-center gap-10 p-8 sm:p-12 lg:grid-cols-[1fr_auto]">
           <div>
             <h2 className="display-3 max-w-[18ch]">
               {t({
-                en: 'No organization is registered yet.',
-                es: 'Todavía no hay ninguna organización inscrita.',
+                en: 'The registry is open.',
+                es: 'El registro está abierto.',
               })}
             </h2>
             <p className={`${P} mt-5 max-w-[44ch]`}>
               {t({
-                en: 'The registry is open and empty. There are no examples either: a sample organization in a record that exists to say which ones are real would be the exact opposite of the point. The first entry will appear here with its name, who verified it, and the date.',
-                es: 'El registro está abierto y vacío. Tampoco hay ejemplos: una organización de muestra en un registro que existe para decir cuáles son reales sería exactamente lo contrario del punto. La primera entrada aparecerá acá con su nombre, quién la verificó y la fecha.',
+                en: 'It is also empty, and there are no examples: a sample organization in a record that exists to say which ones are real would be the exact opposite of the point.',
+                es: 'También está vacío, y no hay ejemplos: una organización de muestra en un registro que existe para decir cuáles son reales sería exactamente lo contrario del punto.',
               })}
             </p>
             <a
@@ -499,6 +545,10 @@ export default function Organizaciones() {
           <Mark className="hidden h-44 w-44 shrink-0 text-ink opacity-[0.14] lg:block" />
         </div>
       </Reveal>
+
+        <FaqSection path="/organizaciones" />
+        <RelatedPages path="/organizaciones" />
+        <StickyCta href="#inscribirse" label={{ en: 'Get listed', es: 'Inscribirse' }} />
     </Container>
   );
 }

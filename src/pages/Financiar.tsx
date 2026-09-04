@@ -1,5 +1,11 @@
 import type { ReactNode } from 'react';
 import { Mark } from '@/components/Logo';
+import {
+  FaqSection,
+  RelatedPages,
+  StickyCta,
+  Takeaways,
+} from '@/components/PageExtras';
 import { Container, Eyebrow, Mono, Reveal } from '@/components/primitives';
 import { ANCLA, CGR, COUNTRIES } from '@/lib/content';
 import { useNum, useT } from '@/lib/i18n';
@@ -61,11 +67,13 @@ export default function Financiar() {
         </h1>
         <p className="lede mt-7 max-w-[46ch]">
           {t({
-            en: 'Costa Rica is live. Five more national procurement portals are named and not started. This page says what the money buys, what it does not, and what happened to the attempts like this one.',
-            es: 'Costa Rica está en línea. Otros cinco portales nacionales de compras públicas están nombrados y sin empezar. Esta página dice qué compra el dinero, qué no compra y qué pasó con los intentos parecidos a este.',
+            en: 'Costa Rica and Panamá are live. Four more national procurement portals are named and not started. This page says what the money buys, what it does not, and what happened to the attempts like this one.',
+            es: 'Costa Rica y Panamá están en línea. Otros cuatro portales nacionales de compras públicas están nombrados y sin empezar. Esta página dice qué compra el dinero, qué no compra y qué pasó con los intentos parecidos a este.',
           })}
         </p>
       </Reveal>
+
+        <Takeaways cta={{ href: '#empezar', label: { en: 'Start a conversation', es: 'Empezar una conversación' } }} path="/financiar" />
 
       {/*
        * A funder arrives with one question already formed — the price, the
@@ -343,8 +351,8 @@ export default function Financiar() {
 
         <p className={`${P} mt-8`}>
           {t({
-            en: 'Elsewhere on this site the same status is called planned. It means this: outside Costa Rica nothing is running, and no record from any other country has been preserved.',
-            es: 'En el resto del sitio ese mismo estado se llama planeado. Significa esto: fuera de Costa Rica no corre nada, y no hay ningún registro de otro país preservado.',
+            en: 'Elsewhere on this site the same status is called planned. It means this: Costa Rica and Panamá are running, and no record from the other four has been preserved.',
+            es: 'En el resto del sitio ese mismo estado se llama planeado. Significa esto: Costa Rica y Panamá corren, y de los otros cuatro no hay ningún registro preservado.',
           })}
         </p>
         <p className={`${P} mt-5`}>
@@ -587,8 +595,8 @@ export default function Financiar() {
       >
         <p className={`${P} mb-8`}>
           {t({
-            en: 'Nobody has funded a country yet, so what follows is what we propose rather than a procedure anyone has been through.',
-            es: 'Todavía nadie ha financiado un país, así que lo que sigue es lo que proponemos y no un procedimiento por el que alguien ya pasó.',
+            en: 'What follows is what we propose, not a procedure anyone has completed.',
+            es: 'Lo que sigue es lo que proponemos, no un procedimiento que alguien ya haya recorrido.',
           })}
         </p>
         <ol className="grid gap-px overflow-hidden rounded-2xl bg-hairline">
@@ -626,8 +634,8 @@ export default function Financiar() {
           <div>
             <h2 className="display-3 max-w-[18ch]">
               {t({
-                en: 'No one funds a country yet.',
-                es: 'Todavía nadie financia un país.',
+                en: 'The first country is open to fund.',
+                es: 'El primer país está abierto para financiar.',
               })}
             </h2>
             <p className={`${P} mt-5 max-w-[46ch]`}>
@@ -680,6 +688,10 @@ export default function Financiar() {
           </p>
         </details>
       </Reveal>
+
+        <FaqSection path="/financiar" />
+        <RelatedPages path="/financiar" />
+        <StickyCta href="#empezar" label={{ en: 'Start a conversation', es: 'Empezar una conversación' }} />
     </Container>
   );
 }

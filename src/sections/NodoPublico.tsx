@@ -77,8 +77,8 @@ export function NodoPublico() {
 
         <Reveal delay={120}>
           <div className="mt-24 grid items-center gap-12 sm:mt-32 lg:mt-40 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-20">
-            <blockquote className="max-w-[19ch]">
-              <p className="display-2">
+            <blockquote>
+              <p className="display-2 max-w-[19ch]">
                 {t({
                   en: 'Who holds the record is the entire question.',
                   es: 'Quién sostiene el registro es la pregunta entera.',
@@ -117,21 +117,21 @@ export function NodoPublico() {
           </div>
         </Reveal>
 
-        {/* The honest empty state. No institution has taken a node yet, and the
-            section says so rather than implying pending partners. */}
+        {/* Leads with the open seat, not the empty roster, and still says plainly
+            that the roster is empty. Both halves are load-bearing. */}
         <Reveal delay={60} className="mt-16 sm:mt-20">
           <div className="card p-8 sm:p-12 lg:p-16">
             <Eyebrow>{t({ en: 'Custodian network', es: 'Red de custodia' })}</Eyebrow>
             <h3 className="display-3 mt-5 max-w-[18ch]">
               {t({
-                en: 'There is no custodian institution yet.',
-                es: 'Todavía no hay ninguna institución custodia.',
+                en: 'The first custodian seat is open.',
+                es: 'El primer puesto de custodia está abierto.',
               })}
             </h3>
             <p className="lede mt-6 max-w-[54ch]">
               {t({
-                en: 'The network is open and the first outside node has not been assigned. When one exists, it will appear here with its name and the date it began holding the copy. Until then this list stays empty, and saying so is part of the method.',
-                es: 'La red está abierta y el primer nodo externo no se ha asignado. Cuando exista, aparecerá acá con su nombre y la fecha en que empezó a sostener la copia. Mientras tanto esta lista está vacía, y decirlo es parte del método.',
+                en: 'The criteria are published and the network takes nodes now. The first institution to hold a copy appears here by name, with the date it began. Today that line is still empty.',
+                es: 'Los criterios están publicados y la red admite nodos desde ya. La primera institución que sostenga una copia aparece acá con su nombre y la fecha en que empezó. Hoy esa línea sigue vacía.',
               })}
             </p>
             <a

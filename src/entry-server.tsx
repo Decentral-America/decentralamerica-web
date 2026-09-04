@@ -3,6 +3,7 @@ import App from '@/App';
 import type { Lang } from '@/lib/i18n';
 
 export { POST_PATHS, POSTS } from '@/lib/blog';
+export { PAGE_BRIEFS } from '@/lib/faq';
 export {
   canonicalFor,
   DESCRIPTION,

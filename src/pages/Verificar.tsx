@@ -1,4 +1,10 @@
 import { type FormEvent, type ReactNode, useEffect, useId, useState } from 'react';
+import {
+  FaqSection,
+  RelatedPages,
+  StickyCta,
+  Takeaways,
+} from '@/components/PageExtras';
 import { Container, Eyebrow, Mono, Reveal } from '@/components/primitives';
 import { type Live, NODE, short } from '@/lib/chain';
 import { ANCHOR } from '@/lib/content';
@@ -469,6 +475,8 @@ export default function Verificar() {
           })}
         </p>
       </Reveal>
+
+        <Takeaways cta={{ href: '#comprobar', label: { en: 'Check a record', es: 'Comprobar un registro' } }} path="/verificar" />
 
       {/* The instrument, above everything. The argument for it is underneath. */}
       <Reveal as="section" aria-labelledby={`${fieldId}-label`} className="mt-10 sm:mt-12">
@@ -997,8 +1005,8 @@ export default function Verificar() {
               </dt>
               <dd className={`${P} mt-2`}>
                 {t({
-                  en: 'No outside institution keeps a copy of the memory yet. Independent copies agreeing is what would make this check strong, and that part still depends on the custody programme.',
-                  es: 'Todavía ninguna institución externa guarda una copia de la memoria. Que copias independientes coincidan es lo que haría fuerte esta comprobación, y esa parte todavía depende del programa de custodia.',
+                  en: 'Independent copies agreeing is what would make this check strong, and that part still depends on the custody programme. No outside institution holds a copy today.',
+                  es: 'Que copias independientes coincidan es lo que haría fuerte esta comprobación, y esa parte todavía depende del programa de custodia. Hoy ninguna institución externa sostiene una copia.',
                 })}
               </dd>
             </div>
@@ -1085,6 +1093,10 @@ export default function Verificar() {
           </div>
         </details>
       </Reveal>
+
+        <FaqSection path="/verificar" />
+        <RelatedPages path="/verificar" />
+        <StickyCta href="#comprobar" label={{ en: 'Check a record', es: 'Comprobar un registro' }} />
     </Container>
   );
 }

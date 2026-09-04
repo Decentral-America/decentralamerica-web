@@ -109,8 +109,8 @@ export function Reach() {
 
           <p className="mt-8 max-w-[56ch] text-[0.9375rem] leading-relaxed text-muted">
             {t({
-              en: 'Planned means exactly that. Outside Costa Rica nothing is running yet, and no record from any other country has been preserved.',
-              es: 'Planeado significa exactamente eso. Fuera de Costa Rica todavía no corre nada, y no hay ningún registro de otro país preservado.',
+              en: 'Planned means exactly that. Costa Rica and Panamá are preserved; nothing from the other four is, and this table will say so until it changes.',
+              es: 'Planeado significa exactamente eso. Costa Rica y Panamá están preservados; de los otros cuatro no hay nada, y esta tabla lo va a decir hasta que cambie.',
             })}
           </p>
         </Reveal>

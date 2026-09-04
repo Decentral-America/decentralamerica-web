@@ -28,6 +28,7 @@ const {
   DESCRIPTION,
   POST_PATHS,
   POSTS,
+  PAGE_BRIEFS,
   ROUTE_META,
   ROUTE_PATHS,
   SITE,
@@ -119,11 +120,45 @@ const jsonLd = (path, post, title, desc) => {
         url: canonicalFor(path),
       };
 
+  // A page that answers questions in its own body says so here. Built from the
+  // same PAGE_BRIEFS the page renders, so a rich result cannot quote a question
+  // the page does not ask.
+  const brief = PAGE_BRIEFS[path];
+  const faq = brief && {
+    '@type': 'FAQPage',
+    mainEntity: brief.faqs.map((f) => ({
+      '@type': 'Question',
+      acceptedAnswer: { '@type': 'Answer', text: f.a.es },
+      name: f.q.es,
+    })),
+  };
+
   return `<script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org',
-    '@graph': [main, { '@type': 'BreadcrumbList', itemListElement: crumbs }],
+    '@graph': [
+      main,
+      { '@type': 'BreadcrumbList', itemListElement: crumbs },
+      ...(faq ? [faq] : []),
+    ],
   })}</script>`;
 };
+
+/**
+ * Analytics and Search Console, injected only when the environment supplies the
+ * ids. Absent them this is a no-op, so a clone builds a site with no third-party
+ * script in it at all, which is the behaviour a contributor should get by
+ * default. Railway holds the real values.
+ */
+const GA4 = process.env.VITE_GA4_ID ?? '';
+const GSC = process.env.GSC_VERIFICATION ?? '';
+
+const analytics = () =>
+  (GSC ? `  <meta name="google-site-verification" content="${escapeHtml(GSC)}" />\n` : '') +
+  (GA4
+    ? `  <script async src="https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA4)}"></script>\n` +
+      '  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}' +
+      `gtag('js',new Date());gtag('config','${GA4}')</script>\n`
+    : '');
 
 const routes = [...ROUTE_PATHS, ...POST_PATHS];
 
@@ -135,7 +170,10 @@ for (const path of routes) {
   // cerrados reescritos — DecentralAmerica" is seventy-five, and the brand is the
   // half that gets cut, so it is only appended when the whole thing survives.
   // og:site_name carries the brand either way.
-  const brand = (t) => (t.length + 19 <= 60 ? `${t} — DecentralAmerica` : t);
+  // When the brand does not survive, the section is appended instead. Both keep
+  // the tag distinct from the H1 below it, which is the point: two identical
+  // strings waste the second-largest field a result has.
+  const brand = (t) => (t.length + 19 <= 60 ? `${t} — DecentralAmerica` : `${t} — Publicaciones`);
   const title = post ? brand(post.title.es) : (meta?.title.es ?? TITLE.es);
   const desc = post ? post.description.es : (meta?.description.es ?? DESCRIPTION.es);
 
@@ -168,7 +206,8 @@ for (const path of routes) {
         `  <meta name="twitter:title" content="${escapeHtml(title)}" />\n` +
         `  <meta name="twitter:description" content="${escapeHtml(desc)}" />\n` +
         `  <meta name="twitter:image" content="${SITE}${ogImage(path)}" />\n` +
-        '</head>',
+        analytics() +
+      '</head>',
     )
     .replace('<div id="root"></div>', `<div id="root">${body}</div>`);
 
@@ -183,7 +222,10 @@ for (const path of routes) {
  * Vite's shell after every route has been written. It goes last for the reason
  * the guard above exists: this file is the template until this moment.
  */
-writeFileSync(join(DIST, 'index.html'), readFileSync(join(ROOT, 'home.html'), 'utf8'));
+writeFileSync(
+  join(DIST, 'index.html'),
+  readFileSync(join(ROOT, 'home.html'), 'utf8').replace('</head>', `${analytics()}</head>`),
+);
 console.log('  copied      / (home.html)');
 
 
@@ -200,7 +242,40 @@ ${['/', ...routes]
 </urlset>
 `;
 writeFileSync(join(DIST, 'sitemap.xml'), sitemap);
-writeFileSync(join(DIST, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
+/**
+ * llms.txt — an index of this site for automated readers.
+ *
+ * Same titles and descriptions the pages carry, so a model reading this and a
+ * reader reading a search result are told the same thing.
+ */
+const llms = [
+  '# DecentralAmerica',
+  '',
+  `> ${DESCRIPTION.es}`,
+  '',
+  '## Páginas',
+  '',
+  `- [${TITLE.es}](${SITE}/): ${DESCRIPTION.es}`,
+  ...ROUTE_PATHS.map(
+    (r) => `- [${ROUTE_META[r].title.es}](${SITE}${r}): ${ROUTE_META[r].description.es}`,
+  ),
+  '',
+  '## Publicaciones',
+  '',
+  ...POSTS.map((p) => `- [${p.title.es}](${SITE}/publicaciones/${p.slug}): ${p.description.es}`),
+  '',
+  '## Capa de evidencia',
+  '',
+  `- [Ancla](${SITE}/evidencia): El registro verificable de la compra pública de Costa Rica y Panamá, con cada copia guardada, su raíz Merkle y el anclaje en cadena.`,
+  '',
+];
+writeFileSync(join(DIST, 'llms.txt'), llms.join('\n'));
+console.log(`  llms.txt (${ROUTE_PATHS.length + POSTS.length + 1} entries)`);
+
+writeFileSync(
+  join(DIST, 'robots.txt'),
+  `User-agent: *\nAllow: /\n\n# Index for automated readers.\n# ${SITE}/llms.txt\n\nSitemap: ${SITE}/sitemap.xml\n`,
+);
 
 rmSync(SSR, { force: true, recursive: true });
 console.log(`\n${routes.length} routes prerendered, plus the home page.`);
