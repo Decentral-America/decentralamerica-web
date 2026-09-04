@@ -72,8 +72,21 @@
 	# against / and asks this site for /ancla.css, which is a 404 here. The page
 	# arrived unstyled and stuck on "Cargando" because its stylesheet and its
 	# script both missed. One redirect fixes every relative reference at once.
-	@evidenciaBare path /evidencia
-	redir @evidenciaBare /evidencia/ 308
+	# Land on the page that works.
+	#
+	# The evidence layer is mid-migration to a static API. versions.html was
+	# ported and reads /versions, /bundles and /recovery, which the export emits.
+	# index.html still calls /stats, /changes and /months, which it does not and
+	# by design never will: that service is static files behind Caddy, with no
+	# server to answer them. So the front page rendered an "HTTP 404" where its
+	# table belongs, on a page three links now point at.
+	#
+	# versions.html already shows changes per bundle, so it is the same answer
+	# rather than a lesser one. This is a redirect here rather than an edit
+	# there because that repository has forty uncommitted files in it; remove
+	# this once index.html is ported.
+	@evidenciaEntry path /evidencia /evidencia/ /evidencia/index.html
+	redir @evidenciaEntry /evidencia/versions.html 302
 
 	handle_path /evidencia* {
 		reverse_proxy http://ancla.railway.internal:8080
