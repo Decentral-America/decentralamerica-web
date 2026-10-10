@@ -82,7 +82,7 @@ The Costa Rican state publishes all of its public procurement as open data. That
 
 Ancla keeps a daily copy before that happens. It fingerprints each copy and writes that fingerprint to DecentralChain, where nobody can change it afterwards. If the file is rewritten, there is an earlier copy to compare it against and a date nobody controls.
 
-It now holds 190 monthly archives, December 2010 to September 2026, around six million records. More than 400 fingerprints are anchored on chain. Running it costs under a dollar a year.
+It now holds 190 monthly archives, December 2010 to September 2026, around six million records. More than 400 fingerprints are anchored on chain. Running it costs under a dollar a year on DecentralChain infrastructure.
 
 ## What changed since August
 
@@ -137,4 +137,4 @@ Panamá joined on 3 September. That is 37 months of PanamaCompra since September
 
 Honduras is out for now. Its portal has served an expired certificate since 5 July 2026, so the download cannot be authenticated, and without that a copy only proves somebody handed us some bytes. Guatemala publishes the data but requires passing an access control its operator turned on deliberately; the route there is to request access, not to work around it. El Salvador and Nicaragua publish no bulk archive at all, so no tool can reach them.
 
-One question remains that is larger than the software. Whoever holds the key that signs the fingerprints is the credibility of the system, and today that key is ours. It belongs with an institution that has no stake in procurement outcomes: a university, a professional college, a newsroom. That is a governance decision rather than an engineering one, and it is the largest open risk in the project.
+One question remains that is larger than the software. Whoever holds the key that signs the fingerprints is the credibility of the system, and today that key is ours. It belongs with an institution that has no stake in procurement outcomes: a university, a professional college, a newsroom. That is a governance decision rather than an engineering one.
