@@ -49,7 +49,8 @@ export type CmsMeta = {
   /** Full ISO timestamp. */
   publishedAt: string;
   seoDescription: string;
-  seoTitle: string;
+  /** The editor's own SEO title, used as written, or null to brand the title. */
+  seoTitle: string | null;
 };
 
 /**

@@ -155,7 +155,7 @@ function sitePost(es, en) {
       only: es && en ? null : primary.locale,
       publishedAt: iso(primary.publishedAt),
       seoDescription: primary.seoDescription || primary.excerpt || '',
-      seoTitle: primary.seoTitle || primary.title,
+      seoTitle: primary.seoTitle || null,
     },
     date: calendarDate(primary.publishedAt),
     description: both((post) => post.excerpt || post.seoDescription || ''),
