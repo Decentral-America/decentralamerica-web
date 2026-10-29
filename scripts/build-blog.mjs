@@ -58,15 +58,26 @@
  *
  * A level-1 heading in a body is a build error: the post page's <h1> is the
  * post title, and a second one on the page breaks the document outline.
+ *
+ * ---------------------------------------------------------------------------
+ * CMS POSTS
+ * ---------------------------------------------------------------------------
+ * When ECO_CMS_URL and ECO_CMS_KEY are set, posts published in the Eco CMS are
+ * fetched too (scripts/cms.mjs) and written to src/lib/cms-generated.json,
+ * which is gitignored: the CMS is their source, and a copy committed here
+ * would only go stale. Without the variables the file is written empty, so a
+ * CMS post from an earlier local build cannot linger into this one.
  */
 
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { cmsConfig, fetchCmsPosts, toSitePosts } from './cms.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SOURCE_DIR = join(ROOT, 'content', 'blog');
 const OUT_FILE = join(ROOT, 'src', 'lib', 'blog-generated.ts');
+const CMS_OUT_FILE = join(ROOT, 'src', 'lib', 'cms-generated.json');
 
 const TYPES = ['hallazgo', 'articulo', 'informe'];
 const REQUIRED = ['title_es', 'title_en', 'description_es', 'description_en', 'date', 'type', 'slug'];
@@ -323,7 +334,7 @@ function pair(field) {
   return `{\n      en: ${lit(field.en)},\n      es: ${lit(field.es)},\n    }`;
 }
 
-function main() {
+async function main() {
   const files = readdirSync(SOURCE_DIR)
     .filter((name) => name.endsWith('.md'))
     .sort();
@@ -400,6 +411,18 @@ ${entries}
   process.stdout.write(
     `blog: ${posts.length} post${posts.length === 1 ? '' : 's'} -> src/lib/blog-generated.ts\n`,
   );
+
+  const cms = cmsConfig();
+  let cmsPosts = [];
+  if (cms) {
+    const { posts: fetched, warnings } = toSitePosts(await fetchCmsPosts(cms), seen);
+    for (const warning of warnings) process.stderr.write(`CMS warning: ${warning}\n`);
+    cmsPosts = fetched;
+    process.stdout.write(
+      `CMS: ${cmsPosts.length} post${cmsPosts.length === 1 ? '' : 's'} -> src/lib/cms-generated.json\n`,
+    );
+  }
+  writeFileSync(CMS_OUT_FILE, `${JSON.stringify(cmsPosts, null, 2)}\n`, 'utf8');
 }
 
-main();
+await main();

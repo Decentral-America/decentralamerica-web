@@ -15,8 +15,13 @@ import type { Lang, T } from '@/lib/i18n';
 export type PostType = 'hallazgo' | 'articulo' | 'informe';
 
 export type Post = {
-  /** Rendered HTML, one body per language. Escaped at build time. */
+  /**
+   * Rendered HTML, one body per language. Escaped at build time, or, for a CMS
+   * post, sanitized by the CMS before it is served.
+   */
   body: T;
+  /** Present only on posts that come from the CMS. */
+  cms?: CmsMeta;
   /** ISO calendar date, `YYYY-MM-DD`. */
   date: string;
   description: T;
@@ -24,6 +29,28 @@ export type Post = {
   tags: readonly string[];
   title: T;
   type: PostType;
+};
+
+/**
+ * What a CMS post carries beyond a markdown one, all of it for the head and
+ * the sitemap. The SEO fields are the primary version's: the Spanish one, or
+ * the only one, which is the language the page is prerendered in.
+ */
+export type CmsMeta = {
+  author: string | null;
+  /** Set only when the editor overrides the site's own URL. */
+  canonicalUrl: string | null;
+  /** Absolute share image, or null. */
+  image: string | null;
+  /** Full ISO timestamp. */
+  modifiedAt: string;
+  /** The one language the CMS has this post in, or null when it has both. */
+  only: Lang | null;
+  /** Full ISO timestamp. */
+  publishedAt: string;
+  seoDescription: string;
+  /** The editor's own SEO title, used as written, or null to brand the title. */
+  seoTitle: string | null;
 };
 
 /**
@@ -59,8 +86,26 @@ export const TYPE_NOTE: Record<PostType, T> = {
 export const BLOG_PATH = '/publicaciones';
 export const TYPE_QUERY_KEY = 'tipo';
 
-/** Sorted newest first by the build script. */
-export const POSTS: readonly Post[] = GENERATED_POSTS;
+/**
+ * CMS posts, written by scripts/build-blog.mjs when ECO_CMS_URL and ECO_CMS_KEY
+ * are set. Globbed rather than imported: the file is gitignored, so in a fresh
+ * clone it does not exist, the glob matches nothing, and typecheck, lint and
+ * dev all work with no CMS at all.
+ */
+const CMS_FILES = import.meta.glob<readonly Post[]>('./cms-generated.json', {
+  eager: true,
+  import: 'default',
+});
+
+/**
+ * Newest first. Each source arrives sorted by the build script and the merge
+ * is a stable sort on the date, so with no CMS posts this is exactly the
+ * markdown order.
+ */
+export const POSTS: readonly Post[] = [
+  ...(Object.values(CMS_FILES)[0] ?? []),
+  ...GENERATED_POSTS,
+].sort((a, b) => b.date.localeCompare(a.date));
 
 /** Every post URL, for whatever enumerates routes to prerender. */
 export const POST_PATHS: readonly string[] = POSTS.map((post) => `${BLOG_PATH}/${post.slug}`);
@@ -72,6 +117,21 @@ export function postPath(slug: string): string {
 export function isPostType(value: unknown): value is PostType {
   return typeof value === 'string' && (POST_TYPES as readonly string[]).includes(value);
 }
+
+/**
+ * The language a post is shown in when that is not the reader's, or null. A
+ * CMS post can exist in one language only, and both views then carry it.
+ */
+export function untranslated(post: Post, lang: Lang): Lang | null {
+  const only = post.cms?.only ?? null;
+  return only !== null && only !== lang ? only : null;
+}
+
+/** Said wherever a post is shown in a language other than the reader's. */
+export const ONLY_IN: Record<Lang, T> = {
+  en: { en: 'English only', es: 'Solo en inglés' },
+  es: { en: 'Spanish only', es: 'Solo en español' },
+};
 
 export function findPost(slug: string): Post | undefined {
   return POSTS.find((post) => post.slug === slug);

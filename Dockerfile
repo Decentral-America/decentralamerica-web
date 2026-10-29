@@ -16,6 +16,14 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
+# The Eco CMS read API and key, read by scripts/cms.mjs; unset, the build skips
+# the CMS. ECO_CONTENT_VERSION is never read: the CMS changes it on every
+# publish, and declaring it here is what makes Docker re-run the build below
+# instead of reusing the cached layer with the old posts in it.
+ARG ECO_CMS_URL
+ARG ECO_CMS_KEY
+ARG ECO_CONTENT_VERSION
+
 # build-blog, vite build, then prerender: writes every route, copies home.html
 # over Vite's shell, and emits the sitemap.
 RUN pnpm run build
