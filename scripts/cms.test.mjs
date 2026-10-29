@@ -40,7 +40,13 @@ test('not configured unless both variables are set', () => {
 test('pairs translations with Spanish as the primary', () => {
   const group = 'g1';
   const { posts, warnings } = toSitePosts([
-    post({ locale: 'en', modifiedAt: '2026-10-23T09:00:00.000Z', slug: 'en-slug', translationGroupId: group }),
+    post({
+      locale: 'en',
+      modifiedAt: '2026-10-23T09:00:00.000Z',
+      seoTitle: 'English SEO title',
+      slug: 'en-slug',
+      translationGroupId: group,
+    }),
     post({ locale: 'es', publishedAt: '2026-10-21T14:00:00.000Z', slug: 'es-slug', translationGroupId: group }),
   ]);
   assert.deepEqual(warnings, []);
@@ -50,7 +56,9 @@ test('pairs translations with Spanish as the primary', () => {
   assert.equal(only.type, 'articulo');
   assert.deepEqual(only.title, { en: 'Title en-slug', es: 'Title es-slug' });
   assert.equal(only.cms.only, null);
-  assert.equal(only.cms.seoTitle, 'Title es-slug');
+  // The primary's SEO fields, not the translation's: here it set none.
+  assert.equal(only.cms.seoTitle, null);
+  assert.equal(only.cms.seoDescription, 'Excerpt.');
   // An edit to the English version is a change to the page, which carries both.
   assert.equal(only.cms.modifiedAt, '2026-10-23T09:00:00.000Z');
 });

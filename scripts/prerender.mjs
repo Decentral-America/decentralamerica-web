@@ -109,6 +109,7 @@ const jsonLd = (path, post, title, desc) => {
         mainEntityOfPage: canonicalFor(path),
         publisher: ORG,
         url: canonicalFor(path),
+        ...(post.cms ? cmsPosting(post.cms, path, desc) : {}),
       }
     : {
         '@type': 'WebPage',
@@ -133,6 +134,8 @@ const jsonLd = (path, post, title, desc) => {
     })),
   };
 
+  // `<` escaped: a CMS title is not written in this repository, and a string in
+  // it must not be able to close the script element.
   return `<script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org',
     '@graph': [
@@ -140,7 +143,26 @@ const jsonLd = (path, post, title, desc) => {
       { '@type': 'BreadcrumbList', itemListElement: crumbs },
       ...(faq ? [faq] : []),
     ],
-  })}</script>`;
+  }).replace(/</g, '\\u003c')}</script>`;
+};
+
+/**
+ * What a CMS post states about itself over the markdown defaults: real
+ * timestamps, its own author and image, the editor's canonical, its language.
+ * Spread over the BlogPosting above, so there is still one record per page.
+ */
+const cmsPosting = (cms, path, desc) => {
+  const url = cms.canonicalUrl ?? canonicalFor(path);
+  return {
+    ...(cms.author ? { author: { '@type': 'Person', name: cms.author } } : {}),
+    dateModified: cms.modifiedAt,
+    datePublished: cms.publishedAt,
+    description: desc,
+    ...(cms.image ? { image: cms.image } : {}),
+    inLanguage: cms.only ?? 'es',
+    mainEntityOfPage: url,
+    url,
+  };
 };
 
 /**
@@ -174,38 +196,52 @@ for (const path of routes) {
   // the tag distinct from the H1 below it, which is the point: two identical
   // strings waste the second-largest field a result has.
   const brand = (t) => (t.length + 19 <= 60 ? `${t} — DecentralAmerica` : `${t} — Publicaciones`);
-  const title = post ? brand(post.title.es) : (meta?.title.es ?? TITLE.es);
-  const desc = post ? post.description.es : (meta?.description.es ?? DESCRIPTION.es);
+  // A CMS post can carry the editor's own SEO title, written and measured for a
+  // result; it is used as written. Without one it is branded like any post.
+  const cms = post?.cms;
+  const title = post ? (cms?.seoTitle ?? brand(post.title.es)) : (meta?.title.es ?? TITLE.es);
+  const desc = post
+    ? cms?.seoDescription || post.description.es
+    : (meta?.description.es ?? DESCRIPTION.es);
+  const canonical = cms?.canonicalUrl ?? canonicalFor(path);
+  // A CMS post's own share image when it has one. Its size is not known, so the
+  // card's 1200×630 is only declared for the card.
+  const image = cms?.image ?? `${SITE}${ogImage(path)}`;
 
   const html = template
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)}</title>`)
     .replace(
       '</head>',
       `  <meta name="description" content="${escapeHtml(desc)}" />\n` +
-        `  <link rel="canonical" href="${canonicalFor(path)}" />\n` +
+        `  <link rel="canonical" href="${escapeHtml(canonical)}" />\n` +
         `  <meta property="og:title" content="${escapeHtml(title)}" />\n` +
         `  <meta property="og:description" content="${escapeHtml(desc)}" />\n` +
         `  <meta property="og:type" content="${post ? 'article' : 'website'}" />\n` +
         (post
-          ? `  <meta property="article:published_time" content="${post.date}T00:00:00+00:00" />\n` +
+          ? `  <meta property="article:published_time" content="${cms ? escapeHtml(cms.publishedAt) : `${post.date}T00:00:00+00:00`}" />\n` +
+            (cms
+              ? `  <meta property="article:modified_time" content="${escapeHtml(cms.modifiedAt)}" />\n`
+              : '') +
             post.tags
               .map((t) => `  <meta property="article:tag" content="${escapeHtml(t)}" />\n`)
               .join('')
           : '') +
-        `  <meta property="og:url" content="${canonicalFor(path)}" />\n` +
+        `  <meta property="og:url" content="${escapeHtml(canonical)}" />\n` +
         `  <meta property="og:site_name" content="DecentralAmerica" />\n` +
-        `  <meta property="og:locale" content="es_CR" />\n` +
+        `  <meta property="og:locale" content="${cms?.only === 'en' ? 'en_US' : 'es_CR'}" />\n` +
         // A card per route, drawn by scripts/og.mjs from this page's own title.
         // Absolute: a relative og:image is ignored by every crawler that reads it.
-        `  <meta property="og:image" content="${SITE}${ogImage(path)}" />\n` +
-        `  <meta property="og:image:width" content="1200" />\n` +
-        `  <meta property="og:image:height" content="630" />\n` +
+        `  <meta property="og:image" content="${escapeHtml(image)}" />\n` +
+        (cms?.image
+          ? ''
+          : `  <meta property="og:image:width" content="1200" />\n` +
+            `  <meta property="og:image:height" content="630" />\n`) +
         `  <meta property="og:image:alt" content="${escapeHtml(title)}" />\n` +
         `  ${jsonLd(path, post, title, desc)}\n` +
         `  <meta name="twitter:card" content="summary_large_image" />\n` +
         `  <meta name="twitter:title" content="${escapeHtml(title)}" />\n` +
         `  <meta name="twitter:description" content="${escapeHtml(desc)}" />\n` +
-        `  <meta name="twitter:image" content="${SITE}${ogImage(path)}" />\n` +
+        `  <meta name="twitter:image" content="${escapeHtml(image)}" />\n` +
         analytics() +
       '</head>',
     )
@@ -232,11 +268,18 @@ console.log('  copied      / (home.html)');
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${['/', ...routes]
+  // A CMS post whose canonical points at another address is a copy of that
+  // address, and a sitemap lists canonical URLs only.
+  .filter((p) => {
+    const override = POSTS.find((x) => `/publicaciones/${x.slug}` === p)?.cms?.canonicalUrl;
+    return !override || override === canonicalFor(p);
+  })
   .map((p) => {
     // Only posts carry a date anyone can defend. Stamping today on every static
     // route each build tells a crawler nothing and teaches it to ignore the field.
+    // A CMS post's is its last change.
     const post = POSTS.find((x) => `/publicaciones/${x.slug}` === p);
-    return `  <url><loc>${SITE}${p === '/' ? '' : p}</loc>${post ? `<lastmod>${post.date}</lastmod>` : ''}</url>`;
+    return `  <url><loc>${SITE}${p === '/' ? '' : p}</loc>${post ? `<lastmod>${post.cms?.modifiedAt ?? post.date}</lastmod>` : ''}</url>`;
   })
   .join('\n')}
 </urlset>
