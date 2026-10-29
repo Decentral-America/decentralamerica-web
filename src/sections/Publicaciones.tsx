@@ -1,6 +1,6 @@
 import { Container, Eyebrow, Reveal } from '@/components/primitives';
-import { BLOG_PATH, postPath, recentPosts, TYPE_LABEL_ONE } from '@/lib/blog';
-import { useT } from '@/lib/i18n';
+import { BLOG_PATH, postPath, recentPosts, TYPE_LABEL_ONE, untranslated } from '@/lib/blog';
+import { useLang, useT } from '@/lib/i18n';
 
 /**
  * Three lines near the bottom of a long page. Anything more here competes with
@@ -8,6 +8,7 @@ import { useT } from '@/lib/i18n';
  */
 export function PublicacionesTeaser() {
   const t = useT();
+  const { lang } = useLang();
   const posts = recentPosts(3);
   if (posts.length === 0) return null;
 
@@ -36,7 +37,10 @@ export function PublicacionesTeaser() {
                     {post.date}
                   </time>
                   <span className="eyebrow">{t(TYPE_LABEL_ONE[post.type])}</span>
-                  <span className="text-[1.0625rem] leading-snug tracking-[-0.014em] underline decoration-transparent underline-offset-[5px] transition-[text-decoration-color] duration-300 group-hover:decoration-hairline-2 sm:text-[1.125rem]">
+                  <span
+                    className="text-[1.0625rem] leading-snug tracking-[-0.014em] underline decoration-transparent underline-offset-[5px] transition-[text-decoration-color] duration-300 group-hover:decoration-hairline-2 sm:text-[1.125rem]"
+                    lang={untranslated(post, lang) ?? undefined}
+                  >
                     {t(post.title)}
                   </span>
                 </a>

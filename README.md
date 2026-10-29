@@ -15,6 +15,7 @@ pnpm dev          # vite, port 5173
 pnpm build        # blog → vite build → prerender every route to static HTML
 pnpm lint         # biome
 pnpm typecheck    # tsc --noEmit
+pnpm test         # node --test, the CMS connector
 ```
 
 ## Rules that are not negotiable
@@ -42,3 +43,7 @@ The single permitted technical disclosure is the closed `<details>` in the
 - `src/lib/chain.ts` — live mainnet reads, SSR-safe, deduped polling
 - `src/sections/` — the landing page, in scroll order
 - `content/blog/` — markdown, bilingual, three types: artículo · hallazgo · informe
+- `scripts/cms.mjs` — optional: with `ECO_CMS_URL` and `ECO_CMS_KEY` set, the build
+  also publishes the Eco CMS's posts as artículos (into a gitignored
+  `src/lib/cms-generated.json`). If the CMS cannot be read, the build fails rather
+  than ship without them. Without the variables nothing changes.
