@@ -14,3 +14,7 @@ AGENT-BRIEF.md
 
 # scroll-craft workspace: briefs, screenshot labs, build scratch. Never shipped.
 scrollcraft/
+
+# CMS posts, written by scripts/build-blog.mjs at build time. The CMS is their
+# source; a copy committed here would only go stale.
+src/lib/cms-generated.json
