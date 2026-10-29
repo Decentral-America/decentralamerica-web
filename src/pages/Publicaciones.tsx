@@ -4,6 +4,7 @@ import {
   BLOG_PATH,
   countByType,
   filterHref,
+  ONLY_IN,
   POST_TYPES,
   type PostType,
   parseTypeParam,
@@ -12,13 +13,15 @@ import {
   TYPE_LABEL,
   TYPE_LABEL_ONE,
   TYPE_NOTE,
+  untranslated,
 } from '@/lib/blog';
-import { useT } from '@/lib/i18n';
+import { useLang, useT } from '@/lib/i18n';
 
 const CHIP = 'eyebrow rounded-full bg-ground-2 px-2.5 py-1 text-faint';
 
 export default function Publicaciones() {
   const t = useT();
+  const { lang } = useLang();
   const [type, setType] = useState<PostType | null>(null);
 
   /**
@@ -93,35 +96,39 @@ export default function Publicaciones() {
         </p>
 
         <ul className="mt-8 pb-28 sm:pb-36">
-          {posts.map((post, index) => (
-            <li className="rule" key={post.slug}>
-              <Reveal
-                as="article"
-                className="group grid gap-x-10 gap-y-3 py-8 sm:grid-cols-[8.5rem_1fr] sm:py-10"
-                delay={Math.min(index, 4) * 45}
-              >
-                <div className="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-3">
-                  <time className="mono-data text-faint" dateTime={post.date}>
-                    {post.date}
-                  </time>
-                  <span className={CHIP}>{t(TYPE_LABEL_ONE[post.type])}</span>
-                </div>
-                <div>
-                  <h2 className="text-[1.375rem] leading-[1.15] font-bold tracking-[-0.024em] sm:text-[1.625rem]">
-                    <a
-                      className="underline decoration-transparent decoration-2 underline-offset-[6px] transition-[text-decoration-color] duration-300 group-hover:decoration-hairline-2"
-                      href={postPath(post.slug)}
-                    >
-                      {t(post.title)}
-                    </a>
-                  </h2>
-                  <p className="mt-3 max-w-[42rem] text-[0.9375rem] leading-[1.65] text-muted sm:text-base">
-                    {t(post.description)}
-                  </p>
-                </div>
-              </Reveal>
-            </li>
-          ))}
+          {posts.map((post, index) => {
+            const shown = untranslated(post, lang) ?? undefined;
+            return (
+              <li className="rule" key={post.slug}>
+                <Reveal
+                  as="article"
+                  className="group grid gap-x-10 gap-y-3 py-8 sm:grid-cols-[8.5rem_1fr] sm:py-10"
+                  delay={Math.min(index, 4) * 45}
+                >
+                  <div className="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-3">
+                    <time className="mono-data text-faint" dateTime={post.date}>
+                      {post.date}
+                    </time>
+                    <span className={CHIP}>{t(TYPE_LABEL_ONE[post.type])}</span>
+                    {shown && <span className={CHIP}>{t(ONLY_IN[shown])}</span>}
+                  </div>
+                  <div lang={shown}>
+                    <h2 className="text-[1.375rem] leading-[1.15] font-bold tracking-[-0.024em] sm:text-[1.625rem]">
+                      <a
+                        className="underline decoration-transparent decoration-2 underline-offset-[6px] transition-[text-decoration-color] duration-300 group-hover:decoration-hairline-2"
+                        href={postPath(post.slug)}
+                      >
+                        {t(post.title)}
+                      </a>
+                    </h2>
+                    <p className="mt-3 max-w-[42rem] text-[0.9375rem] leading-[1.65] text-muted sm:text-base">
+                      {t(post.description)}
+                    </p>
+                  </div>
+                </Reveal>
+              </li>
+            );
+          })}
           {posts.length === 0 && (
             <li className="rule py-12 text-muted">
               {t({
